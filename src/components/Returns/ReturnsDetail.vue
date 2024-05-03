@@ -75,7 +75,7 @@ export default {
     async fetchItem() {
       try {
         const response = await this.$axios.get(
-          `/devoluciones/${this.$route.params.id}`
+          `/faqs/devoluciones/${this.$route.params.id}/`
         );
         this.returnItem = response.data;
       } catch (error) {

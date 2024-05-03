@@ -195,7 +195,7 @@ export default {
           email:this.form.email,
         }
       
-        const response = await this.$axios.post(`/login/signup/`, user);
+        const response = await this.$axios.post(`/oauth/login/signup/`, user);
         this.singupHandler(response);
       
 

@@ -48,7 +48,7 @@ import axios from 'axios';
         try {
           
           const refreshToken = localStorage.getItem('refresh_token');
-          const response = await axiosInstance.post('login/refresh-token/', { refresh_token: refreshToken });                    
+          const response = await axiosInstance.post('oauth/login/refresh-token/', { refresh_token: refreshToken });                    
           const newAccessToken = response.data.access_token;
 
           localStorage.setItem('token', newAccessToken);          

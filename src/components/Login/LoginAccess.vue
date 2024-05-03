@@ -133,7 +133,7 @@ export default {
       try {
 
         const user = { password: hashedPassword, email: this.form.email };
-        const response = await this.$axios.post(`/login/sigin/`, user);
+        const response = await this.$axios.post(`/oauth/login/sigin/`, user);
         this.singinHandler(response);
 
       } catch (error) { 

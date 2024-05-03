@@ -63,7 +63,7 @@ export default {
     async fetchImagesReferences() {
       try {
         const response = await this.$axios.get(
-          "business/enid-service/imagenes-referencia/"
+          "references/business/enid-service/imagenes-referencia/"
         );
         this.images = response.data.results;
         this.next = response.data.next;
@@ -73,6 +73,7 @@ export default {
     },
     async loadMoreImages() {
       try {
+        
         const response = await this.$axios.get(this.next);
         this.images = [...this.images, ...response.data.results];
         this.next = response.data.next;

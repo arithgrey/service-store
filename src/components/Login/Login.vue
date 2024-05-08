@@ -98,7 +98,7 @@ export default {
 
       try {
         const response = await this.$axios.get(
-          `user/exists/${this.form.email}`
+          `oauth/user/exists/${this.form.email}`
         );
 
         this.user_exists = response.data.exists;

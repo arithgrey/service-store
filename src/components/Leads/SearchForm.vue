@@ -76,7 +76,7 @@ export default {
     async submitForm() {
       
       const params = { q: this.form.q };
-      const response = await this.$axios.get(`/lead-search/`, {params});
+      const response = await this.$axios.get(`/lead/lead-search/`, {params});
       this.handlerListLeads(response);
 
     },

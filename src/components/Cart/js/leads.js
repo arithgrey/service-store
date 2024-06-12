@@ -14,7 +14,7 @@ export function chargeUserLead() {
         products_interest: productIds
     }
 
-    this.$axios.post(`/lead/existence/`, user_data)
+    this.$axios.post(`/lead/lead/existence/`, user_data)
         .then(response => {
 
             if (response.status === 201) {

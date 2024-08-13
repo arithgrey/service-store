@@ -20,10 +20,12 @@
         <router-view
           @open_shopping_cart_product_list="handleOpenCartOnViews"
           @open_seccion_login="handleOpenLogin"
+          @open_open_config_product="handlerOpenConfigProduct"
         />
       </div>
       <ShoppingCartList ref="shoppingCartList" />
       <LoginForm ref="loginForm" />
+      <ProductConfig ref="productConfig" :product="selectedProduct" />
       <SearchFormProduct ref="searchFormProduct" />
       <div class="flex-shrink-0">
         <Footer v-if="display_footer" @open_seccion_login="handleOpenLogin" />
@@ -37,6 +39,7 @@ import ShippingAndReturns from "@/components/Banner/ShippingAndReturns.vue";
 import AccountMenu from "@/components/Banner/AccountMenu.vue";
 import ShoppingCartList from "@/components/Cart/ShoppingCartList.vue";
 import LoginForm from "@/components/Login/LoginForm.vue";
+import ProductConfig from "@/components/Products/ProductConfig.vue";
 import SearchFormProduct from "@/components/Search/ProductsForm.vue";
 import Footer from "@/layouts/Footer.vue";
 
@@ -48,10 +51,12 @@ export default {
     Footer,
     SearchFormProduct,
     AccountMenu,
+    ProductConfig,
   },
   data() {
     return {
       display_footer: true,
+      selectedProduct: null,
     };
   },
   methods: {
@@ -67,7 +72,12 @@ export default {
     handleOpenLogin() {
       this.$refs.loginForm.openForm();
     },
+    handlerOpenConfigProduct(product){
+      
+      this.selectedProduct = product;
+      this.$refs.productConfig.openCart();
 
+    },
     redirectToLoginPageIfNecessary(to, from, next) {
       const requiresAuth = to.meta && to.meta.requiresAuth;
       const isAuthenticated = this.$store.getters.isAuthenticated;

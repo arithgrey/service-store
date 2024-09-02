@@ -10,3 +10,9 @@ services:
       - "5173:5173"
     volumes:
       - .:/app
+    networks:
+      - enid_service_network
+
+networks:
+  enid_service_network:
+    external: true

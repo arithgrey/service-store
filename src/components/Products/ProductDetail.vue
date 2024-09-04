@@ -59,7 +59,7 @@ export default {
 
       try {
         const response = await this.$axios.get(
-          `productos/${categorySlug}/${productSlug}/`
+          `enid/productos/${categorySlug}/${productSlug}/`
         );
         this.product = response.data;
         this.mainImagePreview()

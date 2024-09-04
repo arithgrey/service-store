@@ -389,7 +389,7 @@ export default {
     async processPayment() {
       this.cleanErrors();
       this.form.products = this.$store.getters.getProductsFromCart;      
-      return await this.paymentHelper.processPayment(this.form,  "orden/compra/");
+      return await this.paymentHelper.processPayment(this.form,  "enid/orden/compra/");
     },
 
     async nextToSaveOrder(response) {

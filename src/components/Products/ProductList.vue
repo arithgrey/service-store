@@ -37,7 +37,7 @@ export default {
   data() {
     return {
       open: false,
-      api: "productos/top-sellers",
+      api: "enid/productos/top-sellers/",
     };
   },
 

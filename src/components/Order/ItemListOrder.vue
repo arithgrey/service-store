@@ -63,7 +63,7 @@ export default {
   methods: {
     timePassed,
     selectOrder(order) {
-      debugger;
+      
       this.selectedOrder = order;
       this.$emit("selected_order", order);
     },

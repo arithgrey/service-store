@@ -45,12 +45,12 @@ export default {
   },
   watch: {
     "$route.params.categorySlug": function (newQ, oldQ) {
-      this.api = `product-category/${newQ}/`;      
+      this.api = `enid/product-category/${newQ}/`;      
       this.categoryName = newQ.replace(/-/g, " ");
     },
   },
   mounted() {
-    this.api = `product-category/${this.$route.params.categorySlug}/`;
+    this.api = `enid/product-category/${this.$route.params.categorySlug}/`;
     this.categoryName = this.$route.params.categorySlug.replace(/-/g, " ");
     
   },

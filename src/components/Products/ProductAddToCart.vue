@@ -83,9 +83,7 @@
             class=""
           ></path>
         </svg>
-        Envío gratis
-
-
+        Envío gratis | 2 días hábiles
       </li>
 
       <li class="flex items-center text-left text-sm font-medium text-gray-600">

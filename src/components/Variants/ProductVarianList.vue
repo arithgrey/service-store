@@ -98,7 +98,7 @@ export default {
           return;
         }      
         const response = await this.$axios.get(
-          `/producto-variante/producto/${this.product.id}/variantes/`
+          `/enid/producto-variante/producto/${this.product.id}/variantes/`
         );
         this.products_variant = response.data;
 

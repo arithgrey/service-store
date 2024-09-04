@@ -41,7 +41,7 @@ export default {
   methods: {
     async fetchStates() {
       try {
-        const response = await this.$axios.get("estado");
+        const response = await this.$axios.get("enid/estado");
         this.states = response.data;
         this.selectedState = this.value;
         const selectElement = this.$refs.stateSelect;

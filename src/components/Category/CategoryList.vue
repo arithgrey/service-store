@@ -35,7 +35,7 @@ export default {
   methods: {
     async fetchProductCategories() {
       try {
-        const response = await this.$axios.get("categorias");
+        const response = await this.$axios.get("enid/categorias");
         this.product_categories = response.data.map((category) => ({
           ...category,
           href: `${category.slug}`,

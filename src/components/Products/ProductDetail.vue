@@ -77,7 +77,7 @@ export default {
     mainImagePreview() {
 
       const mainImage = this.product.images.find((img) => img.is_main);
-      const imageURL = mainImage ? mainImage.get_image_url : "https://enidservices.com/imgs/04.jpg";
+      const imageURL = mainImage ? mainImage.get_image_url : "https://enidservice.com/public/images/04.jpg";
       const ogImageMetaTag = document.querySelector('meta[property="og:image"]');
 
       const specific_name = this.product.specific_name;

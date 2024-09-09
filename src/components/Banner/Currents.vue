@@ -6,7 +6,7 @@
           class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75"
         >
           <img
-            src="https://enidservices.com/imgs/04.jpg"
+            src="/images/04.jpg"
             alt="Las fotos de referencias, nuestros clientes"
             class="object-cover object-center"
           />
@@ -22,7 +22,7 @@
           class="aspect-h-1 aspect-w-1 overflow-hidden rounded-lg bg-gray-100 group-hover:opacity-75"
         >
           <img
-            src="https://enidservices.com/imgs/05.jpg"
+            src="/images/05.jpg"
             alt="Las fotos de referencias, nuestros clientes"
             class="object-cover object-center"
           />

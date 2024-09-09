@@ -4,7 +4,7 @@
       <div class="flex-shrink-0">
         <img
           class="mx-auto md:h-full w-full"
-          src="https://enidservices.com/imgs/04.jpg"
+          src="/images/04.jpg"
           alt=""
         />
       </div>

@@ -29,13 +29,15 @@
       <h1 class="text-3xl font-bold mb-5">Entregado a tu puerta</h1>
       <ProductVarianList :product="product" />
     </div>
+    
   </div>
 </template>
 <script>
 import ProductVarianList from "@/components/Variants/ProductVarianList.vue";
+
 export default {
   components: {
-    ProductVarianList,
+    ProductVarianList
   },
   props: {
     product: {

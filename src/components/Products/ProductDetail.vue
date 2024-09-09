@@ -15,18 +15,23 @@
             </div>
           </div>
 
-          <div class="lg:col-span-3">
+          <div class="lg:col-span-2 lg:col-span-6">
             <ProductDescription :product="product" />
           </div>
           <ProductVarianList :product="product" />
+          
         </div>
+        <div class=" flow-root sm:mt-12">
+            <References api-endpoint="references/business/enid-service/imagenes-referencia/" />
+        </div>
+
       </div>
     </section>
   </div>
 </template>
 
 <script>
-
+import References from '@/components/Trusth/References.vue';
 import ProductBreadcrumb from "@/components/Products/ProductBreadcrumb.vue";
 import ProductDetailGalery from "@/components/Products/ProductDetailGalery.vue";
 import ProductAddToCart from "@/components/Products/ProductAddToCart.vue";
@@ -39,7 +44,8 @@ export default {
     ProductDetailGalery,
     ProductAddToCart,
     ProductDescription,
-    ProductConfigIcon
+    ProductConfigIcon,
+    References
   },
   data() {
     return {

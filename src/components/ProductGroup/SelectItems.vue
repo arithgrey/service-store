@@ -71,7 +71,7 @@ export default {
     async fetchProductsGroup() {
       try {
         const response = await this.$axios.get(
-          `/product-group/${this.product_group}/products/`
+          `/enid/product-group/${this.product_group}/products/`
         );
         this.products = response.data.products;
         this.category = response.data.category;

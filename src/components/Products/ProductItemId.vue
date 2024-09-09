@@ -67,7 +67,7 @@ export default {
     
       try {
         const response = await this.$axios.get(
-          `productos/${this.id}`
+          `enid/productos/${this.id}`
         );
     
         this.product = response.data;

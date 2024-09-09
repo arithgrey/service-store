@@ -63,7 +63,7 @@ export default {
     
       try {
         const response = await this.$axios.get(
-          `productos/${this.item_order.product}`
+          `enid/productos/${this.item_order.product}`
         );
     
         this.product = response.data;

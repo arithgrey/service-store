@@ -45,7 +45,7 @@ export default {
     async fetchAddress() {
       try {
         const response = await this.$axios.get(
-          `direccion/${this.order.shipping_address}`
+          `enid/direccion/${this.order.shipping_address}`
         );
         this.address = response.data;
       } catch (error) {
@@ -54,7 +54,7 @@ export default {
     },
     formatPhoneNumber(number) {
       
-            return `(${String(number).slice(0, 3)}) ${String(number).slice(3, 6)}-${String(number).slice(6)}`;
+      return `(${String(number).slice(0, 3)}) ${String(number).slice(3, 6)}-${String(number).slice(6)}`;
 
     },
   },

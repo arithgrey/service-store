@@ -316,7 +316,7 @@ export default {
     async processPayment() {
       this.cleanErrors();
       this.form.products = this.$store.getters.getProductsFromCart;      
-      return await this.paymentHelper.processPayment(this.form, "order/oauth/");
+      return await this.paymentHelper.processPayment(this.form, "enid/order/oauth/");
     },
 
     async nextToSaveOrder(response) {

@@ -73,7 +73,7 @@ export default {
     async fetchOrder() {
       try {
         const response = await this.$axios.get(
-          `compra/${this.$route.params.id}`
+          `enid/compra/${this.$route.params.id}`
         );
         this.order = response.data;
         this.items_order = response.data.items;

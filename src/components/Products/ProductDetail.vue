@@ -31,12 +31,12 @@
 </template>
 
 <script>
-import References from '@/components/Trusth/References.vue';
 import ProductBreadcrumb from "@/components/Products/ProductBreadcrumb.vue";
 import ProductDetailGalery from "@/components/Products/ProductDetailGalery.vue";
 import ProductAddToCart from "@/components/Products/ProductAddToCart.vue";
 import ProductDescription from "@/components/Products/ProductDescription.vue";
 import ProductConfigIcon from "@/components/Products/ProductConfigIcon.vue";
+import References from '@/components/Trusth/References.vue';
 
 export default {
   components: {

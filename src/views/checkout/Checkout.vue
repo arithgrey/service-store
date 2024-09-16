@@ -1,11 +1,14 @@
 <template>
-  <div>
-    <div class="mt-10">
+  <div class="flex flex-col">
+    <!-- Sección de pasos de compra -->
+    <div class="">
       <StepsShop :show_buy="true" />
     </div>
+
+    <!-- Sección de resumen del pedido y otros detalles -->
     <div
       v-if="showAddToCart"
-      class="grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 px-4 py-24 sm:px-6 sm:py-32 lg:max-w-7xl lg:grid-cols-2 lg:px-8"
+      class="grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 px-4 py-24 sm:px-6 sm:py-32 lg:max-w-7xl lg:grid-cols-2 lg:px-8 flex-grow"
     >
       <div>
         <h2 class="text-2xl font-bold tracking-tight text-gray-900 sm:tc mb-5">
@@ -26,12 +29,17 @@
         </div>
         <CartList />
 
-        <div class="mt-20 p-3">
+        <!-- Aseguramos que PaymentMethods esté al 100% y debajo -->
+        <div class="w-full mt-10">
+          <PaymentMethods class="w-full" />
+        </div>
+
+        <div class="mt-15">
           <h2
             class="text-2xl font-bold tracking-tight text-gray-900 sm:tc mb-2"
           >
             Llegada ?<span class="border p-1">?</span>
-          </h2>
+          </h2>  
           <div class="bg-gray-50 p-2">
             <p class="text-sm">
               Llegan <span class="font-bold">HOY en CDMX</span> y área
@@ -58,11 +66,11 @@
 
         <FormCheckout v-if="!isAuthenticated"/>
         <FormCheckoutSigned v-if="isAuthenticated"/>
-
       </div>
     </div>
   </div>
 </template>
+
 <script>
 import CartList from "@/components/Cart/CartList.vue";
 import FormCheckout from "@/components/Cart/FormCheckout.vue";
@@ -71,7 +79,7 @@ import StepsShop from "@/components/Trusth/StepsShop.vue";
 import AccessButton from "@/components/Login/AccessButton.vue";
 import CartHelper from "@/components/Products/js/CartOrderHelper.js";
 import OAuthHelper from "@/helpers/OAuth.js";
-
+import PaymentMethods from "@/components/Payments/PaymentMethods.vue";
 
 export default {
   components: {
@@ -80,6 +88,7 @@ export default {
     FormCheckout,
     FormCheckoutSigned,
     AccessButton,
+    PaymentMethods
   },
   data() {
     return {

@@ -1,5 +1,5 @@
 <template>
-    <div class="relative w-full overflow-hidden text-gray-950 text-xs mx-auto text-center bg-stone-100 mt-8">
+    <div class="relative w-full overflow-hidden text-gray-950 text-xs mx-auto text-center bg-stone-100">
       <div 
         class="whitespace-nowrap transition-transform duration-500 ease-in-out"
         :style="{ transform: `translateX(-${currentSlide * 100}%)` }"
@@ -18,11 +18,12 @@
         currentSlide: 0,
         slides: [
           "Envío gratis | 2 días hábiles",
-          "Pago contra entrega dentro de CDMX y recibe el mismo día",
+          "Pago contra entrega dentro de CDMX",
+          "En CDMX recibe el mismo día",
           "Cancela en cualquier momento",
-          "Compra segura y rápida",
+          "Compra segura - rápida",
           "Atención al cliente 24/7",
-          "Descuentos exclusivos por tiempo limitado",
+          "Descuentos exclusivos (tiempo limitado)",
         ],
       };
     },

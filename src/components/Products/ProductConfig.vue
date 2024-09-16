@@ -117,11 +117,10 @@ export default {
   methods: {
     async fetchStock() {
       try {
+          const params = { product_id: this.product.id };
+          const response = await this.$axios.get(`/stock/movements/stock-movements/quantity/`, {params});    
+          this.quantity = response.data.quantity;  
         
-        const params = { product_id: this.product.id };
-        const response = await this.$axios.get(`/stock/movements/stock-movements/quantity/`, {params});    
-        this.quantity = response.data.quantity;  
-
       } catch (error) {
         console.error("Error stock products:", error);
       }

@@ -74,9 +74,11 @@
 import { StarIcon } from "@heroicons/vue/20/solid";
 import SelectItems from "@/components/ProductGroup/SelectItems.vue";
 import CountDown from "@/components/Products/CountDown.vue";
-
 export default {
-  components: { StarIcon, SelectItems, CountDown },
+  components: { 
+    StarIcon, 
+    SelectItems, 
+    CountDown},
   props: {
     product: {
       type: Object,

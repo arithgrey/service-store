@@ -20,7 +20,6 @@ import BannerOffert from "@/components/Banner/BannerOffert.vue";
 import TrusthHome from "@/components/Trusth/TrusthHome.vue";
 import Community from "@/components/Trusth/Community.vue";
 
-
 export default {
   components: {
     ProductList,

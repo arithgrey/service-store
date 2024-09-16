@@ -28,16 +28,13 @@
           </div>
         </div>
 
-        <!-- Copyright information -->
-
-        <!-- Links section -->
       </div>
     </div>
 
     <div class="mt-10 p-5 relative z-50 bg-white md:px-8 md:pt-12 pb-6">
       <div class="container">
         <div class="flex flex-wrap">
-          <div class="w-full md:w-4/12 border-b ">
+          <div class="w-full md:w-4/12  ">
             <h4
               class="block antialiased tracking-normal md:text-3xl text-2xl font-semibold leading-snug text-inherit mb-2 !font-semibold !text-primary"
             >
@@ -84,6 +81,10 @@
                 ></i
               ></a>
             </div>
+            <div class="md:mt-2 mb-10">
+              <PaymentMethods/>
+            </div>
+
           </div>
           <div class="w-full px-4 md:w-7/12">
             <div class="items-top mb-6 flex flex-wrap">
@@ -188,14 +189,19 @@
     <p
       class="flex h-7 items-center justify-center text-sm font-extrabold bg-stone-100"
     >
-      Todos los derechos reservados ENID SERVICE © 2023
+      Todos los derechos reservados ENID SERVICE © 2024
     </p>
   </div>
   </footer>
 </template>
 
 <script>
-export default {  
+import PaymentMethods from '@/components/Payments/PaymentMethods.vue';
+
+export default {
+  components: {
+    PaymentMethods
+  },  
   data(){
     return {
       show:true,

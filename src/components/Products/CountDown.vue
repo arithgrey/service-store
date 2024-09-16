@@ -1,7 +1,7 @@
 <template>
-  <div class="flex flex-col items-center justify-center w-full bg-sky-800 p-1">
-    <div class="text-center  font-semibold text-white ">
-      En {{ hours }} horas, {{ minutes }} minutos y {{ seconds }} segundos termina la oferta
+  <div class="text-gray-950 bg-stone-100 mt-5 p-2">
+    <div class="flex h-7 items-center justify-center text-sm font-extrabold bg-stone-100">
+      En {{ hours }} horas, {{ minutes }} minutos y {{ seconds }} segundos <span class="underline ml-1"> termina la oferta</span>
     </div>
   </div>
 </template>

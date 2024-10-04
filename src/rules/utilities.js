@@ -39,6 +39,15 @@ export function formatNumber() {
     }
 }
 
+export function formatQuantity() {
+    this.form.quantity = this.cleanNonNumericChars(this.form.quantity);
+    this.v$?.form.quantity.$touch(); 
+
+    if (this.form.quantity.length > 7) {
+        this.form.quantity = this.form.quantity.slice(0, 7);
+    }
+}
+
 export function formatPostalCode() {
     this.v$?.form.postal_code.$touch();
     this.form.postal_code = this.cleanNonNumericChars(this.form.postal_code);

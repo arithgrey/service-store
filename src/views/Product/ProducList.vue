@@ -7,9 +7,9 @@
     </div>
     <div class="mx-auto xs:w-full">
       <TrusthHome />
+      <FreeDelivery/>
       <Community />      
     </div>
-    
   </div>
 </template>
 
@@ -19,6 +19,7 @@ import Banner from "@/components/Banner/Banner.vue";
 import BannerOffert from "@/components/Banner/BannerOffert.vue";
 import TrusthHome from "@/components/Trusth/TrusthHome.vue";
 import Community from "@/components/Trusth/Community.vue";
+import FreeDelivery from "@/components/Trusth/FreeDelivery.vue";
 
 export default {
   components: {
@@ -27,7 +28,7 @@ export default {
     BannerOffert,
     TrusthHome,
     Community,
-    
+    FreeDelivery,
   },
   methods: {
     handleOpenCartProductList() {      

@@ -1,5 +1,5 @@
 <template>
-  <div class="overflow-y-hidden bg-cyan-700">
+  <div class="overflow-y-hidden bg-gray-950">
     <div
       class="mx-auto container flex justify-center items-center py-12 px-4 sm:px-6 2xl:px-0"
     >

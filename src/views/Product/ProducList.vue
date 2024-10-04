@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <Banner />
+  <div>    
+    <Running />
     <BannerOffert />
     <div class="mx-auto xs:w-full md:w-10/12 p-5 md:p-0">
       <ProductList @open_shopping_cart_product_list="handleOpenCartProductList" />
@@ -20,6 +20,7 @@ import BannerOffert from "@/components/Banner/BannerOffert.vue";
 import TrusthHome from "@/components/Trusth/TrusthHome.vue";
 import Community from "@/components/Trusth/Community.vue";
 import FreeDelivery from "@/components/Trusth/FreeDelivery.vue";
+import Running from "@/components/Video/Running.vue";
 
 export default {
   components: {
@@ -29,6 +30,7 @@ export default {
     TrusthHome,
     Community,
     FreeDelivery,
+    Running
   },
   methods: {
     handleOpenCartProductList() {      

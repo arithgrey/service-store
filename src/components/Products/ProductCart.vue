@@ -116,7 +116,6 @@ export default {
     ProductVarianList,    
   },
   props: {
-  
     api: {
       type: String,
       required:true

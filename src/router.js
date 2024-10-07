@@ -15,7 +15,7 @@ import ProductsSearchByCategory from '@/views/Search/ProductsSearchByCategory.vu
 import AccountEcommerce from '@/views/Account/Ecommerce.vue';
 import SearchLead from '@/views/Leads/Search.vue';
 import Searchorders from '@/views/Order/Search.vue';
-import Impact from '@/views/impact/Impact.vue';
+import Impact from '@/views/Impact/Impact.vue';
 
 const routes = [
   {   

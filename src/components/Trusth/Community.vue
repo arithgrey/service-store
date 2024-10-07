@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="overflow-y-hidden bg-gray-900">
+    <div class="overflow-y-hidden bg-gray-950">
       <div class="container py-12 px-4 sm:px-6 2xl:px-0">
         <div>
           <p class="text-3xl xl:text-4xl font-semibold leading-9 text-white">

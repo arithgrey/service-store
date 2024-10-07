@@ -12,7 +12,6 @@
         Your browser does not support the video tag.
       </video>
   
-      <!-- Texto en el centro a la izquierda -->
       <div class="absolute top-1/2 left-10 transform -translate-y-1/2 text-white">
         <h1 class="text-4xl font-bold">
             Pasa el siguiente nivel ya!        
@@ -33,8 +32,4 @@
     },
   };
   </script>
-  
-  <style scoped>
-  /* Aquí puedes agregar estilos personalizados si es necesario */
-  </style>
   

@@ -48,8 +48,7 @@
                 <h3 class="text-5xl font-bold uppercase mb-4 p-3 text-white">
                     Distruta la transformación mientras te impulsas a conseguir nuevas experiencias.
                 </h3>
-            </div>
-            
+            </div>    
         </div>
     </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div class="overflow-y-hidden bg-cyan-700">
+  <div class="overflow-y-hidden bg-gray-950">
     <div class="mx-auto container flex justify-center items-center py-2 sm:px-2">
       <div class="flex flex-col lg:flex-row justify-center items-center">
         <div class="w-full lg:w-3/4 sm:w-80 flex flex-col justify-start items-start">

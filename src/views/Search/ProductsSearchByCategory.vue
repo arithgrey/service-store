@@ -32,20 +32,23 @@
 
 <script>
 import ProductCart from "@/components/Products/ProductCart.vue";
+
 export default {
   components: {
-    ProductCart,
-  },
+    ProductCart 
+   },
   data() {
     return {
       open: false,
       api: null,
       categoryName:null,
+      category_name: null,
     };
   },
   watch: {
     "$route.params.categorySlug": function (newQ, oldQ) {
-      this.api = `enid/product-category/${newQ}/`;      
+      this.api = `enid/product-category/${newQ}/`;
+      this.category_name = newQ      
       this.categoryName = newQ.replace(/-/g, " ");
     },
   },

@@ -21,9 +21,6 @@
           <ProductVarianList :product="product" />
           
         </div>
-        <div class=" flow-root sm:mt-12">
-            <References api-endpoint="references/business/enid-service/imagenes-referencia/" />
-        </div>
         <div>
           <PromoSlider/>
         </div>
@@ -38,9 +35,7 @@ import ProductDetailGalery from "@/components/Products/ProductDetailGalery.vue";
 import ProductAddToCart from "@/components/Products/ProductAddToCart.vue";
 import ProductDescription from "@/components/Products/ProductDescription.vue";
 import ProductConfigIcon from "@/components/Products/ProductConfigIcon.vue";
-import References from '@/components/Trusth/References.vue';
 import PromoSlider from "@/components/Terms/PromoSlider.vue";
-
 export default {
   components: {
     ProductBreadcrumb,
@@ -48,8 +43,7 @@ export default {
     ProductAddToCart,
     ProductDescription,
     ProductConfigIcon,
-    References,
-    PromoSlider
+    PromoSlider,
   },
   data() {
     return {

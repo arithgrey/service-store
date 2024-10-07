@@ -387,6 +387,7 @@ const navigation = {
     { name: "REFERENCIAS", href: "referencias",  authenticated: false},
     { name: "RASTREO", href: "rastreo",  authenticated: true },
     { name: "CAMBIOS", href: "cambios-y-devoluciones", authenticated: true, id:1  },
+    { name: "ABOUT", href: "impact"},
   ],
 };
 

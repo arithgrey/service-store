@@ -1,6 +1,7 @@
 <template>
   <div>    
-    <Running />
+    <Halloweeen/>
+    <!--<Running />-->
     <BannerOffert />
     <div class="mx-auto xs:w-full md:w-10/12 p-5 md:p-0">
       <ProductList @open_shopping_cart_product_list="handleOpenCartProductList" />
@@ -8,7 +9,8 @@
     <div class="mx-auto xs:w-full">
       <TrusthHome />
       <FreeDelivery/>
-      <Community />      
+      <CommunityHalloween/>
+      <!--<Community />-->      
     </div>
   </div>
 </template>
@@ -21,6 +23,8 @@ import TrusthHome from "@/components/Trusth/TrusthHome.vue";
 import Community from "@/components/Trusth/Community.vue";
 import FreeDelivery from "@/components/Trusth/FreeDelivery.vue";
 import Running from "@/components/Video/Running.vue";
+import Halloweeen from "@/components/Video/Halloween.vue";
+import CommunityHalloween from "@/components/Video/CommunityHalloween.vue";
 
 export default {
   components: {
@@ -30,7 +34,9 @@ export default {
     TrusthHome,
     Community,
     FreeDelivery,
-    Running
+    Running,
+    Halloweeen,
+    CommunityHalloween
   },
   methods: {
     handleOpenCartProductList() {      

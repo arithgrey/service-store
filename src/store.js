@@ -33,6 +33,7 @@ export default createStore({
       localStorage.removeItem('refresh_token');      
     },
     addToCart(state, product) {
+      debugger;
       const existingItem = state.cart.find(item => item.product.id === product.id);
       if (existingItem) {
         existingItem.quantity++;
@@ -40,6 +41,10 @@ export default createStore({
         state.cart.push({ product: product, quantity: 1 });
       }
       localStorage.setItem('cart', JSON.stringify(state.cart));
+
+      if (typeof fbq === 'function') {
+        fbq('track', 'AddToWishlist');
+      }
     },
     removeFromCart(state, product) {
       state.cart = state.cart.filter(item => item.product.id !== product.id);

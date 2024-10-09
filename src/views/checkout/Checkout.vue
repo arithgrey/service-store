@@ -98,6 +98,9 @@ export default {
   },
   mounted() {
     window.scrollTo({ top: 0, behavior: "smooth" });
+    if (typeof fbq === 'function') {
+      fbq('track', 'InitiateCheckout');
+    }
   },
   methods: {
     openSeccionLogin() {

@@ -72,6 +72,7 @@
 
                         <router-link                         
                         v-if="showReviewAndPay"
+                        @click.prevent="handleReviewAndPay"
                         @click="open = false"
                         class="flex items-center justify-center 
                         rounded-md border border-transparent bg-slate-900 px-6 py-3 text-base font-medium text-white shadow-sm 
@@ -165,6 +166,12 @@ export default {
         minimumFractionDigits: 2,
       });
     },
+    handleReviewAndPay() {
+      if (typeof fbq === 'function') {
+        fbq('track', 'Lead');
+      }
+    }
+
   },
   computed:{
     showReviewAndPay() {      

@@ -19,26 +19,40 @@
       </div>
     </div>
 
+    <div class="mt-10 flex flex-col items-center justify-between space-y-4 border-t  py-4 sm:space-y-0">
+      <div class="flex flex-col items-center space-y-4">
+        <div class="flex flex-col">
+          <h1 class="text-3xl font-bold">{{ product.formatted_price }}</h1>
+          <span class="text-slate-600 line-through">
+            ${{ normalizedPrice }}
+          </span>
+        </div>
 
-    <div
-      class="mt-10 flex flex-col items-center justify-between space-y-4 border-t  py-4 sm:flex-row sm:space-y-0">
-      <div class="flex flex-col">
-        <h1 class="text-3xl font-bold">{{ product.formatted_price }}</h1>
-        <span class="text-slate-600 line-through">
-          ${{ normalizedPrice }}
-        </span>
+        <button type="button" @click="addToCart()"
+          class="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-gray-900 bg-none px-12 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800 xs:w-full lg:w-auto">
+
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+            stroke="currentColor" class="shrink-0 mr-3 h-5 w-5">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+          </svg>
+
+          Añadir al carrito
+        </button>
+
+        <a v-if="product.express_payment_link" @click.prevent="handleExpressCheckout"
+          class="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-blue-600 bg-none px-12 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-blue-500 xs:w-full lg:w-auto">
+          <svg xmlns="http://www.w3.org/2000/svg" class="shrink-0 mr-3 h-5 w-5" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+          </svg>
+          Compra Express
+        </a>
+
       </div>
-
-      <button type="button" @click="addToCart()" class="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-gray-900 bg-none px-12 py-3 text-center text-base
-   font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800 xs:w-full lg:w-auto">
-        <svg xmlns="http://www.w3.org/2000/svg" class="shrink-0 mr-3 h-5 w-5" fill="none" viewBox="0 0 24 24"
-          stroke="currentColor" stroke-width="2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-        </svg>
-        Añadir al carrito
-      </button>
     </div>
-    <div class="border-b py-5">
+
+    <div class="border-b ">
       <CountDown />
     </div>
     <div>
@@ -70,15 +84,17 @@
     </ul>
   </div>
 </template>
+
 <script>
 import { StarIcon } from "@heroicons/vue/20/solid";
 import SelectItems from "@/components/ProductGroup/SelectItems.vue";
 import CountDown from "@/components/Products/CountDown.vue";
 export default {
-  components: { 
-    StarIcon, 
-    SelectItems, 
-    CountDown},
+  components: {
+    StarIcon,
+    SelectItems,
+    CountDown
+  },
   props: {
     product: {
       type: Object,
@@ -102,6 +118,12 @@ export default {
       this.$emit("open_shopping_cart_product");
       return this.$store.commit("addToCart", this.product);
 
+    },
+    handleExpressCheckout() {
+      if (typeof fbq === 'function') {
+        fbq('track', 'InitiateCheckout');
+      }
+      window.location.href = this.product.express_payment_link;
     },
   },
 

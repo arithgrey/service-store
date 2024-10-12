@@ -33,7 +33,6 @@ export default createStore({
       localStorage.removeItem('refresh_token');      
     },
     addToCart(state, product) {
-      debugger;
       const existingItem = state.cart.find(item => item.product.id === product.id);
       if (existingItem) {
         existingItem.quantity++;

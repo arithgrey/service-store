@@ -57,13 +57,10 @@
       </div>
 
       <div>
-        <h2 class="text-2xl font-bold tracking-tight text-gray-900 sm:tc mb-5">
-          Información de envío
+        <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:tc mb-8">
+          Pago
         </h2>
-        <p class="mt-4 text-sm text-gray-950 bg-gray-50">
-          Solo usaremos estos datos para ayudarnos a entregar tu pedido
-        </p>
-
+        <ExpressCheckout/>
         <FormCheckout v-if="!isAuthenticated"/>
         <FormCheckoutSigned v-if="isAuthenticated"/>
       </div>
@@ -80,6 +77,7 @@ import AccessButton from "@/components/Login/AccessButton.vue";
 import CartHelper from "@/components/Products/js/CartOrderHelper.js";
 import OAuthHelper from "@/helpers/OAuth.js";
 import PaymentMethods from "@/components/Payments/PaymentMethods.vue";
+import ExpressCheckout from "@/components/Cart/ExpressCheckout.vue";
 
 export default {
   components: {
@@ -88,7 +86,8 @@ export default {
     FormCheckout,
     FormCheckoutSigned,
     AccessButton,
-    PaymentMethods
+    PaymentMethods,
+    ExpressCheckout
   },
   data() {
     return {

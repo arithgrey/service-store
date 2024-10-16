@@ -2,9 +2,13 @@
   <div>
     <form class="mt-8" @submit.prevent="submitForm" :disabled="loading">
       <div>
-        <h5 class="text-2xl font-bold tracking-tight text-gray-900 sm:tc mb-10">
+        <h5 class="text-2xl font-bold tracking-tight text-gray-900 sm:tc mb-5">
           ¿Dónde enviamos tu pedido?
-        </h5>        
+        </h5> 
+        <p class="mt-4 text-sm text-gray-950 bg-gray-50">
+          Solo usaremos estos datos para ayudarnos a entregar tu pedido
+        </p>
+       
       </div>
 
       <div ref="shippingAddressSection">        

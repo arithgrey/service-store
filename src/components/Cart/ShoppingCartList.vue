@@ -86,7 +86,8 @@
                         rounded-md border border-transparent bg-slate-400 px-6 py-3 text-base font-medium text-white shadow-sm 
                         hover:bg-slate-400"
                         >Revisar y Pagar
-                        </div>                      
+                        </div> 
+                        <ExpressPayment/>                     
                       </div>
                       <div
                         class="mt-6 flex justify-center text-center text-sm text-gray-500"
@@ -132,7 +133,7 @@ import {
 } from "@headlessui/vue";
 import CartList from '@/components/Cart/CartList.vue';
 import StepsShop from '@/components/Trusth/StepsShop.vue';
-
+import ExpressPayment from "@/components/Cart/ExpressPayment.vue";
 export default {
   components: {
     Dialog,
@@ -146,6 +147,7 @@ export default {
     XMarkIcon,
     CartList,
     StepsShop,
+    ExpressPayment,
   },
   data() {
     return {

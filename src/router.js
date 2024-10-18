@@ -1,15 +1,15 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import MainLayout from '@/layouts/MainLayout.vue'; 
 import FaqList from '@/views/Faq/FaqList.vue';
-import ReturnsList from '@/views/Faq/Returns/ReturnsList.vue'
-import ReturnsDetail from '@/views/Faq/Returns/ReturnsDetail.vue'
-import SeachOrders from '@/views/SearchOrders/Form.vue'
-import ProductList from '@/views/Product/ProducList.vue'
-import Checkout from '@/views/checkout/Checkout.vue'
-import ProductDetail from '@/views/Product/ProductDetail.vue'
-import References from '@/views/References/ReferencesList.vue'
-import OrderDetail from '@/views/Order/OrderDetail.vue'
-import UserArea from '@/views/UserArea/Area.vue'
+import ReturnsList from '@/views/Faq/Returns/ReturnsList.vue';
+import ReturnsDetail from '@/views/Faq/Returns/ReturnsDetail.vue';
+import SeachOrders from '@/views/SearchOrders/Form.vue';
+import ProductList from '@/views/Product/ProducList.vue';
+import Checkout from '@/views/checkout/Checkout.vue';
+import ProductDetail from '@/views/Product/ProductDetail.vue';
+import References from '@/views/References/ReferencesList.vue';
+import OrderDetail from '@/views/Order/OrderDetail.vue';
+import UserArea from '@/views/UserArea/Area.vue';
 import SeachProducts from '@/views/Search/SeachProducts.vue';
 import ProductsSearchByCategory from '@/views/Search/ProductsSearchByCategory.vue';
 import AccountEcommerce from '@/views/Account/Ecommerce.vue';
@@ -116,6 +116,13 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition;
+    } else {
+      return { top: 0 };
+    }
+  }
 });
 
 export default router;

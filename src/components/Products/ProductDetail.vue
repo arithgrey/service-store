@@ -9,7 +9,7 @@
           </div>
 
           <div class="lg:col-span-2 lg:row-span-2 lg:row-end-2 relative">
-            <ProductConfigIcon :product="product" @open_config_product="handler_open_config_product"/>
+            <ProductConfigIcon :product="product" @open_config_product="handler_open_config_product" />
             <div class="mt-5">
               <ProductAddToCart :product="product" @open_shopping_cart_product="handle_open_shoping_cart" />
             </div>
@@ -19,10 +19,10 @@
             <ProductDescription :product="product" />
           </div>
           <ProductVarianList :product="product" />
-          
+
         </div>
         <div>
-          <PromoSlider/>
+          <PromoSlider />
         </div>
       </div>
     </section>
@@ -57,25 +57,40 @@ export default {
   },
   methods: {
 
+
     async fetchProduct() {
       const categorySlug = this.$route.params.categorySlug;
       const productSlug = this.$route.params.productSlug;
-
       try {
         const response = await this.$axios.get(
           `enid/productos/${categorySlug}/${productSlug}/`
         );
+
         this.product = response.data;
         this.mainImagePreview()
+        this.facebook_event(this.product)
+
       } catch (error) {
         console.error("Error al obtener los datos:", error);
+      }
+    },
+    facebook_event(product) {
+      debugger;
+      if (typeof fbq === 'function') {
+        fbq('track', 'ViewContent', {
+          content_name: product.name,
+          content_ids: [product.id],
+          content_type: 'product',
+          value: parseFloat(product.price),
+          currency: 'MXN'
+        });
       }
     },
     handle_open_shoping_cart() {
 
       this.$emit("open_shopping_cart_product");
     },
-    handler_open_config_product(product){
+    handler_open_config_product(product) {
       this.$emit("open_config_product", product);
     },
     mainImagePreview() {

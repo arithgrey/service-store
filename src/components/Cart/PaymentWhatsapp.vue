@@ -37,7 +37,7 @@
         }
         const currentUrl = window.location.href;
         const message = `Hola, me interesa este producto: ${this.productName}. Aquí está el enlace: ${currentUrl}`;
-        const whatsappUrl = `https://wa.me/5252967027?text=${encodeURIComponent(message)}`;
+        const whatsappUrl = `https://wa.me/5552967027?text=${encodeURIComponent(message)}`;
         window.open(whatsappUrl, '_blank');
       },
     },

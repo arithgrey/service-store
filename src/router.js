@@ -16,6 +16,7 @@ import AccountEcommerce from '@/views/Account/Ecommerce.vue';
 import SearchLead from '@/views/Leads/Search.vue';
 import Searchorders from '@/views/Order/Search.vue';
 import Impact from '@/views/Impact/Impact.vue';
+import Advanced from '@/views/Faq/Advanced.vue';
 
 const routes = [
   {   
@@ -106,6 +107,11 @@ const routes = [
         path: 'impact',
         name: 'impact',
         component: Impact,        
+      },
+      {
+        path: 'experiencia',
+        name: 'experiencia',
+        component: Advanced,        
       },
     
     ],

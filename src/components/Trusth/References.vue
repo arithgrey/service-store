@@ -1,17 +1,16 @@
 <template>
-  <div class="overflow-y-hidden bg-gray-950">
-    <div class="mx-auto container flex justify-center items-center py-2 sm:px-2">
-      <div class="flex flex-col lg:flex-row justify-center items-center">
-        <div class="w-full lg:w-3/4 sm:w-80 flex flex-col justify-start items-start">
-          <div>
-            <p class="text-3xl xl:text-4xl font-semibold leading-9 text-white">
-              NUESTRA HISTORIA: CONTADA POR USTEDES
-            </p>
-          </div>
-        </div>
-      </div>
+  <Share />
+  <div class="flex flex-col md:flex-row items-stretch bg-black p-2">
+    <div class="w-full  pl-0 md:pl-5 bg-cream-100 p-5 flex flex-col justify-center text-right">
+      <h3 class="text-4xl font-bold uppercase mb-4 p-3 text-white">
+        Nuestra historía <br>
+        <span class="animate-pulse text-yellow-300 cursor-pointer">
+          contada por ustedes
+        </span>
+      </h3>
     </div>
   </div>
+
 
   <div>
     <div ref="imageContainer" class="max-h-screen overflow-y-auto p-1" @scroll="handleScroll">
@@ -32,7 +31,13 @@
 </template>
 
 <script>
+
+import Share from '@/components/Trusth/Share.vue'
+
 export default {
+  components: {
+    Share
+  },
   props: {
     apiEndpoint: {
       type: String,

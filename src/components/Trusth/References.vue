@@ -11,7 +11,6 @@
     </div>
   </div>
 
-
   <div>
     <div ref="imageContainer" class="max-h-screen overflow-y-auto p-1" @scroll="handleScroll">
       <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
@@ -66,9 +65,13 @@ export default {
     },
     async loadMoreImages() {
       try {
-        const response = await this.$axios.get(this.next);
-        this.images = [...this.images, ...response.data.results];
-        this.next = response.data.next;
+
+        const secureNextUrl = this.next.replace('http://', 'https://');
+        if (secureNextUrl) {
+          const response = await this.$axios.get(secureNextUrl);
+          this.images = [...this.images, ...response.data.results];
+          this.next = response.data.next;
+        }
       } catch (error) {
         console.error("Error loading more images:", error);
       } finally {

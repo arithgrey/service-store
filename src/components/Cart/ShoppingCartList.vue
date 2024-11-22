@@ -79,6 +79,16 @@
                         hover:bg-slate-950"
                         to="/checkout">Revisar y Pagar
                         </router-link>
+
+                        <router-link                         
+                        v-if="showReviewAndPay"
+                        @click.prevent="handleReviewAndPay"
+                        @click="open = false"
+                        class="flex items-center justify-center  mt-4
+                        rounded-md border border-transparent bg-blue-800 px-6 py-3 text-base font-medium text-white shadow-sm 
+                        hover:bg-slat-950"
+                        to="/checkout-pago-contra-entrega">Pago contra entrega
+                        </router-link>
                         
                         <div
                         v-if="!showReviewAndPay"                        
@@ -87,6 +97,7 @@
                         hover:bg-slate-400"
                         >Revisar y Pagar
                         </div> 
+                         
                         <ExpressPayment/>                     
                       </div>
                       <div

@@ -31,7 +31,7 @@ export default {
     return {
       orders: null,
       selectedOrder: null,
-      api:"order-user",
+      api:"/enid/order-user",
     };
   },
   methods: {

@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col">
     <!-- Sección de pasos de compra -->
-    <div class="">
+    <div class="">  
       <StepsShop :show_buy="true" />
     </div>
 
@@ -14,9 +14,7 @@
         <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:tc mb-8">
           Pago
         </h2>
-        <ExpressCheckout />
-        <FormCheckout v-if="!isAuthenticated" />
-        <FormCheckoutSigned v-if="isAuthenticated" />
+        <FormPaymentOnDelivery v-if="!isAuthenticated" />
       </div>
     </div>
   </div>
@@ -24,20 +22,15 @@
 
 <script>
 import OrderSummary from "@/components/Order/OrderSummary.vue";
-import FormCheckout from "@/components/Cart/FormCheckout.vue";
-import FormCheckoutSigned from "@/components/Cart/FormCheckoutSigned.vue";
+import FormPaymentOnDelivery from "@/components/Cart/FormPaymentOnDelivery.vue";
 import StepsShop from "@/components/Trusth/StepsShop.vue";
 import CartHelper from "@/components/Products/js/CartOrderHelper.js";
 import OAuthHelper from "@/helpers/OAuth.js";
-import ExpressCheckout from "@/components/Cart/ExpressCheckout.vue";
 
 export default {
   components: {
-
     StepsShop,
-    FormCheckout,
-    FormCheckoutSigned,
-    ExpressCheckout,
+    FormPaymentOnDelivery,
     OrderSummary
   },
   data() {

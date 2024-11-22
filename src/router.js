@@ -6,6 +6,7 @@ import ReturnsDetail from '@/views/Faq/Returns/ReturnsDetail.vue';
 import SeachOrders from '@/views/SearchOrders/Form.vue';
 import ProductList from '@/views/Product/ProducList.vue';
 import Checkout from '@/views/checkout/Checkout.vue';
+import PaymentOnDelivery from '@/views/checkout/PaymentOnDelivery.vue';
 import ProductDetail from '@/views/Product/ProductDetail.vue';
 import References from '@/views/References/ReferencesList.vue';
 import OrderDetail from '@/views/Order/OrderDetail.vue';
@@ -47,6 +48,12 @@ const routes = [
         name: 'checkout',
         component: Checkout,
       },
+      {
+        path:'checkout-pago-contra-entrega',
+        name: 'checkout-pago-contra-entrega',
+        component: PaymentOnDelivery,
+      },
+      
       {
         path: '/',
         name: 'product-list',

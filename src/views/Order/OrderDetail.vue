@@ -1,19 +1,25 @@
 <template>
   <div>
+    <Steps/>
+
     <div class="bg-white">
       <div class="pt-6">
+        
         <div
           class="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16"
         >
           <div class="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
+
             <h1
               class="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl"
             >
               Orden #{{ order.id }}
             </h1>
-            <p class="font-bold">status: {{ order.status }}</p>
+            <p class="font-bold">Status: {{ order.status }} </p>
+            <TypeOfPayment :paymentOnDelivery="order.payment_on_delivery"/>
             <p class="text-sm">Pedido realizado el {{ formattedCreatedAt }}</p>
           </div>
+          
 
           <!-- Options -->
           <div class="mt-4 lg:row-span-3 lg:mt-0">
@@ -24,6 +30,7 @@
               Dirección de envío
             </h1>
             <AddressDetail :order="order" />
+
           </div>
 
           <div
@@ -48,13 +55,18 @@
 <script>
 import ProductItem from "@/components/Products/ProductItemOrder.vue";
 import AddressDetail from "@/components/Address/AddressDetail.vue";
+import TypeOfPayment from "@/components/Order/TypeOfPayment.vue";
+import Steps from "@/components/Delivery/Steps.vue";
+
 import moment from "moment";
 import "moment/locale/es";
 
 export default {
   components: {
     ProductItem,
-    AddressDetail
+    AddressDetail,
+    TypeOfPayment,
+    Steps
   },
   props: {},
   data() {

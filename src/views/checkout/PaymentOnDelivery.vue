@@ -15,14 +15,18 @@
           Pago
         </h2>
         <FormPaymentOnDelivery v-if="!isAuthenticated" />
+        <FormPaymentOnDeliverySession v-if="isAuthenticated" />
+
       </div>
     </div>
   </div>
 </template>
 
 <script>
+
 import OrderSummary from "@/components/Order/OrderSummary.vue";
 import FormPaymentOnDelivery from "@/components/Cart/FormPaymentOnDelivery.vue";
+import FormPaymentOnDeliverySession from "@/components/Cart/FormPaymentOnDeliverySession.vue";
 import StepsShop from "@/components/Trusth/StepsShop.vue";
 import CartHelper from "@/components/Products/js/CartOrderHelper.js";
 import OAuthHelper from "@/helpers/OAuth.js";
@@ -31,6 +35,7 @@ export default {
   components: {
     StepsShop,
     FormPaymentOnDelivery,
+    FormPaymentOnDeliverySession,
     OrderSummary
   },
   data() {

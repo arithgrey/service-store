@@ -9,7 +9,8 @@
       <p class="block text-sm text-right">
         {{ timePassed(order.created_at) }}
       </p>
-      
+      <TypeOfPayment :paymentOnDelivery="order.payment_on_delivery"/>
+
       <p class="text-3xl tracking-tight text-gray-900" >
         Total {{ totalPriceQuantity }}
       </p>
@@ -44,11 +45,13 @@ import { timePassed } from "@/helpers/time.js";
 import ProductItem from "@/components/Products/ProductItemOrder.vue";
 import AddressDetail from "@/components/Address/AddressDetail.vue";
 import OrderHelper from "@/components/Products/js/OrderHelper.js";
+import TypeOfPayment from "@/components/Order/TypeOfPayment.vue";
 
 export default {
   components: {
     ProductItem,
-    AddressDetail
+    AddressDetail,
+    TypeOfPayment
   },
   props: {
     order: {

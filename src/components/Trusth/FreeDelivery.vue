@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import Truck from '@/components/icons/Truck.vue';
+import Truck from '@/components/Icons/Truck.vue';
 
 export default {
     components: {

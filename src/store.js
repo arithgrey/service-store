@@ -14,6 +14,7 @@ export default createStore({
     setUser(state, user) {
       state.user = user;
       localStorage.setItem('user', user);
+      
     },
     setToken(state, token) {
       state.token = token;
@@ -78,7 +79,7 @@ export default createStore({
         ...item.product,
         quantity: item.quantity
       }));
-    }
+    },
   },
   actions: {
 

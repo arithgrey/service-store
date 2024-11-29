@@ -63,7 +63,7 @@ class ValidationRules {
             ),
             maxLength: helpers.withMessage(
                 "El nombre de tu calle es tan largo?",
-                maxLength(100)
+                maxLength(800)
             ),
         };
     }

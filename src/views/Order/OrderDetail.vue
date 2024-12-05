@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Steps/>
-
+    
+    <Steps :stages="orderStages" :currentStage="currentOrderStage" />
     <div class="bg-white">
       <div class="pt-6">
         
@@ -74,7 +74,7 @@ export default {
       order: [],
       items_order: [],
       order_id: null,
-      
+      currentOrderStage: 0,
     };
   },
   mounted() {
@@ -89,6 +89,11 @@ export default {
         );
         this.order = response.data;
         this.items_order = response.data.items;
+        this.orderStages = response.data.visible_statuses;
+        
+        this.currentOrderStage = this.orderStages.findIndex(
+          (stage) => stage.key === this.order.status
+        );
 
       } catch (error) {
         console.error("Error Order list:", error);

@@ -1,42 +1,47 @@
 <template>
   <div>
-    <form class="mt-8" @submit.prevent="submitForm">
-      <div class="flex">
-        <div>
-          <input
-            v-model="form.q"
-            class="peer input-cart"
-            placeholder="Buscar..."
-            type="text"
-            inputmode="text"
-          />
-        </div>
-
+    <form class="mt-8 flex items-center space-x-4" @submit.prevent="submitForm">
+      
+      <div class="">
+        <select
+          id="status"
+          v-model="form.status"
+          class="peer input-cart h-12"
+        >
+          <option value="">Todos</option>
+          <option v-for="status in statusOptions" :key="status.value" :value="status.value">
+            {{ status.label }}
+          </option>
+        </select>
+      </div>
+      <div class="flex items-center">
+        <input
+          v-model="form.q"
+          class="peer input-cart h-12"
+          placeholder="Buscar por texto..."
+          type="text"
+          inputmode="text"
+        />
         <button
           type="submit"
-          class="relative flex items-center px-3 mt-1 font-medium tracking-wide text-white bg-black hover:bg-gray-900 focus:outline-none transition duration-300 transform active:scale-95 ease-in-out"
+          class="flex items-center justify-center h-12 px-4 text-white bg-black hover:bg-gray-900 focus:outline-none transition duration-300 transform active:scale-95 ease-in-out"
         >
-          <span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke-width="1.5"
-              stroke="currentColor"
-              class="w-6 h-6"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-              />
-            </svg>
-          </span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+            />
+          </svg>
         </button>
       </div>
-      <span class="text-red-500 text-sm" v-if="v$?.form.q.$error">
-        {{ v$?.form.q.$errors[0].$message }}
-      </span>
     </form>
   </div>
 </template>
@@ -55,7 +60,6 @@ export const rules = {
 };
 
 export default {
-  components: {},
   props: {
     api: {
       type: String,
@@ -65,10 +69,22 @@ export default {
   data() {
     return {
       formSubmitted: false,
-      
       form: {
         q: "",
+        status: "",
+        payment_on_delivery: false,
       },
+      statusOptions: [
+        { value: "pending", label: "Pedido recibido" },
+        { value: "payment_confirmed", label: "Pago confirmado" },
+        { value: "preparing", label: "Preparando" },
+        { value: "ready_for_shipping", label: "Listo para envío" },
+        { value: "in_transit", label: "En tránsito" },
+        { value: "delivered", label: "Entregado" },
+        { value: "canceled", label: "Cancelado" },
+        { value: "returned", label: "Devuelto" },
+        { value: "cash_on_delivery", label: "Pagado contra entrega" },
+      ],
     };
   },
   setup: () => ({ v$: useVuelidate() }),
@@ -76,21 +92,26 @@ export default {
     return {
       form: rules,
     };
-  }, 
+  },
   methods: {
-      
     async submitForm() {
-      
-      const params = { q: this.form.q };
-      const response = await this.$axios.get(this.api, {params});
-      this.handlerListOrders(response);
-
+      const params = {
+        q: this.form.q,
+        status: this.form.status,
+        payment_on_delivery: this.form.payment_on_delivery,
+      };
+      try {
+        const response = await this.$axios.get(this.api, { params });
+        this.handlerListOrders(response);
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      }
     },
-    handlerListOrders(response){        
-        if(response.status ==  200){            
-            this.$emit("list_orders", response.data)
-        }
-    }
+    handlerListOrders(response) {
+      if (response.status === 200) {
+        this.$emit("list_orders", response.data);
+      }
+    },
   },
 };
 </script>

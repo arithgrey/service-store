@@ -21,14 +21,17 @@
           </h5>
           <CartTotal :productsFromCart="item" />
 
-          <div class="flex mt-5 items-end justify-end">
-            <p class="block text-sm">
-              {{ item.status }}
+          <div class="flex mt-2 items-end justify-end">
+            <p class="block text-sm ">
+              {{ get_status_label(item) }}
             </p>
             <span class="mx-2 text-sm text-gray-700">|</span>
             <p class="block text-sm">
               {{ timePassed(item.created_at) }}
             </p>
+          </div>
+          <div>
+            <TypeOfPayment :paymentOnDelivery="item.payment_on_delivery" />
           </div>
         </div>
       </div>
@@ -39,10 +42,13 @@
 <script>
 import { timePassed } from "@/helpers/time.js";
 import CartTotal from "@/components/Order/CartTotal.vue";
+import TypeOfPayment from "@/components/Order/TypeOfPayment.vue";
+import { get_status_label } from "@/helpers/OrderHelper.js";
 
 export default {
   components: {
     CartTotal,
+    TypeOfPayment
   },
   props: {
     orders: {
@@ -61,12 +67,13 @@ export default {
     };
   },
   methods: {
+    get_status_label,
     timePassed,
     selectOrder(order) {
-      
       this.selectedOrder = order;
       this.$emit("selected_order", order);
     },
+ 
   },
 };
 </script>

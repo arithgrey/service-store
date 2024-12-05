@@ -1,10 +1,14 @@
 <template>
-  <div class="flex items-center space-x-2">
-    <Truck v-if="paymentOnDelivery" />
-    <Check v-else />
-    <p class="text-sm">
-      {{ paymentText }}
-    </p>
+  <div class="flex justify-end items-center space-x-2">
+    <div>
+      <Truck v-if="paymentOnDelivery" />
+      <Check v-else />
+    </div>
+    <div>
+      <p class="font-bold text-sm">
+        {{ paymentText }}
+      </p>
+    </div>
   </div>
 </template>
 

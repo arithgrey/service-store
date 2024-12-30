@@ -8,10 +8,14 @@
         v-for="item in orders"
         :key="item.id"
         @click="selectOrder(item)"
-        :class="{
-          'border-cyan-700': selectOrder && selectOrder.id === item.id,
-        }"
-        class="shadow-md bg w-full border cursor-pointer"
+        :class="[
+          'shadow-md',
+          'w-full',
+          'border',
+          'cursor-pointer',
+          get_order_bg_class(item),
+          { 'border-cyan-700': selectedOrder && selectedOrder.id === item.id }
+        ]"
       >
         <div class="p-6">
           <h5
@@ -22,7 +26,7 @@
           <CartTotal :productsFromCart="item" />
 
           <div class="flex mt-2 items-end justify-end">
-            <p class="block text-sm ">
+            <p class="block text-sm font-bold">
               {{ get_status_label(item) }}
             </p>
             <span class="mx-2 text-sm text-gray-700">|</span>
@@ -43,7 +47,7 @@
 import { timePassed } from "@/helpers/time.js";
 import CartTotal from "@/components/Order/CartTotal.vue";
 import TypeOfPayment from "@/components/Order/TypeOfPayment.vue";
-import { get_status_label } from "@/helpers/OrderHelper.js";
+import { get_status_label, get_order_bg_class } from "@/helpers/OrderHelper.js";
 
 export default {
   components: {
@@ -68,6 +72,7 @@ export default {
   },
   methods: {
     get_status_label,
+    get_order_bg_class,
     timePassed,
     selectOrder(order) {
       this.selectedOrder = order;

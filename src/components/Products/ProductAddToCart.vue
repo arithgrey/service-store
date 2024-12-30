@@ -62,6 +62,9 @@
 
     <ul class="mt-8 space-y-2">
       <li class="flex items-center text-left text-sm font-medium text-gray-600">
+        <Check/>Recibe el mismo día, en CDMX!
+      </li>
+      <li class="flex items-center text-left text-sm font-medium text-gray-600">
         <svg class="mr-2 block h-5 w-5 align-middle text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none"
           viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -90,12 +93,15 @@ import { StarIcon } from "@heroicons/vue/20/solid";
 import SelectItems from "@/components/ProductGroup/SelectItems.vue";
 import CountDown from "@/components/Products/CountDown.vue";
 import PaymentWhatsapp from "@/components/Cart/PaymentWhatsapp.vue";
+import Check from "@/components/Icons/Check.vue";
+
 export default {
   components: {
     StarIcon,
     SelectItems,
     CountDown,
-    PaymentWhatsapp
+    PaymentWhatsapp,
+    Check
   },
   props: {
     product: {

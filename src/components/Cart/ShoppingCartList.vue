@@ -181,6 +181,7 @@ export default {
     },
     handleReviewAndPay() {
       if (typeof fbq === 'function') {
+        fbq('track', 'InitiateCheckout');
         fbq('track', 'Lead');
       }
     }

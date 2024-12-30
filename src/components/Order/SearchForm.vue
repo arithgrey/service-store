@@ -8,7 +8,7 @@
           v-model="form.status"
           class="peer input-cart h-12"
         >
-          <option value="">Todos</option>
+          <option value="all">Todos</option>
           <option v-for="status in statusOptions" :key="status.value" :value="status.value">
             {{ status.label }}
           </option>
@@ -54,8 +54,8 @@ import { required } from "@vuelidate/validators";
 
 export const rules = {
   q: {
-    minLength: helpers.withMessage("Encuentra tu order", minLength(1)),
-    required: helpers.withMessage("Encuentra tu order", required),
+    minLength: helpers.withMessage("Encuentra tu orden", minLength(1)),
+    required: helpers.withMessage("Encuentra tu orden", required),
   },
 };
 
@@ -71,7 +71,7 @@ export default {
       formSubmitted: false,
       form: {
         q: "",
-        status: "",
+        status: "all", // Valor por defecto como "all"
         payment_on_delivery: false,
       },
       statusOptions: [
@@ -83,7 +83,6 @@ export default {
         { value: "delivered", label: "Entregado" },
         { value: "canceled", label: "Cancelado" },
         { value: "returned", label: "Devuelto" },
-        { value: "cash_on_delivery", label: "Pagado contra entrega" },
       ],
     };
   },
@@ -97,19 +96,26 @@ export default {
     async submitForm() {
       const params = {
         q: this.form.q,
-        status: this.form.status,
         payment_on_delivery: this.form.payment_on_delivery,
       };
+      
+      if (this.form.status && this.form.status !== 'all') {
+        params.status = this.form.status;
+      }
+      
       try {
         const response = await this.$axios.get(this.api, { params });
         this.handlerListOrders(response);
       } catch (error) {
         console.error("Error fetching orders:", error);
+        this.$emit("error", "Error al obtener las órdenes.");
       }
     },
     handlerListOrders(response) {
       if (response.status === 200) {
         this.$emit("list_orders", response.data);
+      } else {
+        this.$emit("error", "No se pudieron obtener las órdenes.");
       }
     },
   },

@@ -10,3 +10,12 @@ export function get_status_label(order){
     );
     return statusOption.label;
 }
+
+export function get_order_bg_class(order) {
+  switch (order.status) {
+    case "canceled":
+      return "bg-slate-100";
+    default:
+      return "";
+  }
+}

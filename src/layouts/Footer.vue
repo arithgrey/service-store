@@ -149,32 +149,6 @@
                 </ul>
               </div>
               <div class="w-6/12 pt-6 md:px-4 md:pt-0 xl:w-3/12">
-                <span
-                  class="text-md mb-4 block font-medium font-bold text-primary md:text-center"
-                  >OPORTUNIDADES</span
-                >
-                <ul class="list-unstyled">
-                  <li>
-                    <a
-                      rel="noreferrer"
-                      target="_self"
-                      class="block py-2 text-sm leading-relaxed text-gray-600 hover:text-white hover:bg-black transition-colors hover:text-primary 
-                      md:text-center"
-                      href="https://enidservices.com/kits-pesas-barras-discos-mancuernas-fit/simulador-utilidad/"
-                      >Simulador de ganancias</a
-                    >
-                  </li>
-                  <li>
-                    <a
-                      rel="noreferrer"
-                      class="block py-2 text-sm leading-relaxed text-gray-600 hover:text-white hover:bg-black md:text-center 
-                      transition-colors hover:text-primary "
-                      href="https://enidservices.com/kits-pesas-barras-discos-mancuernas-fit/sobre_ventas/"
-                    >
-                      Programa de afiliados</a
-                    >
-                  </li>
-                </ul>
               </div>
             </div>
           </div>

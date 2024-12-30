@@ -75,7 +75,7 @@ export default {
       }
     },
     facebook_event(product) {
-      debugger;
+      
       if (typeof fbq === 'function') {
         fbq('track', 'ViewContent', {
           content_name: product.name,

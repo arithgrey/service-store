@@ -10,8 +10,8 @@
             <div class="ml-4 flex lg:ml-0">
               <router-link to="/">
                 <div class="md:border-b p-0 md:px-2 border-black">
-                  <span class="font-bold"> Enid </span>
-                  service
+                  <span class="font-bold"> {{storeBoldPart}} </span>
+                  {{storeNormalPart}}
                 </div>
               </router-link>
             </div>

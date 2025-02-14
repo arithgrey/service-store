@@ -1,8 +1,8 @@
 <template>
   <div class="text-center">
     <div class="text-2xl">
-      <span class="font-bold"> Enid </span>
-      service
+      <span class="font-bold"> {{storeBoldPart}} </span>
+      {{storeNormalPart}}
     </div>
 
     <form v-if="searching" @submit.prevent="submitForm">

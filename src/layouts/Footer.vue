@@ -163,7 +163,7 @@
     <p
       class="flex h-7 items-center justify-center text-sm font-extrabold bg-stone-100"
     >
-      Todos los derechos reservados ENID SERVICE © 2024
+      Todos los derechos reservados {{ storeName }} © 2024
     </p>
   </div>
   </footer>
@@ -171,7 +171,6 @@
 
 <script>
 import PaymentMethods from '@/components/Payments/PaymentMethods.vue';
-
 export default {
   components: {
     PaymentMethods
@@ -190,6 +189,7 @@ export default {
     isAuthenticated() {
       return this.$store.getters.isAuthenticated;
     },
+    
   },
   watch: {
     '$route'(newVal, oldVal) {

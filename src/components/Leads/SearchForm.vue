@@ -1,11 +1,25 @@
 <template>
   <div>
     <form class="mt-8" @submit.prevent="submitForm">
-      <div class="flex">
+      <div class="flex flex-col md:flex-row gap-4">
+                <div>
+          <select
+            v-model="form.status"
+            class="peer input-cart h-[42px]"
+          >
+            <option
+              v-for="status in statusList"
+              :key="status.id"
+              :value="status.id"
+            >
+              {{ status.name }}
+            </option>
+          </select>
+        </div>
         <div>
           <input
             v-model="form.q"
-            class="peer input-cart"
+            class="peer input-cart h-[42px]"
             placeholder="Buscar..."
             type="text"
             inputmode="text"
@@ -62,7 +76,16 @@ export default {
       
       form: {
         q: "",
+        status: "pending",
       },
+      statusList: [
+        { id: 'all', name: 'Todos' },
+        { id: 'pending', name: 'Pendiente' },
+        { id: 'contacted', name: 'Contactado' },
+        { id: 'discarded', name: 'Descartado' },
+        { id: 'process', name: 'En proceso' },
+        { id: 'converted', name: 'Convertido' },
+      ],
     };
   },
   setup: () => ({ v$: useVuelidate() }),
@@ -72,19 +95,32 @@ export default {
     };
   }, 
   methods: {
-      
     async submitForm() {
-      
-      const params = { q: this.form.q };
+      await this.searchLeads();
+    },
+    
+    async searchLeads() {
+      const params = { 
+        q: this.form.q,
+        status: this.form.status 
+      };
       const response = await this.$axios.get(`/lead/lead-search/`, {params});
       this.handlerListLeads(response);
-
     },
+
     handlerListLeads(response){        
         if(response.status ==  200){            
             this.$emit("list_leads", response.data)
         }
     }
   },
+  watch: {
+    'form.status': {
+      handler: async function() {
+        await this.searchLeads();
+      },
+      immediate: true
+    }
+  }
 };
 </script>

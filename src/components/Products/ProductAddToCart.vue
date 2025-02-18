@@ -112,13 +112,11 @@ export default {
   data() {
     return {
       reviews: { href: "#", average: 4, totalCount: 1209 },
+      normalizedPrice: (this.product.price * 1.2).toFixed(2),
     };
   },
   computed: {
 
-    normalizedPrice() {
-      return (this.product.price * 1.2).toFixed(2);
-    },
   },
   methods: {
     addToCart() {
@@ -134,6 +132,20 @@ export default {
       window.location.href = this.product.express_payment_link;
     },
   },
-
+  watch: {
+    product: {
+      handler(newProduct) {
+        this.normalizedPrice = (newProduct.price * 1.2).toFixed(2);
+      },
+      deep: true
+    },
+    'product.formatted_price': {
+      handler(newFormattedPrice) {
+        console.log('El precio formateado ha cambiado:', newFormattedPrice);
+        // Aquí puedes agregar la lógica adicional que necesites cuando cambie el formatted_price
+      },
+      immediate: true
+    }
+  },
 };
 </script>

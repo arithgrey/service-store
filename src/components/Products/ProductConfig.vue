@@ -31,14 +31,62 @@
                         </div>
                       </div>
 
-                      <!-- Cantidad disponible -->
+                      <!-- Precio y cantidad -->
                       <p class="text-sm text-gray-500">ID del producto: {{ product.id }}</p>
                       <div class="flex items-center">
-                        <p class="text-sm text-gray-900 font-bold">Cantidad actual: {{ quantity }}</p>
+                        <p class="text-sm text-gray-900 font-bold">Precio: ${{ formattedPrice(product.price) }}</p>
+                        <button type="button" class="ml-2 text-gray-500 hover:text-gray-700" @click="editPriceMode = !editPriceMode">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-4">
+                            <path d="m2.695 14.762-1.262 3.155a.5.5 0 0 0 .65.65l3.155-1.262a4 4 0 0 0 1.343-.886L17.5 5.501a2.121 2.121 0 0 0-3-3L3.58 13.419a4 4 0 0 0-.885 1.343Z" />
+                          </svg>
+                        </button>
+                      </div>
+
+                      <!-- Editar precio -->
+                      <div v-if="editPriceMode" class="mt-5">
+                        <label for="price" class="text-sm text-gray-900 border-b text-base">Actualizar precio:</label>
+                        <div class="relative z-0 w-full mb-5 mt-2 group">
+                          <input
+                            v-model="form.price"
+                            type="text"
+                            name="price"
+                            id="price"
+                            class="peer input-cart"
+                            placeholder="Nuevo precio*"
+                            @input="formatPrice"
+                            @keyup.enter="confirmPriceChange"
+                            required
+                            inputmode="numeric"
+                            @focus="initializePrice"
+                          />
+                          <span class="text-red-500 text-sm" v-if="errors && errors.price">{{ formatError(errors.price) }}</span>
+                        </div>
+
+                        <!-- Mostrar resumen del cambio de precio -->
+                        <div v-if="form.price && !isNaN(form.price)" class="mt-3">
+                          <p class="text-sm text-gray-700">
+                            Actual: <strong>${{ formattedPrice(product.price) }}</strong>
+                          </p>
+                          <p class="text-sm text-gray-700">
+                            Nuevo precio: <strong>${{ formattedPrice(form.price) }}</strong>
+                          </p>
+
+                          <!-- Botón de confirmar precio -->
+                          <button
+                            @click="confirmPriceChange"
+                            class="mt-3 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                          >
+                            Confirmar
+                          </button>
+                        </div>
+                      </div>
+
+                      <!-- Cantidad disponible -->
+                      <div class="flex items-center mt-4">
+                        <p class="text-sm text-gray-900 font-bold">Cantidad actual en stock: {{ quantity }}</p>
                         <button type="button" class="ml-2 text-gray-500 hover:text-gray-700" @click="editMode = !editMode">
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-4">
-                            <path
-                              d="m2.695 14.762-1.262 3.155a.5.5 0 0 0 .65.65l3.155-1.262a4 4 0 0 0 1.343-.886L17.5 5.501a2.121 2.121 0 0 0-3-3L3.58 13.419a4 4 0 0 0-.885 1.343Z" />
+                            <path d="m2.695 14.762-1.262 3.155a.5.5 0 0 0 .65.65l3.155-1.262a4 4 0 0 0 1.343-.886L17.5 5.501a2.121 2.121 0 0 0-3-3L3.58 13.419a4 4 0 0 0-.885 1.343Z" />
                           </svg>
                         </button>
                       </div>
@@ -99,6 +147,7 @@
 import { useVuelidate } from "@vuelidate/core";
 import * as utilities from "@/rules/utilities.js";
 import ValidationStockRules from "@/rules/stock/commons.js";
+import { formattedPrice } from '@/components/Products/js/priceHelper';
 
 import {
   Bars3Icon,
@@ -135,12 +184,15 @@ export default {
     return {
       open: false,
       editMode: false,
+      editPriceMode: false,
       quantity: 0,
       form: {
-        quantity: ""
+        quantity: "",
+        price: ""
       },        
       errors: {
         quantity: "",
+        price: "",
       },
     };
   },
@@ -167,6 +219,7 @@ export default {
   },
   methods: {
     ...utilities,
+    formattedPrice,
     async fetchStock() {
       try {
         const params = { product_id: this.product.id };
@@ -198,7 +251,31 @@ export default {
 
       this.form.quantity = '';
       this.editMode = false;
-    }
+    },
+    formatPrice() {
+      this.form.price = this.form.price.replace(/[^0-9]/g, '');
+    },
+    async confirmPriceChange() {
+      try {
+        const params = { 
+          id: this.product.id, 
+          price: this.form.price 
+        };
+        const response = await this.$axios.patch(`enid/productos/${this.product.id}/`, params);
+        this.product.price = this.form.price;
+        this.form.price = '';
+        this.editPriceMode = false;
+        this.$emit('price-updated', this.form.price);
+        
+      } catch (error) {
+        console.error("Error actualizando precio:", error);
+      }
+    },
+    initializePrice() {
+      if (!this.form.price) {
+        this.form.price = this.product.price.toString();
+      }
+    },
   },
 };
 </script>

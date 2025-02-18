@@ -11,7 +11,11 @@
           <div class="lg:col-span-2 lg:row-span-2 lg:row-end-2 relative">
             <ProductConfigIcon :product="product" @open_config_product="handler_open_config_product" />
             <div class="mt-5">
-              <ProductAddToCart :product="product" @open_shopping_cart_product="handle_open_shoping_cart" />
+              <ProductAddToCart 
+                :product="product" 
+                @open_shopping_cart_product="handle_open_shoping_cart"
+                @price-updated="handlePriceUpdate"
+              />
             </div>
           </div>
 
@@ -56,8 +60,6 @@ export default {
     window.scrollTo({ top: 0, behavior: "smooth" });
   },
   methods: {
-
-
     async fetchProduct() {
       const categorySlug = this.$route.params.categorySlug;
       const productSlug = this.$route.params.productSlug;
@@ -106,9 +108,19 @@ export default {
       }
 
     },
+    handlePriceUpdate(newPrice) {
+      this.product.formatted_price = newPrice;
+    },
   },
   watch: {
-    '$route': 'fetchProduct'
+    '$route': 'fetchProduct',
+    'product.price': {
+      handler(newPrice) {
+        this.fetchProduct();
+
+      },
+      immediate: true
+    }
   },
 };
 </script>

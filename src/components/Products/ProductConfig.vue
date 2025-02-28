@@ -103,7 +103,7 @@ import { useVuelidate } from "@vuelidate/core";
 import * as utilities from "@/rules/utilities.js";
 import ValidationStockRules from "@/rules/stock/commons.js";
 import { formattedPrice } from '@/components/Products/js/priceHelper';
-import StockManager from '@/components/Products/StockManager.vue';
+import StockManager from '@/components/Stock/StockManager.vue';
 
 import {
   Bars3Icon,

@@ -18,6 +18,7 @@ import SearchLead from '@/views/Leads/Search.vue';
 import Searchorders from '@/views/Order/Search.vue';
 import Impact from '@/views/Impact/Impact.vue';
 import Advanced from '@/views/Faq/Advanced.vue';
+import StockView from '@/views/StockView.vue';
 
 const routes = [
   {   
@@ -120,7 +121,11 @@ const routes = [
         name: 'experiencia',
         component: Advanced,        
       },
-    
+      {
+        path: 'stock',
+        name: 'stock',
+        component: StockView,        
+      },
     ],
    
   },

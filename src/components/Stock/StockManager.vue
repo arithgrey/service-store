@@ -2,8 +2,13 @@
   <div class="inline-block">
     <!-- Cantidad disponible -->
     <div class="inline-flex items-center">
-      <p class=" text-gray-900 font-bold"> Stock: {{ quantity }}</p>
-      <button type="button" class="ml-2 text-gray-500 hover:text-gray-700" @click="editMode = !editMode">
+      <p class="text-gray-900"> Stock en esta bodega: {{ quantity }}</p>
+      <button 
+        v-if="canEdit"
+        type="button" 
+        class="ml-2 text-gray-500 hover:text-gray-700" 
+        @click="editMode = !editMode"
+      >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-4">
           <path d="m2.695 14.762-1.262 3.155a.5.5 0 0 0 .65.65l3.155-1.262a4 4 0 0 0 1.343-.886L17.5 5.501a2.121 2.121 0 0 0-3-3L3.58 13.419a4 4 0 0 0-.885 1.343Z" />
         </svg>
@@ -71,6 +76,10 @@ export default {
     productId: {
       type: [String, Number],
       required: true
+    },
+    warehouseId: {
+      type: [String, Number],
+      required: true
     }
   },
   setup: () => ({ v$: useVuelidate() }),
@@ -95,7 +104,23 @@ export default {
   watch: {
     productId: {
       immediate: true,
-      handler() {
+      handler(newValue, oldValue) {
+        if (newValue !== oldValue) {
+          this.editMode = false;
+          this.form.quantity = '';
+          this.form.movementType = 1;
+        }
+        this.fetchStock();
+      },
+    },
+    warehouseId: {
+      immediate: true,
+      handler(newValue, oldValue) {
+        if (newValue !== oldValue) {
+          this.editMode = false;
+          this.form.quantity = '';
+          this.form.movementType = 1;
+        }
         this.fetchStock();
       },
     },
@@ -117,28 +142,46 @@ export default {
       return this.form.movementType === 1 
         ? "Agregar cantidad" 
         : "Quitar cantidad";
+    },
+    canEdit() {
+      return parseInt(this.warehouseId) > 0;
     }
   },
   methods: {
     ...utilities,
     async fetchStock() {
+      if (!this.productId || !this.warehouseId) return;
+
       try {
-        const params = { product_id: this.productId };
-        const response = await this.$axios.get(`/stock/movements/stock-movements/quantity/`, { params });
+        const params = { 
+          product_id: this.productId,
+          warehouse_id: this.warehouseId
+        };
+        const response = await this.$axios.get(`/stock/movements/stock-movements/warehouse-quantity/`, { params });
         this.quantity = response.data.quantity;
       } catch (error) {
         console.error("Error stock products:", error);
       }
     },
     async confirmChange() {
+      if (!this.productId || !this.warehouseId) return;
+
       try {
         const params = { 
           product_id: this.productId, 
+          warehouse_id: this.warehouseId,
           quantity: parseInt(this.form.quantity),
           movement_type: parseInt(this.form.movementType)
         };
         const response = await this.$axios.post(`/stock/movements/stock-movements/existence/`, params);
         await this.fetchStock();
+
+        this.$emit('stock-updated', {
+          productId: this.productId,
+          warehouseId: this.warehouseId,
+          quantity: this.quantity
+        });
+        
       } catch (error) {
         console.error("Error stock products:", error);
       }

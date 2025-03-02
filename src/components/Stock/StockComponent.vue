@@ -31,7 +31,15 @@
                                         {{ product.short_name }}
                                     </router-link>
                                 </h3>
-                                <StockManager :product-id="product.id" class="mt-2" />
+                                <StockTotalquantity 
+                                    :product-id="product.id" 
+                                    class="mt-2"
+                                />
+                                <StockManager 
+                                    :product-id="product.id" 
+                                    :warehouse-id="selectedWarehouse"
+                                    @stock-updated="handleStockUpdate"
+                                />
                             </div>
                         </div>
                         <div class="mt-2">
@@ -50,16 +58,19 @@
 
 <script>
 import StockManager from '@/components/Stock/StockManager.vue';
+import StockTotalquantity from '@/components/Stock/StockTotalquantity.vue';
 import ListSelect from '@/components/Warehouses/ListSelect.vue';
 
 export default {
     components: {
         StockManager,
+        StockTotalquantity,
         ListSelect,
     },
     data() {
         return {
             primaryProducts: [],
+            selectedWarehouse: null,
         };
     },
     methods: {
@@ -76,7 +87,10 @@ export default {
             }
         },
         handleWarehouseChange(newWarehouse) {
-            alert(`Nuevo almacén seleccionado: ${newWarehouse}`);
+            this.selectedWarehouse = newWarehouse;
+        },
+        handleStockUpdate() {
+            alert(2)
         },
     },
     mounted() {

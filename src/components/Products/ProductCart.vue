@@ -136,13 +136,13 @@ export default {
         const response = await this.$axios.get(this.api);
         const paginator = response.data;
                 
-        this.products = paginator.results.map((product) => ({ 
+        this.products = paginator.results.map((product, index) => ({ 
           ...product,
-          show: false,
+          show: index === 0,
           code: `FENID-0${product.id}`,
         }));
       } catch (error) {
-        console.error("Error products  list:", error);
+        console.error("Error products list:", error);
       }
     },
     addToCart(product) {

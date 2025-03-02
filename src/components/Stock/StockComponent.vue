@@ -34,6 +34,7 @@
                                 <StockTotalquantity 
                                     :product-id="product.id" 
                                     class="mt-2"
+                                    ref="stockTotal"
                                 />
                                 <StockManager 
                                     :product-id="product.id" 
@@ -90,7 +91,12 @@ export default {
             this.selectedWarehouse = newWarehouse;
         },
         handleStockUpdate() {
-            alert(2)
+            const stockTotalRefs = this.$refs.stockTotal;
+            if (Array.isArray(stockTotalRefs)) {
+                stockTotalRefs.forEach(component => {
+                    component.fetchStock();
+                });
+            }
         },
     },
     mounted() {

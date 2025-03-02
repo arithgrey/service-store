@@ -1,6 +1,5 @@
 <template>
     <div class="inline-block">
-      <!-- Cantidad disponible -->
       <div class="inline-flex items-center">
         <p class="text-gray-900 text-xl"> Stock total: {{ quantity }}</p>
       </div>

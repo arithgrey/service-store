@@ -1,6 +1,6 @@
 <template>
   <div>
-    <StockComponent />
+    <StockComponent @open_config_product="handler_open_config_product"/>
   </div>
 </template>
 
@@ -11,6 +11,14 @@ export default {
   name: 'StockView',
   components: {
     StockComponent
-  }
+  },
+  methods: {
+    handler_open_config_product(product) {
+
+      this.$emit("open_open_config_product", product);   
+
+
+    },
+  },
 }
 </script> 

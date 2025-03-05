@@ -1,7 +1,12 @@
 <template>
     <div class="inline-block">
-      <div class="inline-flex items-center">
-        <p class="text-gray-900 text-xl"> Stock total: {{ quantity }}</p>
+      <div class="inline-flex items-center w-full justify-between">
+        <p class="text-gray-900 text-xl flex items-center gap-2"> 
+          <span>Stock total: {{ quantity }}</span>
+          <span v-if="isStockBelowMinimum" class="px-2 py-1 bg-red-100 text-red-700 rounded-md text-sm">
+            Bajo stock
+          </span>
+        </p>
       </div>
     </div>
 </template>
@@ -13,11 +18,20 @@ export default {
         productId: {
             type: [String, Number],
             required: true
+        },
+        minStock: {
+            type: Number,
+            required: true
         }
     },
     data() {
         return {
             quantity: 0
+        }
+    },
+    computed: {
+        isStockBelowMinimum() {
+            return this.quantity <= this.minStock;
         }
     },
     watch: {

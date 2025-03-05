@@ -31,7 +31,6 @@ export default {
   },
   methods: {        
     handle_open_shoping_cart(){
-      
       this.$emit("open_shopping_cart_product_list");
     },
     handler_open_config_product(product){

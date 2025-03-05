@@ -33,13 +33,163 @@
 
                       <!-- Precio y cantidad -->
                       <p class="text-sm text-gray-500">ID del producto: {{ product.id }}</p>
-                      <div class="flex items-center">
+                      
+                      <!-- Precio -->
+                      <div class="flex items-center mt-1">
                         <p class="text-sm text-gray-900 font-bold">Precio: ${{ formattedPrice(product.price) }}</p>
                         <button type="button" class="ml-2 text-gray-500 hover:text-gray-700" @click="editPriceMode = !editPriceMode">
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-4">
                             <path d="m2.695 14.762-1.262 3.155a.5.5 0 0 0 .65.65l3.155-1.262a4 4 0 0 0 1.343-.886L17.5 5.501a2.121 2.121 0 0 0-3-3L3.58 13.419a4 4 0 0 0-.885 1.343Z" />
                           </svg>
                         </button>
+                      </div>
+
+                      <!-- Costo -->
+                      <div class="flex items-center mt-2">
+                        <p class="text-sm text-gray-900 font-bold">Costo: ${{ formattedPrice(product.cost) }}</p>
+                        <button type="button" class="ml-2 text-gray-500 hover:text-gray-700" @click="editCostMode = !editCostMode">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-4">
+                            <path d="m2.695 14.762-1.262 3.155a.5.5 0 0 0 .65.65l3.155-1.262a4 4 0 0 0 1.343-.886L17.5 5.501a2.121 2.121 0 0 0-3-3L3.58 13.419a4 4 0 0 0-.885 1.343Z" />
+                          </svg>
+                        </button>
+                      </div>
+
+                      <!-- Primary Toggle -->
+                      <div class="flex items-center mt-1">
+                        <p class="text-sm text-gray-900 font-bold">Es producto primario:</p>
+                        <button 
+                          type="button" 
+                          class="ml-2 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+                          :class="product.primary ? 'bg-indigo-600' : 'bg-gray-200'"
+                          @click="togglePrimary"
+                        >
+                          <span 
+                            class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                            :class="product.primary ? 'translate-x-5' : 'translate-x-0'"
+                          />
+                        </button>
+                      </div>
+
+                      <!-- Top Seller Toggle -->
+                      <div class="flex items-center mt-1">
+                        <p class="text-sm text-gray-900 font-bold">Es más top seller:</p>
+                        <button 
+                          type="button" 
+                          class="ml-2 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+                          :class="product.top_seller ? 'bg-indigo-600' : 'bg-gray-200'"
+                          @click="toggleTopSeller"
+                        >
+                          <span 
+                            class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                            :class="product.top_seller ? 'translate-x-5' : 'translate-x-0'"
+                          />
+                        </button>
+                      </div>
+
+                      <!-- Stock Configuration -->
+                      <div class="mt-4 space-y-3">
+                        <h3 class="text-sm font-bold text-gray-900 border-b">Configuración de Inventario</h3>
+                        
+                       
+
+                        <!-- Stock Mínimo -->
+                        <div class="flex items-center">
+                          <p class="text-sm text-gray-900">Stock mínimo: {{ product.min_stock }}</p>
+                          <button type="button" class="ml-2 text-gray-500 hover:text-gray-700" @click="editMinStockMode = !editMinStockMode">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-4">
+                              <path d="m2.695 14.762-1.262 3.155a.5.5 0 0 0 .65.65l3.155-1.262a4 4 0 0 0 1.343-.886L17.5 5.501a2.121 2.121 0 0 0-3-3L3.58 13.419a4 4 0 0 0-.885 1.343Z" />
+                            </svg>
+                          </button>
+                        </div>
+
+                        <!-- Editar stock mínimo -->
+                        <div v-if="editMinStockMode" class="mt-5">
+                          <label for="min_stock" class="text-sm text-gray-900 border-b text-base">Actualizar stock mínimo:</label>
+                          <div class="relative z-0 w-full mb-5 mt-2 group">
+                            <input
+                              v-model="form.min_stock"
+                              type="text"
+                              name="min_stock"
+                              id="min_stock"
+                              class="peer input-cart"
+                              placeholder="Nuevo stock mínimo*"
+                              @input="formatMinStock"
+                              @keyup.enter="confirmMinStockChange"
+                              required
+                              inputmode="numeric"
+                              @focus="initializeMinStock"
+                            />
+                            <span class="text-red-500 text-sm" v-if="errors && errors.min_stock">{{ formatError(errors.min_stock) }}</span>
+                          </div>
+
+                          <!-- Mostrar resumen del cambio de stock mínimo -->
+                          <div v-if="form.min_stock && !isNaN(form.min_stock)" class="mt-3">
+                            <p class="text-sm text-gray-700">
+                              Actual: <strong>{{ product.min_stock }}</strong>
+                            </p>
+                            <p class="text-sm text-gray-700">
+                              Nuevo stock mínimo: <strong>{{ form.min_stock }}</strong>
+                            </p>
+
+                            <!-- Botón de confirmar stock mínimo -->
+                            <button
+                              @click="confirmMinStockChange"
+                              class="mt-3 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            >
+                              Confirmar
+                            </button>
+                          </div>
+                        </div>
+
+                        <!-- Stock Máximo -->
+                        <div class="flex items-center">
+                          <p class="text-sm text-gray-900">Stock máximo: {{ product.max_stock }}</p>
+                          <button type="button" class="ml-2 text-gray-500 hover:text-gray-700" @click="editMaxStockMode = !editMaxStockMode">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-4">
+                              <path d="m2.695 14.762-1.262 3.155a.5.5 0 0 0 .65.65l3.155-1.262a4 4 0 0 0 1.343-.886L17.5 5.501a2.121 2.121 0 0 0-3-3L3.58 13.419a4 4 0 0 0-.885 1.343Z" />
+                            </svg>
+                          </button>
+                        </div>
+
+                        <!-- Editar stock máximo -->
+                        <div v-if="editMaxStockMode" class="mt-5">
+                          <label for="max_stock" class="text-sm text-gray-900 border-b text-base">Actualizar stock máximo:</label>
+                          <div class="relative z-0 w-full mb-5 mt-2 group">
+                            <input
+                              v-model="form.max_stock"
+                              type="text"
+                              name="max_stock"
+                              id="max_stock"
+                              class="peer input-cart"
+                              placeholder="Nuevo stock máximo*"
+                              @input="formatMaxStock"
+                              @keyup.enter="confirmMaxStockChange"
+                              required
+                              inputmode="numeric"
+                              @focus="initializeMaxStock"
+                            />
+                            <span class="text-red-500 text-sm" v-if="errors && errors.max_stock">{{ formatError(errors.max_stock) }}</span>
+                          </div>
+
+                          <!-- Mostrar resumen del cambio de stock máximo -->
+                          <div v-if="form.max_stock && !isNaN(form.max_stock)" class="mt-3">
+                            <p class="text-sm text-gray-700">
+                              Actual: <strong>{{ product.max_stock }}</strong>
+                            </p>
+                            <p class="text-sm text-gray-700">
+                              Nuevo stock máximo: <strong>{{ form.max_stock }}</strong>
+                            </p>
+
+                            <!-- Botón de confirmar stock máximo -->
+                            <button
+                              @click="confirmMaxStockChange"
+                              class="mt-3 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            >
+                              Confirmar
+                            </button>
+                          </div>
+                        </div>
+
                       </div>
 
                       <!-- Editar precio -->
@@ -81,10 +231,46 @@
                         </div>
                       </div>
 
-                      <!-- Componente de gestión de stock -->
-                      <StockManager 
-                        :product-id="product.id"
-                      />
+                      <!-- Editar costo -->
+                      <div v-if="editCostMode" class="mt-5">
+                        <label for="cost" class="text-sm text-gray-900 border-b text-base">Actualizar costo:</label>
+                        <div class="relative z-0 w-full mb-5 mt-2 group">
+                          <input
+                            v-model="form.cost"
+                            type="text"
+                            name="cost"
+                            id="cost"
+                            class="peer input-cart"
+                            placeholder="Nuevo costo*"
+                            @input="formatCost"
+                            @keyup.enter="confirmCostChange"
+                            required
+                            inputmode="numeric"
+                            @focus="initializeCost"
+                          />
+                          <span class="text-red-500 text-sm" v-if="errors && errors.cost">{{ formatError(errors.cost) }}</span>
+                        </div>
+
+                        <!-- Mostrar resumen del cambio de costo -->
+                        <div v-if="form.cost && !isNaN(form.cost)" class="mt-3">
+                          <p class="text-sm text-gray-700">
+                            Actual: <strong>${{ formattedPrice(product.cost) }}</strong>
+                          </p>
+                          <p class="text-sm text-gray-700">
+                            Nuevo costo: <strong>${{ formattedPrice(form.cost) }}</strong>
+                          </p>
+
+                          <!-- Botón de confirmar costo -->
+                          <button
+                            @click="confirmCostChange"
+                            class="mt-3 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                          >
+                            Confirmar
+                          </button>
+                        </div>
+                      </div>
+
+                      
 
                     </div>
                   </div>
@@ -103,7 +289,6 @@ import { useVuelidate } from "@vuelidate/core";
 import * as utilities from "@/rules/utilities.js";
 import ValidationStockRules from "@/rules/stock/commons.js";
 import { formattedPrice } from '@/components/Products/js/priceHelper';
-import StockManager from '@/components/Stock/StockManager.vue';
 
 import {
   Bars3Icon,
@@ -128,8 +313,7 @@ export default {
     TransitionRoot,
     Bars3Icon,
     MagnifyingGlassIcon,
-    XMarkIcon,
-    StockManager
+    XMarkIcon
   },
   props: {
     product: {
@@ -141,11 +325,21 @@ export default {
     return {
       open: false,
       editPriceMode: false,
+      editCostMode: false,
+      editStockMode: false,
+      editMinStockMode: false,
+      editMaxStockMode: false,
       form: {
-        price: ""
+        price: "",
+        cost: "",
+        stock: "",
+        min_stock: "",
+        max_stock: "",
+        stock_status: ""
       },        
       errors: {
         price: "",
+        cost: "",
       },
     };
   },
@@ -196,6 +390,106 @@ export default {
     initializePrice() {
       if (!this.form.price) {
         this.form.price = this.product.price.toString();
+      }
+    },
+    formatCost() {
+      this.form.cost = this.form.cost.replace(/[^0-9]/g, '');
+    },
+    async confirmCostChange() {
+      try {
+        const params = { 
+          id: this.product.id, 
+          cost: this.form.cost 
+        };
+        const response = await this.$axios.patch(`enid/productos/${this.product.id}/`, params);
+        this.product.cost = this.form.cost;
+        this.form.cost = '';
+        this.editCostMode = false;
+        this.$emit('cost-updated', this.form.cost);
+        
+      } catch (error) {
+        console.error("Error actualizando costo:", error);
+      }
+    },
+    initializeCost() {
+      if (!this.form.cost) {
+        this.form.cost = this.product.cost.toString();
+      }
+    },
+    async togglePrimary() {
+      try {
+        const params = { 
+          id: this.product.id, 
+          primary: !this.product.primary 
+        };
+        const response = await this.$axios.patch(`enid/productos/${this.product.id}/`, params);
+        this.product.primary = !this.product.primary;
+        this.$emit('primary-updated', this.product.primary);
+        
+      } catch (error) {
+        console.error("Error actualizando estado primary:", error);
+      }
+    },
+    async toggleTopSeller() {
+      try {
+        const params = { 
+          id: this.product.id, 
+          top_seller: !this.product.top_seller 
+        };
+        const response = await this.$axios.patch(`enid/productos/${this.product.id}/`, params);
+        this.product.top_seller = !this.product.top_seller;
+        this.$emit('top-seller-updated', this.product.top_seller);
+        
+      } catch (error) {
+        console.error("Error actualizando estado top_seller:", error);
+      }
+    },
+    formatMinStock() {
+      this.form.min_stock = this.form.min_stock.replace(/[^0-9]/g, '');
+    },
+    async confirmMinStockChange() {
+      try {
+        const params = { 
+          id: this.product.id, 
+          min_stock: this.form.min_stock 
+        };
+        const response = await this.$axios.patch(`enid/productos/${this.product.id}/`, params);
+        this.product.min_stock = this.form.min_stock;
+        this.form.min_stock = '';
+        this.editMinStockMode = false;
+        this.$emit('min-stock-updated', this.form.min_stock);
+        
+      } catch (error) {
+        console.error("Error actualizando stock mínimo:", error);
+      }
+    },
+    initializeMinStock() {
+      if (!this.form.min_stock) {
+        this.form.min_stock = this.product.min_stock.toString();
+      }
+    },
+    formatMaxStock() {
+      this.form.max_stock = this.form.max_stock.replace(/[^0-9]/g, '');
+    },
+    async confirmMaxStockChange() {
+      try {
+        const params = { 
+          id: this.product.id, 
+          max_stock: this.form.max_stock 
+        };
+        const response = await this.$axios.patch(`enid/productos/${this.product.id}/`, params);
+        this.product.max_stock = this.form.max_stock;
+        this.form.max_stock = '';
+        this.editMaxStockMode = false;
+        this.$emit('max-stock-updated', this.form.max_stock);
+        
+      } catch (error) {
+        console.error("Error actualizando stock máximo:", error);
+      }
+    },
+    initializeMaxStock() {
+      if (!this.form.max_stock) {
+        this.form.max_stock = this.product.max_stock.toString();
       }
     },
   },

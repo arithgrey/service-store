@@ -1,6 +1,7 @@
 <template>
+    <ListSelect @warehouse-selected="handleWarehouseChange" />
+
     <div class="px-4">
-        <ListSelect @warehouse-selected="handleWarehouseChange" />
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div v-for="product in primaryProducts" :key="product.id" class="border p-2 border-gray-200 pb-6">
@@ -19,27 +20,36 @@
 
                     <div class="ml-4 flex flex-1 flex-col">
                         <div>
-                            <div class="flex flex-col text-base font-medium text-gray-900">
-                                <h3>
-                                    <router-link :to="{
-                                        name: 'product-detail',
-                                        params: {
-                                            categorySlug: product.category.slug,
-                                            productSlug: product.slug,
-                                        },
-                                    }">
-                                        {{ product.short_name }}
-                                    </router-link>
-                                </h3>
-                                <StockTotalquantity 
-                                    :product-id="product.id" 
-                                    class="mt-2"
-                                    ref="stockTotal"
-                                />
-                                <StockManager 
-                                    :product-id="product.id" 
-                                    :warehouse-id="selectedWarehouse"
-                                    @stock-updated="handleStockUpdate"
+                            <div class="flex justify-between items-start text-base font-medium text-gray-900">
+                                <div class="flex flex-col">
+                                    <h3>
+                                        <router-link :to="{
+                                            name: 'product-detail',
+                                            params: {
+                                                categorySlug: product.category.slug,
+                                                productSlug: product.slug,
+                                            },
+                                        }">
+                                            {{ product.short_name }}
+                                        </router-link>
+                                    </h3>
+                                    
+                                    <StockTotalquantity 
+                                        :product-id="product.id" 
+                                        :min-stock="product.min_stock"
+                                        class="mt-2"
+                                        ref="stockTotal"
+                                    />
+                                    <StockManager 
+                                        :product-id="product.id" 
+                                        :warehouse-id="selectedWarehouse"
+                                        @stock-updated="handleStockUpdate"
+                                    />
+                                </div>
+                                <ProductConfigIcon 
+                                    :product="product" 
+                                    @open_config_product="handler_open_config_product"
+                                    class="ml-2" 
                                 />
                             </div>
                         </div>
@@ -61,12 +71,14 @@
 import StockManager from '@/components/Stock/StockManager.vue';
 import StockTotalquantity from '@/components/Stock/StockTotalquantity.vue';
 import ListSelect from '@/components/Warehouses/ListSelect.vue';
+import ProductConfigIcon from "@/components/Products/ProductConfigIcon.vue";
 
 export default {
     components: {
         StockManager,
         StockTotalquantity,
         ListSelect,
+        ProductConfigIcon
     },
     data() {
         return {
@@ -97,6 +109,9 @@ export default {
                     component.fetchStock();
                 });
             }
+        },
+        handler_open_config_product(product) {
+          this.$emit("open_config_product", product);
         },
     },
     mounted() {

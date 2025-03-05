@@ -3,26 +3,11 @@
     <h3 class="text-sm font-bold text-gray-900 border-b">Componentes del Producto</h3>
 
     <!-- Lista de componentes actuales -->
-    <div v-if="product.primary_components && product.primary_components.length > 0" class="mb-4">
-      <h4 class="text-sm text-gray-700 mb-2">Componentes actuales:</h4>
-      <ul class="space-y-2">
-        <li v-for="component in product.primary_components" :key="component.id" 
-            class="flex items-center justify-between p-2 bg-gray-50 rounded-md">
-          <div class="flex items-center">
-            <img :src="getMainImage(component)" class="h-8 w-8 object-cover rounded-sm mr-2" />
-            <span class="text-sm text-gray-900">{{ component.name }}</span>
-          </div>
-          <button 
-            @click="removeComponent(component.id)"
-            class="text-red-500 hover:text-red-700"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-            </svg>
-          </button>
-        </li>
-      </ul>
-    </div>
+    <ProductComponentsList 
+      v-if="product.primary_components"
+      :components="product.primary_components"
+      @remove="removeComponent"
+    />
 
     <!-- Buscador de productos -->
     <div class="relative">
@@ -35,19 +20,19 @@
       />
 
       <!-- Resultados de búsqueda -->
-      <div v-if="searchResults.length > 0" 
+      <div v-if="searchResults && searchResults.length > 0" 
            class="absolute z-10 w-full mt-1 bg-white rounded-md shadow-lg max-h-60 overflow-auto">
         <ul class="py-1">
-          <li v-for="product in searchResults" 
-              :key="product.id"
+          <li v-for="result in searchResults" 
+              :key="result.id"
               class="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center justify-between"
-              @click="selectProduct(product)"
+              @click="selectProduct(result)"
           >
             <div class="flex items-center">
-              <img :src="getMainImage(product)" class="h-8 w-8 object-cover rounded-sm mr-2" />
-              <span class="text-sm text-gray-900">{{ product.specific_name }}</span>
+              <img :src="getMainImage(result)" class="h-8 w-8 object-cover rounded-sm mr-2" />
+              <span class="text-sm text-gray-900">{{ result.specific_name }}</span>
             </div>
-            <span v-if="isProductSelected(product.id)" 
+            <span v-if="isProductSelected(result.id)" 
                   class="text-xs text-green-600">
               Agregado
             </span>
@@ -82,8 +67,13 @@
 </template>
 
 <script>
+import ProductComponentsList from '@/components/Products/ProductComponentsList.vue';
+
 export default {
   name: 'ProductComponentsConfig',
+  components: {
+    ProductComponentsList
+  },
   props: {
     product: {
       type: Object,
@@ -99,11 +89,6 @@ export default {
     };
   },
   methods: {
-    getMainImage(product) {
-      const mainImage = product.images?.find((img) => img.is_main);
-      return mainImage ? mainImage.get_image_url : "";
-    },
-
     async searchProducts() {
       if (this.searchQuery.length < 2) {
         this.searchResults = [];
@@ -112,9 +97,11 @@ export default {
 
       try {
         const response = await this.$axios.get(`enid/search/product/${this.searchQuery}`);
+        console.log('Resultados de búsqueda:', response.data.results);
         this.searchResults = response.data.results.filter(p => p.id !== this.product.id);
       } catch (error) {
         console.error('Error buscando productos:', error);
+        this.searchResults = [];
       }
     },
 
@@ -129,42 +116,59 @@ export default {
 
       try {
         const params = {
-          component_id: this.selectedProduct.id,
+          kit: this.product.id,
+          component: this.selectedProduct.id,
           quantity: this.quantity
         };
         
-        const response = await this.$axios.patch(`enid/productos/${this.product.id}/`, params);
+        const response = await this.$axios.post(`enid/primary-components/components/`, params);
         
-        // Actualizar el producto con la respuesta del servidor
-        this.product.primary_components.push({
-          ...this.selectedProduct,
-          quantity: this.quantity
-        });
-
-        // Limpiar el formulario
-        this.selectedProduct = null;
-        this.searchQuery = '';
-        this.quantity = 1;
+        // Actualizar la lista de componentes
+        if (response.data) {
+          if (!this.product.primary_components) {
+            this.product.primary_components = [];
+          }
+          this.product.primary_components.push({
+            ...this.selectedProduct,
+            quantity: this.quantity
+          });
+          
+          // Limpiar el formulario
+          this.selectedProduct = null;
+          this.quantity = 1;
+          this.searchQuery = '';
+        }
       } catch (error) {
         console.error('Error agregando componente:', error);
       }
     },
 
-    async removeComponent(componentId) {
+    async removeComponent(primaryComponentId) {
       try {
-        await this.$axios.delete(`enid/productos/${this.product.id}/components/${componentId}/`);
+        await this.$axios.delete(`enid/primary-components/components/delete_component/`, {
+          data: {
+            kit: this.product.id,
+            component: primaryComponentId
+          }
+        });
         
-        // Actualizar el producto removiendo el componente
+        // Actualizar la lista eliminando el componente
         this.product.primary_components = this.product.primary_components.filter(
-          comp => comp.id !== componentId
+          comp => comp.id !== primaryComponentId
         );
       } catch (error) {
-        console.error('Error eliminando componente:', error);
+        console.error('Error al eliminar el componente:', error);
       }
     },
 
     isProductSelected(productId) {
       return this.product.primary_components.some(comp => comp.id === productId);
+    },
+
+    getMainImage(product) {
+      if (!product || !product.images) return '';
+      const mainImage = product.images.find((img) => img.is_main);
+      return mainImage ? mainImage.get_image_url : '';
     }
   }
 };

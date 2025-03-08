@@ -87,7 +87,7 @@
                         class="flex items-center justify-center  mt-4
                         rounded-md border border-transparent bg-blue-800 px-6 py-3 text-base font-medium text-white shadow-sm 
                         hover:bg-slat-950"
-                        to="/checkout-pago-contra-entrega">Pago contra entrega
+                        to="/checkout-pago-contra-entrega">Paga al recibir
                         </router-link>
                         
                         <div

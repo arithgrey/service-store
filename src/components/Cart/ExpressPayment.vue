@@ -10,14 +10,12 @@
         Compra Express
       </a>
     </div>
-    <PaymentWhatsapp/>
   </div>
 </template>
 
 <script>
-import PaymentWhatsapp from '@/components/Cart/PaymentWhatsapp.vue';
 export default {
-  components: { PaymentWhatsapp },
+  components: {},
   computed: {
     displayedCartProducts() {
       return this.$store.getters.getProductsFromCart;

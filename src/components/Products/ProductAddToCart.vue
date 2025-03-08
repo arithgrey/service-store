@@ -27,14 +27,6 @@
             ${{ normalizedPrice }}
           </span>
         </div>
-        <a v-if="product.express_payment_link" @click.prevent="handleExpressCheckout"
-          class="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-blue-600 bg-none px-12 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-blue-500 xs:w-full lg:w-auto">
-          <svg xmlns="http://www.w3.org/2000/svg" class="shrink-0 mr-3 h-5 w-5" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-          </svg>
-          Compra Express
-        </a>
         <button type="button" @click="addToCart()"
           class="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-gray-900 bg-none px-12 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-800 xs:w-full lg:w-auto">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -46,9 +38,16 @@
           Añadir al carrito
         </button>
 
-       
-        <PaymentWhatsapp/>
 
+        <a v-if="product.express_payment_link" @click.prevent="handleExpressCheckout"
+          class="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-blue-600 bg-none px-12 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-blue-500 xs:w-full lg:w-auto">
+          <svg xmlns="http://www.w3.org/2000/svg" class="shrink-0 mr-3 h-5 w-5" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+          </svg>
+          Compra Express
+        </a>
+        
       </div>
     </div>
 
@@ -92,7 +91,6 @@
 import { StarIcon } from "@heroicons/vue/20/solid";
 import SelectItems from "@/components/ProductGroup/SelectItems.vue";
 import CountDown from "@/components/Products/CountDown.vue";
-import PaymentWhatsapp from "@/components/Cart/PaymentWhatsapp.vue";
 import Check from "@/components/Icons/Check.vue";
 
 export default {
@@ -100,7 +98,6 @@ export default {
     StarIcon,
     SelectItems,
     CountDown,
-    PaymentWhatsapp,
     Check
   },
   props: {

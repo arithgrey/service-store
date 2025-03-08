@@ -124,11 +124,17 @@ export default {
   data() {
     return {
       open: false,
-      products:[],
+      products: [],
+      isTablet: false,
     };
   },
   mounted() {
     this.fetchProducts();
+    this.checkDeviceWidth();
+    window.addEventListener('resize', this.checkDeviceWidth);
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.checkDeviceWidth);
   },
   methods: {
     async fetchProducts() {
@@ -138,11 +144,20 @@ export default {
                 
         this.products = paginator.results.map((product, index) => ({ 
           ...product,
-          show: index === 0,
+          show: this.isTablet ? true : index === 0,
           code: `FENID-0${product.id}`,
         }));
       } catch (error) {
         console.error("Error products list:", error);
+      }
+    },
+    checkDeviceWidth() {
+      this.isTablet = window.innerWidth >= 768 && window.innerWidth <= 1024;
+      if (this.products.length > 0) {
+        this.products = this.products.map((product, index) => ({
+          ...product,
+          show: this.isTablet ? true : index === 0,
+        }));
       }
     },
     addToCart(product) {
@@ -150,9 +165,11 @@ export default {
       return this.$store.commit("addToCart", product);
     },
     toggleShow(index) {
-      this.products.forEach((product, i) => {
-        product.show = index === i && !product.show;
-      });
+      if (!this.isTablet) {
+        this.products.forEach((product, i) => {
+          product.show = index === i && !product.show;
+        });
+      }
     },
     getMainImage(item) {
       const mainImage = item.images.find((img) => img.is_main);

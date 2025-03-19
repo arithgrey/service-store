@@ -11,8 +11,11 @@
 
     <div 
       v-if="isOpen" 
-      class="absolute bottom-20 right-0 rounded-lg shadow-xl bg-white overflow-hidden chat-window"
-      :class="{ 'w-[500px]': !isExpanded, 'w-[800px]': isExpanded }"
+      class="absolute bottom-20 right-0 rounded-lg shadow-xl bg-white overflow-hidden chat-window w-screen md:w-[500px]"
+      :class="{ 
+        'md:w-[500px]': !isExpanded, 
+        'md:w-[75vw]': isExpanded 
+      }"
     >
       <div class="bg-emerald-400 p-4 flex items-center justify-between">
         <div class="flex items-center">

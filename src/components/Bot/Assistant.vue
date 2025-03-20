@@ -1,6 +1,7 @@
 <template>
   <div v-if="isEnabled" class="fixed bottom-4 right-4 z-50">
     <button 
+      v-if="!isOpen"
       @click="toggleChat"
       class="w-14 h-14 rounded-full bg-emerald-400 text-white flex items-center justify-center shadow-lg hover:bg-emerald-500 transition-colors"
     >
@@ -11,10 +12,11 @@
 
     <div 
       v-if="isOpen" 
-      class="absolute bottom-20 right-0 rounded-lg shadow-xl bg-white overflow-hidden chat-window w-screen md:w-[500px]"
+      class="chat-window bg-white shadow-xl rounded-lg"
       :class="{ 
-        'md:w-[500px]': !isExpanded, 
-        'md:w-[75vw]': isExpanded 
+        'fixed inset-0 w-full h-full z-50 rounded-none': $viewport.width < 768,
+        'absolute bottom-20 right-0 md:w-[500px]': !isExpanded && $viewport.width >= 768, 
+        'absolute bottom-20 right-0 md:w-[75vw]': isExpanded && $viewport.width >= 768
       }"
     >
       <div class="bg-emerald-400 p-4 flex items-center justify-between">
@@ -23,10 +25,10 @@
           <span class="text-white ml-3 font-medium">Yo te ayudo!</span>
         </div>
         <div class="flex gap-2">
-          <button @click="resetChat" class="text-white hover:text-emerald-100">
+          <button @click="resetChat" class="border-b text-white hover:text-emerald-100">
             <span class="material-icons">Reiniciar</span>
           </button>
-          <button @click="toggleExpand" class="text-white hover:text-emerald-100">
+          <button @click="toggleExpand" class="text-white hover:text-emerald-100 hidden md:block">
             <svg v-if="isExpanded" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 9V4.5M9 9H4.5M15 9h4.5M15 9V4.5M15 15v4.5M15 15H4.5M15 15h4.5M9 15v4.5M9 15h4.5" />
             </svg>
@@ -34,15 +36,19 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
             </svg>
           </button>
-          <button @click="closeChat" class="text-white hover:text-emerald-100">
-            <CloseIcon />
+          <button @click="closeChat" class="border p-1 text-white hover:text-emerald-100 ">
+            <CloseIcon class="" />
           </button>
         </div>
       </div>
 
       <div 
         class="p-4 overflow-y-auto bg-gray-50"
-        :class="{ 'h-80': !isExpanded, 'h-[600px]': isExpanded }"
+        :class="{ 
+          'h-[calc(100vh-130px)]': $viewport.width < 768,
+          'h-80 md:h-80': !isExpanded && $viewport.width >= 768, 
+          'h-[90vh] md:h-[600px]': isExpanded && $viewport.width >= 768
+        }"
       >
         <div v-for="(msg, index) in messages" :key="index" class="flex items-start mb-4">
           <template v-if="msg.sender === 'bot'">
@@ -125,7 +131,10 @@ export default {
       messages: [],
       conversationId: null,
       storageKey: 'chat_history',
-      isTyping: false
+      isTyping: false,
+      $viewport: {
+        width: window.innerWidth
+      }
     }
   },
   created() {
@@ -137,8 +146,18 @@ export default {
     } else {
       this.resetChat()
     }
+    
+    // Agregar listener para cambios de tamaño de ventana
+    window.addEventListener('resize', this.handleResize)
+  },
+  beforeUnmount() {
+    // Limpiar listener cuando el componente se desmonta
+    window.removeEventListener('resize', this.handleResize)
   },
   methods: {
+    handleResize() {
+      this.$viewport.width = window.innerWidth
+    },
     toggleChat() {
       this.isOpen = !this.isOpen
     },

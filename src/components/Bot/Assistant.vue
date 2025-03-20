@@ -45,7 +45,7 @@
       <div 
         class="p-4 overflow-y-auto bg-gray-50"
         :class="{ 
-          'h-[calc(100vh-130px)]': $viewport.width < 768,
+          'h-[calc(100vh-180px)]': $viewport.width < 768,
           'h-80 md:h-80': !isExpanded && $viewport.width >= 768, 
           'h-[90vh] md:h-[600px]': isExpanded && $viewport.width >= 768
         }"
@@ -80,7 +80,7 @@
         </div>
       </div>
 
-      <div class="border-t p-4 bg-white">
+      <div class="border-t p-4 bg-white" :class="{ 'fixed bottom-0 left-0 right-0': $viewport.width < 768 }">
         <div class="flex items-center">
           <input 
             type="text" 

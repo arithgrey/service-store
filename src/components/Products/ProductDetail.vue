@@ -17,6 +17,14 @@
                 @price-updated="handlePriceUpdate"
               />
             </div>
+            
+            <!-- Botón de compartir -->
+            <div class="mt-4">
+              <ShareButton 
+                :product="product" 
+                @open-share-modal="openShareModal"
+              />
+            </div>
           </div>
 
           <div class="lg:col-span-2 lg:col-span-6">
@@ -30,6 +38,13 @@
         </div>
       </div>
     </section>
+    
+    <!-- Modal de compartir -->
+    <ProductShareModal 
+      :show="showShareModal" 
+      :product="product" 
+      @close="closeShareModal"
+    />
   </div>
 </template>
 
@@ -40,6 +55,8 @@ import ProductAddToCart from "@/components/Products/ProductAddToCart.vue";
 import ProductDescription from "@/components/Products/ProductDescription.vue";
 import ProductConfigIcon from "@/components/Products/ProductConfigIcon.vue";
 import PromoSlider from "@/components/Terms/PromoSlider.vue";
+import ShareButton from "@/components/Share/ShareButton.vue";
+import ProductShareModal from "@/components/Share/ProductShareModal.vue";
 export default {
   components: {
     ProductBreadcrumb,
@@ -48,11 +65,13 @@ export default {
     ProductDescription,
     ProductConfigIcon,
     PromoSlider,
+    ShareButton,
+    ProductShareModal,
   },
   data() {
     return {
       product: [],
-
+      showShareModal: false,
     };
   },
   mounted() {
@@ -111,6 +130,12 @@ export default {
     handlePriceUpdate(newPrice) {
       this.product.formatted_price = newPrice;
     },
+    openShareModal() {
+      this.showShareModal = true;
+    },
+    closeShareModal() {
+      this.showShareModal = false;
+    }
   },
   watch: {
     '$route': 'fetchProduct',

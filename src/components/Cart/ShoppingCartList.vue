@@ -103,8 +103,7 @@
                       <div
                         class="mt-6 flex justify-center text-center text-sm text-gray-500"
                       >
-                        <p>
-                          o
+                        <div class="flex flex-col space-y-2">
                           <button
                             type="button"
                             class="font-medium text-blue-600 hover:text-blue-500"
@@ -113,7 +112,16 @@
                             Sigue Comprando
                             <span aria-hidden="true"> &rarr;</span>
                           </button>
-                        </p>
+                          
+                          <button
+                            v-if="showReviewAndPay"
+                            type="button"
+                            class="font-medium text-red-600 hover:text-red-500 text-xs"
+                            @click="clearCart"
+                          >
+                            Vaciar carrito
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -184,6 +192,9 @@ export default {
         fbq('track', 'InitiateCheckout');
         fbq('track', 'Lead');
       }
+    },
+    clearCart() {
+      this.$store.commit("clearCart");
     }
 
   },

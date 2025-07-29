@@ -1,5 +1,20 @@
 import { createStore } from 'vuex';
 
+// Función helper para parsear el carrito de forma segura
+function getCartFromStorage() {
+  try {
+    const cartData = localStorage.getItem('cart');
+    if (!cartData) return [];
+    
+    const parsed = JSON.parse(cartData);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    console.error('Error parsing cart from localStorage:', error);
+    localStorage.removeItem('cart'); // Limpiar datos corruptos
+    return [];
+  }
+}
+
 export default createStore({
   state: {    
     user: localStorage.getItem('user') || null,
@@ -7,7 +22,7 @@ export default createStore({
     refresh_token: localStorage.getItem('refresh_token') || null,
     profile: localStorage.getItem('profile') || null,
     storeId:1,
-    cart: JSON.parse(localStorage.getItem('cart')) || [],
+    cart: getCartFromStorage(),
     showDialog: false,
   },
   mutations: {
@@ -75,10 +90,11 @@ export default createStore({
       return state.cart.reduce((total, item) => total + item.quantity, 0);
     },
     getProductsFromCart: (state) => {
-      return state.cart.map(item => ({
+      const products = state.cart.map(item => ({
         ...item.product,
         quantity: item.quantity
       }));
+      return products;
     },
   },
   actions: {

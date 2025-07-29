@@ -88,6 +88,47 @@ export default {
         next();
       }
     },
+    trackUserInteraction() {
+      // Marcar que el usuario ha interactuado con la página
+      sessionStorage.setItem('user_interacted', 'true');
+      
+      // Trackear eventos importantes para conversión
+      document.addEventListener('click', (event) => {
+        if (event.target.matches('button, a, [role="button"]')) {
+          // Trackear clics en botones
+          this.trackEvent('button_click', {
+            element: event.target.textContent || event.target.className,
+            page: this.$route.name
+          });
+        }
+      });
+      
+      // Trackear scroll para engagement
+      let scrollDepth = 0;
+      window.addEventListener('scroll', () => {
+        const newScrollDepth = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+        if (newScrollDepth > scrollDepth && newScrollDepth % 25 === 0) {
+          scrollDepth = newScrollDepth;
+          this.trackEvent('scroll_depth', { depth: scrollDepth });
+        }
+      });
+    },
+    trackEvent(eventName, data = {}) {
+      // Enviar evento a analytics
+      if (typeof gtag !== 'undefined') {
+        gtag('event', eventName, data);
+      }
+      
+      // Enviar evento a Facebook Pixel
+      if (typeof fbq !== 'undefined') {
+        fbq('track', eventName, data);
+      }
+      
+      console.log('Event tracked:', eventName, data);
+    }
+  },
+  mounted() {
+    this.trackUserInteraction();
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {

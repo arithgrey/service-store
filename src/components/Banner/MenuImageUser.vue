@@ -7,11 +7,11 @@
     />
     <transition name="fade">
       <div
-        v-if="showMenu"
+        v-if="showMenu && isAuthenticated"
         class="absolute right-0 mt-5 w-72 bg-white overflow-hidden shadow p-5"
       >
         <ul>
-          <li v-if="user">
+          <li v-if="currentUser && currentUser.name">
             <div class="ml-4 flow-root">
               <a                
                 class="group flex items-center cursor-pointer"
@@ -22,7 +22,7 @@
                   alt="Imagen de usuario"
                 />
                 <p class="ml-3 text-md">
-                  {{user.name}}
+                  {{currentUser.name}}
                 </p>
               </a>
             </div>
@@ -85,12 +85,16 @@
 export default {
   data() {
     return {
-      showMenu: false,
-      user:null
+      showMenu: false
     };
   },
-  mounted(){
-    this.user = this.$store.getters.user;
+  computed: {
+    currentUser() {
+      return this.$store.getters.user;
+    },
+    isAuthenticated() {
+      return this.$store.getters.isAuthenticated;
+    },
   },
   methods: {
     logout() {
@@ -110,11 +114,6 @@ export default {
 
     toggleMenu() {
       this.showMenu = !this.showMenu;
-    },
-  },
-  computed: {
-    isAuthenticated() {
-      return this.$store.getters.isAuthenticated;
     },
   },
 };

@@ -15,9 +15,24 @@ function getCartFromStorage() {
   }
 }
 
+// Función helper para parsear el usuario de forma segura
+function getUserFromStorage() {
+  try {
+    const userData = localStorage.getItem('user');
+    if (!userData) return null;
+    
+    const parsed = JSON.parse(userData);
+    return parsed;
+  } catch (error) {
+    console.error('Error parsing user from localStorage:', error);
+    localStorage.removeItem('user'); // Limpiar datos corruptos
+    return null;
+  }
+}
+
 export default createStore({
   state: {    
-    user: localStorage.getItem('user') || null,
+    user: getUserFromStorage(),
     token: localStorage.getItem('token') || null,
     refresh_token: localStorage.getItem('refresh_token') || null,
     profile: localStorage.getItem('profile') || null,
@@ -28,8 +43,7 @@ export default createStore({
   mutations: {
     setUser(state, user) {
       state.user = user;
-      localStorage.setItem('user', user);
-      
+      localStorage.setItem('user', JSON.stringify(user));
     },
     setToken(state, token) {
       state.token = token;
@@ -45,8 +59,10 @@ export default createStore({
     },
     clearToken(state) {
       state.token = null;
+      state.user = null;
       localStorage.removeItem('token');
-      localStorage.removeItem('refresh_token');      
+      localStorage.removeItem('refresh_token');
+      localStorage.removeItem('user');
     },
     addToCart(state, product) {
       const existingItem = state.cart.find(item => item.product.id === product.id);

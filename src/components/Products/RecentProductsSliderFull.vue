@@ -184,7 +184,8 @@ export default {
   emits: [
     'product-clicked',
     'clear-recent',
-    'add-to-cart'
+    'add-to-cart',
+    'open_shopping_cart_product'
   ],
 
   setup(props, { emit }) {
@@ -239,7 +240,9 @@ export default {
     };
 
     const handleAddToCart = (product) => {
+      console.log('Agregando producto al carrito y abriendo barra lateral:', product.name);
       emit('add-to-cart', product);
+      emit('open_shopping_cart_product');
     };
 
     const scrollLeft = () => {
@@ -323,6 +326,9 @@ export default {
 <style scoped>
 .recent-products-slider-full {
   @apply w-full bg-gray-50 py-8;
+  margin: 0;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .slider-header-full {
@@ -331,15 +337,20 @@ export default {
 
 .slider-container-full {
   @apply relative;
+  width: 100%;
+  max-width: none;
 }
 
 .slider-track-full {
   @apply pb-4;
   scroll-behavior: smooth;
+  width: 100%;
+  overflow-x: auto;
 }
 
 .slider-content {
-  @apply flex space-x-6 px-4 md:px-8 lg:px-12;
+  @apply flex space-x-6 px-4 md:px-8 lg:px-12 xl:px-16;
+  min-width: max-content;
 }
 
 .slider-item-full {
@@ -387,14 +398,41 @@ export default {
 }
 
 @media (max-width: 640px) {
+  .slider-content {
+    @apply px-1;
+  }
+  
   .slider-item-full {
     @apply w-56;
   }
 }
 
 @media (max-width: 480px) {
+  .slider-content {
+    @apply px-0;
+  }
+  
   .slider-item-full {
     @apply w-48;
+  }
+}
+
+/* Asegurar que el slider use todo el ancho disponible */
+@media (min-width: 1024px) {
+  .slider-content {
+    @apply px-8;
+  }
+}
+
+@media (min-width: 1280px) {
+  .slider-content {
+    @apply px-12;
+  }
+}
+
+@media (min-width: 1536px) {
+  .slider-content {
+    @apply px-16;
   }
 }
 </style> 

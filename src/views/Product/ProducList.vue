@@ -16,6 +16,7 @@
         @product-clicked="handleProductClick"
         @clear-recent="handleClearRecent"
         @add-to-cart="handleAddToCart"
+        @open_shopping_cart_product="handleOpenShoppingCart"
       />
     </div>
     <div class="mx-auto xs:w-full">
@@ -97,6 +98,11 @@ export default {
       console.log('Producto agregado al carrito:', product);
       // Integrar con el store de Vuex
       this.$store.commit('addToCart', product);
+    },
+    
+    handleOpenShoppingCart() {
+      console.log('Abriendo carrito de compras desde productos recientes');
+      this.$emit("open_shopping_cart_product_list");
     }
   },
 };

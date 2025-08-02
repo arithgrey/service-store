@@ -135,6 +135,7 @@ export default {
     'product-removed',
     'clear-recent',
     'add-to-cart',
+    'open_shopping_cart_product',
     'view-more'
   ],
 
@@ -192,6 +193,7 @@ export default {
 
     const handleAddToCart = (product) => {
       emit('add-to-cart', product);
+      emit('open_shopping_cart_product');
     };
 
     const handleViewMore = () => {

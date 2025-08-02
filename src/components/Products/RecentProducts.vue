@@ -195,7 +195,8 @@ export default {
     'product-clicked',
     'product-removed',
     'clear-recent',
-    'add-to-cart'
+    'add-to-cart',
+    'open_shopping_cart_product'
   ],
 
   setup(props, { emit }) {
@@ -277,6 +278,7 @@ export default {
 
     const handleAddToCart = (product) => {
       emit('add-to-cart', product);
+      emit('open_shopping_cart_product');
     };
 
     return {

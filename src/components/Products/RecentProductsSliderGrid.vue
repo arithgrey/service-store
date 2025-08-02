@@ -27,7 +27,7 @@
 
     <!-- Grid de productos -->
     <div class="grid-container">
-      <div class="grid-content">
+      <div :class="['grid-content', gridColumns]">
         <div
           v-for="(product, index) in displayProducts"
           :key="`${product.id}-${index}`"
@@ -156,6 +156,14 @@ export default {
       return getRecentProducts(props.maxDisplay);
     });
 
+    // Computed para determinar el número de columnas basado en productos
+    const gridColumns = computed(() => {
+      const count = displayProducts.value.length;
+      if (count <= 2) return 'grid-cols-1 md:grid-cols-2';
+      if (count <= 4) return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
+      return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4';
+    });
+
     // Métodos
     const getProductImage = (product) => {
       if (product.images && product.images.length > 0) {
@@ -181,17 +189,18 @@ export default {
       emit('open_shopping_cart_product');
     };
 
-    return {
-      // Computed properties
-      hasRecentProducts,
-      displayProducts,
-      
-      // Métodos
-      getProductImage,
-      handleProductClick,
-      handleClearRecent,
-      handleAddToCart
-    };
+          return {
+        // Computed properties
+        hasRecentProducts,
+        displayProducts,
+        gridColumns,
+        
+        // Métodos
+        getProductImage,
+        handleProductClick,
+        handleClearRecent,
+        handleAddToCart
+      };
   }
 };
 </script>
@@ -216,20 +225,9 @@ export default {
 
 .grid-content {
   @apply grid gap-4 md:gap-6 px-4 md:px-6 lg:px-8 xl:px-12;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
-@media (max-width: 640px) {
-  .grid-content {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  }
-}
 
-@media (max-width: 480px) {
-  .grid-content {
-    grid-template-columns: 1fr;
-  }
-}
 
 
 

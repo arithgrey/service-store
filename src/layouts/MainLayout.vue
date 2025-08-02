@@ -31,6 +31,8 @@
         <Footer v-if="display_footer" @open_seccion_login="handleOpenLogin" />
       </div>
     </div>
+    <!-- Componente invisible para tracking de analytics -->
+    <PageAnalyticsTracker ref="pageAnalyticsTracker" />
   </div>
 </template>
 
@@ -42,6 +44,7 @@ import LoginForm from "@/components/Login/LoginForm.vue";
 import ProductConfig from "@/components/Products/ProductConfig.vue";
 import SearchFormProduct from "@/components/Search/ProductsForm.vue";
 import Footer from "@/layouts/Footer.vue";
+import PageAnalyticsTracker from "@/components/Analytics/PageAnalyticsTracker.vue";
 
 export default {
   components: {
@@ -52,6 +55,7 @@ export default {
     SearchFormProduct,
     AccountMenu,
     ProductConfig,
+    PageAnalyticsTracker,
   },
   data() {
     return {
@@ -129,6 +133,14 @@ export default {
   },
   mounted() {
     this.trackUserInteraction();
+    
+    // Registrar el analytics tracker globalmente
+    this.$nextTick(() => {
+      const tracker = this.$refs.pageAnalyticsTracker;
+      if (tracker) {
+        this.$analyticsTracker = tracker;
+      }
+    });
   },
   beforeRouteEnter(to, from, next) {
     next((vm) => {

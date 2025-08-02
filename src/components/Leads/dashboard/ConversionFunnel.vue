@@ -8,7 +8,7 @@
     
     <div v-else class="space-y-4">
       <!-- Total de Leads -->
-      <div class="funnel-step bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
+      <div class="funnel-step bg-blue-50 border-l-4 border-blue-500 p-4">
         <div class="flex justify-between items-center">
           <div>
             <h4 class="text-lg font-semibold text-blue-900">Total de Leads</h4>
@@ -21,7 +21,7 @@
       </div>
 
       <!-- Pendientes -->
-      <div class="funnel-step bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-lg">
+      <div class="funnel-step bg-yellow-50 border-l-4 border-yellow-500 p-4">
         <div class="flex justify-between items-center">
           <div>
             <h4 class="text-lg font-semibold text-yellow-900">Pendientes</h4>
@@ -31,13 +31,13 @@
             <span class="text-2xl font-bold text-yellow-900">{{ funnelData.pending_percentage }}%</span>
           </div>
         </div>
-        <div class="mt-2 w-full bg-yellow-200 rounded-full h-2">
-          <div class="bg-yellow-500 h-2 rounded-full" :style="{ width: `${funnelData.pending_percentage}%` }"></div>
+        <div class="mt-2 w-full bg-yellow-200 h-2">
+          <div class="bg-yellow-500 h-2" :style="{ width: `${funnelData.pending_percentage}%` }"></div>
         </div>
       </div>
 
       <!-- Contactados -->
-      <div class="funnel-step bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
+      <div class="funnel-step bg-blue-50 border-l-4 border-blue-500 p-4">
         <div class="flex justify-between items-center">
           <div>
             <h4 class="text-lg font-semibold text-blue-900">Contactados</h4>
@@ -47,13 +47,13 @@
             <span class="text-2xl font-bold text-blue-900">{{ funnelData.contacted_percentage }}%</span>
           </div>
         </div>
-        <div class="mt-2 w-full bg-blue-200 rounded-full h-2">
-          <div class="bg-blue-500 h-2 rounded-full" :style="{ width: `${funnelData.contacted_percentage}%` }"></div>
+        <div class="mt-2 w-full bg-blue-200 h-2">
+          <div class="bg-blue-500 h-2" :style="{ width: `${funnelData.contacted_percentage}%` }"></div>
         </div>
       </div>
 
       <!-- En Proceso -->
-      <div class="funnel-step bg-purple-50 border-l-4 border-purple-500 p-4 rounded-lg">
+      <div class="funnel-step bg-purple-50 border-l-4 border-purple-500 p-4">
         <div class="flex justify-between items-center">
           <div>
             <h4 class="text-lg font-semibold text-purple-900">En Proceso</h4>
@@ -63,13 +63,13 @@
             <span class="text-2xl font-bold text-purple-900">{{ funnelData.process_percentage }}%</span>
           </div>
         </div>
-        <div class="mt-2 w-full bg-purple-200 rounded-full h-2">
-          <div class="bg-purple-500 h-2 rounded-full" :style="{ width: `${funnelData.process_percentage}%` }"></div>
+        <div class="mt-2 w-full bg-purple-200 h-2">
+          <div class="bg-purple-500 h-2" :style="{ width: `${funnelData.process_percentage}%` }"></div>
         </div>
       </div>
 
       <!-- Convertidos -->
-      <div class="funnel-step bg-green-50 border-l-4 border-green-500 p-4 rounded-lg">
+      <div class="funnel-step bg-green-50 border-l-4 border-green-500 p-4">
         <div class="flex justify-between items-center">
           <div>
             <h4 class="text-lg font-semibold text-green-900">Convertidos</h4>
@@ -79,13 +79,13 @@
             <span class="text-2xl font-bold text-green-900">{{ funnelData.converted_percentage }}%</span>
           </div>
         </div>
-        <div class="mt-2 w-full bg-green-200 rounded-full h-2">
-          <div class="bg-green-500 h-2 rounded-full" :style="{ width: `${funnelData.converted_percentage}%` }"></div>
+        <div class="mt-2 w-full bg-green-200 h-2">
+          <div class="bg-green-500 h-2" :style="{ width: `${funnelData.converted_percentage}%` }"></div>
         </div>
       </div>
 
       <!-- Descartados -->
-      <div class="funnel-step bg-red-50 border-l-4 border-red-500 p-4 rounded-lg">
+      <div class="funnel-step bg-red-50 border-l-4 border-red-500 p-4">
         <div class="flex justify-between items-center">
           <div>
             <h4 class="text-lg font-semibold text-red-900">Descartados</h4>
@@ -95,8 +95,8 @@
             <span class="text-2xl font-bold text-red-900">{{ funnelData.discarded_percentage }}%</span>
           </div>
         </div>
-        <div class="mt-2 w-full bg-red-200 rounded-full h-2">
-          <div class="bg-red-500 h-2 rounded-full" :style="{ width: `${funnelData.discarded_percentage}%` }"></div>
+        <div class="mt-2 w-full bg-red-200 h-2">
+          <div class="bg-red-500 h-2" :style="{ width: `${funnelData.discarded_percentage}%` }"></div>
         </div>
       </div>
     </div>

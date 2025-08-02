@@ -17,7 +17,7 @@
       <div 
         v-for="activity in activities" 
         :key="activity.id"
-        class="flex items-center space-x-3 p-3 bg-white rounded-lg border hover:shadow-md transition-shadow"
+        class="flex items-center space-x-3 p-3 bg-white border hover:shadow-md transition-shadow"
       >
         <div class="flex-shrink-0">
           <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
@@ -34,7 +34,7 @@
             {{ activity.email }}
           </p>
           <div class="flex items-center space-x-2 mt-1">
-            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium" :class="getStatusClass(activity.status)">
+            <span class="inline-flex items-center px-2 py-0.5 text-xs font-medium" :class="getStatusClass(activity.status)">
               {{ getStatusLabel(activity.status) }}
             </span>
             <span class="text-xs text-gray-400">

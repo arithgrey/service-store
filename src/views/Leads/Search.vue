@@ -2,15 +2,15 @@
   <div class="container mx-auto px-4 flex flex-col items-center min-h-screen mb-10">
     <!-- Tabs Navigation -->
     <div class="w-full mb-6">
-      <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-1">
+      <div class="bg-white shadow-sm border border-gray-200 p-1">
         <nav class="flex space-x-1" aria-label="Tabs">
-          <button
+                      <button
             @click="switchTab('dashboard')"
             :class="[
               activeTab === 'dashboard'
                 ? 'bg-blue-50 text-blue-700 border-blue-200 shadow-sm'
                 : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50',
-              'flex-1 py-3 px-4 rounded-md font-medium text-sm transition-all duration-200 border'
+              'flex-1 py-3 px-4 font-medium text-sm transition-all duration-200 border'
             ]"
           >
             <div class="flex items-center justify-center space-x-2">
@@ -27,7 +27,7 @@
               activeTab === 'search'
                 ? 'bg-blue-50 text-blue-700 border-blue-200 shadow-sm'
                 : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50',
-              'flex-1 py-3 px-4 rounded-md font-medium text-sm transition-all duration-200 border'
+              'flex-1 py-3 px-4 font-medium text-sm transition-all duration-200 border'
             ]"
           >
             <div class="flex items-center justify-center space-x-2">
@@ -35,7 +35,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
               </svg>
               <span>Buscar Leads</span>
-              <span v-if="leads && leads.length > 0" class="bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full">
+                                    <span v-if="leads && leads.length > 0" class="bg-gray-100 text-gray-600 text-xs px-2 py-1">
                 {{ leads.length }}
               </span>
             </div>

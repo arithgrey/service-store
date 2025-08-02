@@ -1,5 +1,5 @@
 <template>
-  <div class="metric-card bg-white rounded-xl shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300" :class="borderColorClass">
+  <div class="metric-card bg-white shadow-lg p-6 border border-gray-100 hover:shadow-xl transition-all duration-300" :class="borderColorClass">
     <div class="flex items-start justify-between">
       <div class="flex-1">
         <div v-if="loading" class="animate-pulse">
@@ -31,7 +31,7 @@
       
       <div class="flex-shrink-0 ml-4">
         <div v-if="loading" class="animate-pulse bg-gray-200 h-12 w-12 rounded-full"></div>
-        <div v-else class="p-3 rounded-full shadow-lg" :class="iconBgColorClass">
+        <div v-else class="p-3 shadow-lg" :class="iconBgColorClass">
           <svg class="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <!-- Users Icon -->
             <path v-if="icon === 'users'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
@@ -54,9 +54,9 @@
         <span>Progreso</span>
         <span>{{ progressPercentage }}%</span>
       </div>
-      <div class="w-full bg-gray-200 rounded-full h-2">
+      <div class="w-full bg-gray-200 h-2">
         <div 
-          class="h-2 rounded-full transition-all duration-300" 
+          class="h-2 transition-all duration-300" 
           :class="progressColorClass"
           :style="{ width: `${progressPercentage}%` }"
         ></div>

@@ -17,7 +17,7 @@
       <div 
         v-for="item in data" 
         :key="item.date"
-        class="flex items-center justify-between p-3 bg-white rounded-lg border"
+        class="flex items-center justify-between p-3 bg-white border"
       >
         <div class="flex items-center space-x-3">
           <div class="text-sm font-medium text-gray-900">

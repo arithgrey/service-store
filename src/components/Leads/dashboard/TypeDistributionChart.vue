@@ -17,7 +17,7 @@
       <div 
         v-for="(item, index) in data" 
         :key="item.lead_type"
-        class="flex items-center justify-between p-3 bg-white rounded-lg border"
+        class="flex items-center justify-between p-3 bg-white border"
       >
         <div class="flex items-center space-x-3">
           <div class="w-3 h-3 rounded-full" :class="getTypeColor(index)"></div>
@@ -28,9 +28,9 @@
         </div>
         <div class="text-right">
           <p class="text-lg font-bold text-gray-900">{{ item.percentage }}%</p>
-          <div class="w-20 h-2 bg-gray-200 rounded-full mt-1">
-            <div 
-              class="h-2 rounded-full" 
+                  <div class="w-20 h-2 bg-gray-200 mt-1">
+          <div 
+            class="h-2" 
               :class="getTypeColor(index)"
               :style="{ width: `${item.percentage}%` }"
             ></div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="lead-metrics-dashboard bg-gradient-to-br from-blue-50 to-indigo-100 rounded-xl shadow-xl p-6 mb-8">
+  <div class="lead-metrics-dashboard bg-gradient-to-br from-blue-50 to-indigo-100 shadow-xl p-6 mb-8">
     <!-- Header con estadísticas principales -->
     <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8">
       <div>
@@ -10,7 +10,7 @@
         <button 
           @click="refreshMetrics" 
           :disabled="loading"
-          class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center space-x-2 transition-all duration-200 shadow-lg hover:shadow-xl"
+          class="px-6 py-3 bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 flex items-center space-x-2 transition-all duration-200 shadow-lg hover:shadow-xl"
         >
           <svg v-if="loading" class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -21,7 +21,7 @@
           </svg>
           <span>Actualizar</span>
         </button>
-        <div class="px-4 py-3 bg-green-100 text-green-800 rounded-lg flex items-center space-x-2">
+        <div class="px-4 py-3 bg-green-100 text-green-800 flex items-center space-x-2">
           <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
           <span class="text-sm font-medium">En vivo</span>
         </div>
@@ -67,7 +67,7 @@
     <!-- Gráficos y Métricas Detalladas -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
       <!-- Distribución por Estado -->
-      <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+      <div class="bg-white shadow-lg p-6 border border-gray-100">
         <div class="flex items-center justify-between mb-6">
           <h3 class="text-xl font-semibold text-gray-800">Distribución por Estado</h3>
           <div class="text-sm text-gray-500">{{ getTotalStatusCount() }} leads</div>
@@ -79,7 +79,7 @@
       </div>
 
       <!-- Distribución por Tipo -->
-      <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+      <div class="bg-white shadow-lg p-6 border border-gray-100">
         <div class="flex items-center justify-between mb-6">
           <h3 class="text-xl font-semibold text-gray-800">Distribución por Tipo</h3>
           <div class="text-sm text-gray-500">{{ getTotalTypeCount() }} tipos</div>
@@ -94,12 +94,12 @@
     <!-- Tendencias y Actividad Reciente -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
       <!-- Tendencias -->
-      <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+      <div class="bg-white shadow-lg p-6 border border-gray-100">
         <div class="flex items-center justify-between mb-6">
           <h3 class="text-xl font-semibold text-gray-800">Tendencias (Últimos 7 días)</h3>
           <div class="flex space-x-2">
-            <span class="text-xs px-2 py-1 bg-green-100 text-green-800 rounded">Nuevos</span>
-            <span class="text-xs px-2 py-1 bg-blue-100 text-blue-800 rounded">Convertidos</span>
+            <span class="text-xs px-2 py-1 bg-green-100 text-green-800">Nuevos</span>
+            <span class="text-xs px-2 py-1 bg-blue-100 text-blue-800">Convertidos</span>
           </div>
         </div>
         <TrendsChart 
@@ -109,7 +109,7 @@
       </div>
 
       <!-- Actividad Reciente -->
-      <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+      <div class="bg-white shadow-lg p-6 border border-gray-100">
         <div class="flex items-center justify-between mb-6">
           <h3 class="text-xl font-semibold text-gray-800">Actividad Reciente</h3>
           <button @click="loadMoreActivity" class="text-sm text-blue-600 hover:text-blue-800">
@@ -124,7 +124,7 @@
     </div>
 
     <!-- Funnel de Conversión -->
-    <div class="bg-white rounded-xl shadow-lg p-6 border border-gray-100">
+    <div class="bg-white shadow-lg p-6 border border-gray-100">
       <div class="flex items-center justify-between mb-6">
         <h3 class="text-xl font-semibold text-gray-800">Funnel de Conversión</h3>
         <div class="text-sm text-gray-500">

@@ -20,7 +20,7 @@
       <div 
         v-for="item in data" 
         :key="item.status"
-        class="status-item bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-all duration-200 cursor-pointer"
+        class="status-item bg-gray-50 p-4 hover:bg-gray-100 transition-all duration-200 cursor-pointer"
         @click="handleStatusClick(item)"
       >
         <div class="flex items-center justify-between">
@@ -37,9 +37,9 @@
           <div class="text-right">
             <p class="text-2xl font-bold text-gray-900">{{ item.percentage }}%</p>
             <div class="flex items-center space-x-2 mt-1">
-              <div class="w-20 h-3 bg-gray-200 rounded-full overflow-hidden">
-                <div 
-                  class="h-3 rounded-full transition-all duration-500" 
+                      <div class="w-20 h-3 bg-gray-200 overflow-hidden">
+          <div 
+            class="h-3 transition-all duration-500" 
                   :class="getStatusColor(item.status)"
                   :style="{ width: `${item.percentage}%` }"
                 ></div>
@@ -64,7 +64,7 @@
       </div>
       
       <!-- Resumen total -->
-      <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+      <div class="mt-6 p-4 bg-blue-50 border border-blue-200">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm font-medium text-blue-900">Total de leads</p>

@@ -7,7 +7,7 @@ import LocalStorageHelper from '@/helpers/localStorageHelper';
  */
 export function useRecentProducts() {
   const recentProducts = ref([]);
-  const maxProducts = ref(20);
+  const maxProducts = ref(10); // Configurable - máximo 10 productos
   const isInitialized = ref(false);
 
   const initialize = () => {

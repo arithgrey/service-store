@@ -9,10 +9,9 @@
     
     <!-- Productos Recientemente Vistos -->
     <div class="mx-auto xs:w-full md:w-10/12 p-5 md:p-0 mt-8">
-      <RecentProducts
+      <RecentProductsSliderGrid
         :max-display="8"
         :show-clear-button="true"
-        :show-stats="false"
         @product-clicked="handleProductClick"
         @clear-recent="handleClearRecent"
         @add-to-cart="handleAddToCart"
@@ -29,7 +28,7 @@
 
 <script>
 import ProductList from "@/components/Products/ProductList.vue";
-import RecentProducts from "@/components/Products/RecentProducts.vue";
+import RecentProductsSliderGrid from "@/components/Products/RecentProductsSliderGrid.vue";
 import { getSeasonalContent } from "@/helpers/SeasonalHelper.js";
 import BannerOffertRunning from "@/components/Banner/BannerOffertRunning.vue";
 import BannerOffertHalloween from "@/components/Banner/BannerOffertHalloween.vue";
@@ -47,7 +46,7 @@ import CommunityRunning from "@/components/Video/CommunityRunning.vue";
 export default {
   components: {
     ProductList,
-    RecentProducts,
+    RecentProductsSliderGrid,
     BannerOffertRunning,
     BannerOffertHalloween,
     BannerOffertChristmas,

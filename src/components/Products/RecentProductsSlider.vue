@@ -318,7 +318,7 @@ export default {
 }
 
 .slider-container {
-  @apply relative px-8;
+  @apply relative px-4 md:px-8;
 }
 
 .slider-track {
@@ -327,7 +327,7 @@ export default {
 }
 
 .slider-item {
-  @apply w-40;
+  @apply w-40 md:w-48 lg:w-56;
 }
 
 .product-card-compact {
@@ -358,17 +358,17 @@ export default {
 /* Responsive adjustments */
 @media (max-width: 640px) {
   .slider-container {
-    @apply px-4;
+    @apply px-2;
   }
   
   .slider-item {
-    @apply w-32;
+    @apply w-36;
   }
 }
 
 @media (max-width: 480px) {
   .slider-item {
-    @apply w-28;
+    @apply w-32;
   }
 }
 </style> 

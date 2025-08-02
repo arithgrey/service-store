@@ -7,16 +7,14 @@
   </div>
   
   <!-- Productos Recientemente Vistos -->
-  <div class="mt-12">
-    <RecentProductsSlider
-      :max-display="6"
-      :show-clear-button="true"
-      :show-scroll-indicators="true"
-      @product-clicked="handleProductClick"
-      @clear-recent="handleClearRecent"
-      @add-to-cart="handleAddToCart"
-    />
-  </div>
+  <RecentProductsSliderFull
+    :max-display="6"
+    :show-clear-button="true"
+    :show-scroll-indicators="true"
+    @product-clicked="handleProductClick"
+    @clear-recent="handleClearRecent"
+    @add-to-cart="handleAddToCart"
+  />
 </template>
 
 <script>
@@ -25,7 +23,7 @@ import ProductDetail from "@/components/Products/ProductDetail.vue";
 import ProductHalloween from  "@/components/Video/ProductHalloween.vue";
 import ProductChristmas from  "@/components/Video/ProductChristmas.vue";
 import ProductRunning from  "@/components/Video/ProductRunning.vue";
-import RecentProductsSlider from "@/components/Products/RecentProductsSlider.vue";
+import RecentProductsSliderFull from "@/components/Products/RecentProductsSliderFull.vue";
 
 export default {
   components: {
@@ -33,7 +31,7 @@ export default {
     ProductHalloween,
     ProductChristmas,
     ProductRunning,
-    RecentProductsSlider
+    RecentProductsSliderFull
   },
   data() {
     return {

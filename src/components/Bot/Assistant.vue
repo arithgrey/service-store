@@ -156,7 +156,7 @@ export default {
   },
   methods: {
     handleResize() {
-      this.$viewport.width = window.innerWidth
+      //this.$viewport.width = window.innerWidth
     },
     toggleChat() {
       this.isOpen = !this.isOpen

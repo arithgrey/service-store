@@ -234,6 +234,8 @@ export default {
         this.recentActivity = activityResponse.data
         this.conversionFunnel = funnelResponse.data
 
+
+
         this.lastUpdateTime = new Date().toLocaleTimeString('es-ES')
         this.$emit('metrics-loaded', this.overview)
 

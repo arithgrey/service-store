@@ -27,11 +27,11 @@
         <div class="flex space-x-4">
           <div class="text-center">
             <p class="text-xs text-gray-500">Nuevos</p>
-            <p class="text-lg font-bold text-green-600">{{ item.new_leads }}</p>
+            <p class="text-lg font-bold text-green-600">{{ formatNumber(item.new_leads) }}</p>
           </div>
           <div class="text-center">
             <p class="text-xs text-gray-500">Convertidos</p>
-            <p class="text-lg font-bold text-blue-600">{{ item.converted_leads }}</p>
+            <p class="text-lg font-bold text-blue-600">{{ formatNumber(item.converted_leads) }}</p>
           </div>
         </div>
       </div>
@@ -52,16 +52,24 @@ export default {
       default: false
     }
   },
+
   methods: {
     formatDate(dateString) {
-      const date = new Date(dateString)
+      // Asegurar que la fecha se procese correctamente
+      const date = new Date(dateString + 'T00:00:00')
       const today = new Date()
+      today.setHours(0, 0, 0, 0)
       const yesterday = new Date(today)
       yesterday.setDate(yesterday.getDate() - 1)
       
-      if (date.toDateString() === today.toDateString()) {
+      // Comparar solo las fechas (sin hora)
+      const dateOnly = new Date(date.getFullYear(), date.getMonth(), date.getDate())
+      const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate())
+      const yesterdayOnly = new Date(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate())
+      
+      if (dateOnly.getTime() === todayOnly.getTime()) {
         return 'Hoy'
-      } else if (date.toDateString() === yesterday.toDateString()) {
+      } else if (dateOnly.getTime() === yesterdayOnly.getTime()) {
         return 'Ayer'
       } else {
         return date.toLocaleDateString('es-ES', { 
@@ -70,6 +78,13 @@ export default {
           day: 'numeric'
         })
       }
+    },
+    formatNumber(num) {
+      // Formatear números grandes para mejor legibilidad
+      if (num >= 1000) {
+        return (num / 1000).toFixed(1) + 'k'
+      }
+      return num.toString()
     }
   }
 }

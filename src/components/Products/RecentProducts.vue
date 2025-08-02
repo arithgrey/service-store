@@ -36,7 +36,7 @@
     </div>
 
     <!-- Grid de productos -->
-    <div class="recent-products-grid">
+    <div :class="['recent-products-grid', gridColumns]">
       <div
         v-for="(product, index) in displayProducts"
         :key="`${product.id}-${index}`"
@@ -230,6 +230,14 @@ export default {
       return stats.value.mostViewed[0];
     });
 
+    // Computed para determinar el número de columnas basado en productos
+    const gridColumns = computed(() => {
+      const count = displayProducts.value.length;
+      if (count <= 2) return 'grid-cols-1 md:grid-cols-2';
+      if (count <= 4) return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3';
+      return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4';
+    });
+
     // Métodos
     const getProductImage = (product) => {
       if (product.images && product.images.length > 0) {
@@ -292,6 +300,7 @@ export default {
       hasRecentProducts,
       displayProducts,
       getMostViewedProduct,
+      gridColumns,
       
       // Métodos
       getProductImage,
@@ -313,7 +322,6 @@ export default {
 
 .recent-products-grid {
   @apply grid gap-4 md:gap-6;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
 .recent-product-card {

@@ -57,6 +57,7 @@ import ProductConfigIcon from "@/components/Products/ProductConfigIcon.vue";
 import PromoSlider from "@/components/Terms/PromoSlider.vue";
 import ShareButton from "@/components/Share/ShareButton.vue";
 import ProductShareModal from "@/components/Share/ProductShareModal.vue";
+import { useRecentProducts } from "@/components/RecentProductsHelper";
 export default {
   components: {
     ProductBreadcrumb,
@@ -72,6 +73,16 @@ export default {
     return {
       product: [],
       showShareModal: false,
+    };
+  },
+  setup() {
+    const { addProduct, initialize } = useRecentProducts();
+    
+    // Inicializar el composable
+    initialize();
+    
+    return {
+      addProduct
     };
   },
   mounted() {
@@ -90,6 +101,9 @@ export default {
         this.product = response.data;
         this.mainImagePreview()
         this.facebook_event(this.product)
+        
+        // Agregar producto a recientemente vistos
+        this.addProduct(this.product);
 
       } catch (error) {
         console.error("Error al obtener los datos:", error);

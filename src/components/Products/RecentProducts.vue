@@ -55,12 +55,14 @@
             class="block relative overflow-hidden rounded-lg"
             @click="handleProductClick(product)"
           >
-            <img
-              :src="getProductImage(product)"
-              :alt="product.name"
-              class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
-              loading="lazy"
-            />
+            <div class="relative w-full aspect-square overflow-hidden">
+              <img
+                :src="getProductImage(product)"
+                :alt="product.name"
+                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                loading="lazy"
+              />
+            </div>
             
             <!-- Badge de "Reciente" -->
             <div class="absolute top-2 left-2">
@@ -310,12 +312,12 @@ export default {
 }
 
 .recent-products-grid {
-  @apply grid gap-6;
+  @apply grid gap-4 md:gap-6;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
 .recent-product-card {
-  @apply bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden border border-gray-200;
+  @apply bg-white rounded-lg shadow-md hover:shadow-lg transition-all duration-300 overflow-hidden border border-gray-200;
 }
 
 .product-image-container {
@@ -323,7 +325,7 @@ export default {
 }
 
 .product-title {
-  @apply text-sm font-medium text-gray-900 line-clamp-2;
+  @apply text-sm font-medium text-gray-900;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;

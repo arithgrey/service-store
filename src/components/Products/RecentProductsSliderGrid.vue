@@ -46,12 +46,14 @@
               class="block relative"
               @click="handleProductClick(product)"
             >
-              <img
-                :src="getProductImage(product)"
-                :alt="product.name"
-                class="w-full h-48 object-cover rounded-lg transition-transform duration-300 group-hover:scale-105"
-                loading="lazy"
-              />
+              <div class="relative w-full aspect-square overflow-hidden rounded-lg">
+                <img
+                  :src="getProductImage(product)"
+                  :alt="product.name"
+                  class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  loading="lazy"
+                />
+              </div>
               
               <!-- Badge de reciente -->
               <div class="absolute top-2 left-2">
@@ -63,7 +65,7 @@
 
             <!-- Información del producto -->
             <div class="product-info-grid mt-3">
-              <h4 class="product-title-grid text-sm font-medium text-gray-900 line-clamp-2">
+              <h4 class="product-title-grid">
                 {{ product.name }}
               </h4>
               
@@ -115,7 +117,7 @@ export default {
     // Número máximo de productos a mostrar
     maxDisplay: {
       type: Number,
-      default: 8
+      default: 10
     },
     // Mostrar botón de limpiar
     showClearButton: {
@@ -213,50 +215,34 @@ export default {
 }
 
 .grid-content {
-  @apply grid gap-6;
+  @apply grid gap-4 md:gap-6 px-4 md:px-6 lg:px-8 xl:px-12;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  padding: 0 1rem;
 }
 
-@media (min-width: 640px) {
+@media (max-width: 640px) {
   .grid-content {
-    padding: 0 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   }
 }
 
-@media (min-width: 768px) {
+@media (max-width: 480px) {
   .grid-content {
-    padding: 0 3rem;
+    grid-template-columns: 1fr;
   }
 }
 
-@media (min-width: 1024px) {
-  .grid-content {
-    padding: 0 4rem;
-  }
-}
 
-@media (min-width: 1280px) {
-  .grid-content {
-    padding: 0 6rem;
-  }
-}
-
-@media (min-width: 1536px) {
-  .grid-content {
-    padding: 0 8rem;
-  }
-}
 
 .grid-item {
   @apply flex-shrink-0;
 }
 
 .product-card-grid {
-  @apply bg-white rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-200;
+  @apply bg-white rounded-lg p-3 md:p-4 shadow-md hover:shadow-lg transition-all duration-300 border border-gray-200;
 }
 
 .product-title-grid {
+  @apply text-sm font-medium text-gray-900 line-clamp-2;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -264,21 +250,8 @@ export default {
 }
 
 .product-actions-grid {
-  @apply flex space-x-2;
+  @apply flex space-x-2 mt-3;
 }
 
-/* Responsive adjustments */
-@media (max-width: 640px) {
-  .grid-content {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    padding: 0 0.5rem;
-  }
-}
 
-@media (max-width: 480px) {
-  .grid-content {
-    grid-template-columns: 1fr;
-    padding: 0 0.25rem;
-  }
-}
 </style> 

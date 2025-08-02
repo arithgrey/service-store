@@ -4,7 +4,7 @@
     <div class="w-full mb-6">
       <div class="bg-white shadow-sm border border-gray-200 p-1">
         <nav class="flex space-x-1" aria-label="Tabs">
-                      <button
+          <button
             @click="switchTab('dashboard')"
             :class="[
               activeTab === 'dashboard'
@@ -35,9 +35,26 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
               </svg>
               <span>Buscar Leads</span>
-                                    <span v-if="leads && leads.length > 0" class="bg-gray-100 text-gray-600 text-xs px-2 py-1">
+              <span v-if="leads && leads.length > 0" class="bg-gray-100 text-gray-600 text-xs px-2 py-1">
                 {{ leads.length }}
               </span>
+            </div>
+          </button>
+
+          <button
+            @click="switchTab('analytics')"
+            :class="[
+              activeTab === 'analytics'
+                ? 'bg-purple-50 text-purple-700 border-purple-200 shadow-sm'
+                : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50',
+              'flex-1 py-3 px-4 font-medium text-sm transition-all duration-200 border'
+            ]"
+          >
+            <div class="flex items-center justify-center space-x-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z"></path>
+              </svg>
+              <span>Analytics</span>
             </div>
           </button>
         </nav>
@@ -84,6 +101,15 @@
           </div>
         </div>
       </div>
+
+      <!-- Analytics Tab -->
+      <div v-if="activeTab === 'analytics'" class="space-y-6">
+        <div class="mb-6">
+          <h1 class="text-2xl font-bold text-gray-900 mb-2">Analytics de Páginas</h1>
+          <p class="text-gray-600">Monitorea el comportamiento de usuarios y optimiza la experiencia de tu sitio web.</p>
+        </div>
+        <PageAnalyticsDashboard @error="handleError" />
+      </div>
     </div>
   </div>
 </template>
@@ -93,6 +119,7 @@ import SearchForm from "@/components/Leads/SearchForm.vue";
 import DetailLead from  "@/components/Leads/DetailLead.vue";
 import ItemListLead from "@/components/Leads/ItemListLead.vue";
 import LeadMetricsDashboard from "@/components/Leads/LeadMetricsDashboard.vue";
+import PageAnalyticsDashboard from "@/components/Analytics/PageAnalyticsDashboard.vue";
 import {timePassed}  from "@/helpers/time.js";
 
 
@@ -101,7 +128,8 @@ export default {
     SearchForm,
     DetailLead,
     ItemListLead,
-    LeadMetricsDashboard
+    LeadMetricsDashboard,
+    PageAnalyticsDashboard
   },
   data() {
     return {

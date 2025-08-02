@@ -59,30 +59,34 @@
           :class="{ hidden: !isContact, block: isContact }"
           ref="shippingAddressSection"
         >
-          <h5 class="text-1xl font-bold tracking-tight text-gray-900 sm:tc mb-5">
-            Dirección o link de google en donde se entregará tu equipo!
+                    <h5 class="text-1xl font-bold tracking-tight text-gray-900 sm:tc mb-5">
+            Dirección de entrega
           </h5>
-  
-  
-          <div class="relative z-0 w-full mb-5  group">
-            <input
-              v-model="form.street"
-              type="text"
-              name="street"
-              id="floating_street"
-              class="peer input-cart"
-              placeholder="Calle*"
-              required
-              @input="v$?.form.street.$touch()"
-            />
-            <span
-              class="text-red-500 text-sm"
-              v-if="this.errors && this.errors.street"
-              >{{ formatError(this.errors.street) }}</span
-            >
-            <span class="text-red-500 text-sm" v-if="v$?.form.street.$error">
-              {{ v$?.form.street.$errors[0].$message }}
-            </span>
+          <p class="text-sm text-gray-600 mb-4">
+            Escribe tu dirección y selecciona una de las sugerencias de Google Maps
+          </p>
+
+          <AddressAutocomplete
+            v-model="form.street"
+            name="street"
+            id="floating_street"
+            placeholder="Escribe tu dirección completa*"
+            @address-selected="handleAddressSelected"
+          />
+          <span
+            class="text-red-500 text-sm"
+            v-if="this.errors && this.errors.street"
+            >{{ formatError(this.errors.street) }}</span
+          >
+          <span class="text-red-500 text-sm" v-if="v$?.form.street.$error">
+            {{ v$?.form.street.$errors[0].$message }}
+          </span>
+
+          <!-- Información adicional de la dirección seleccionada -->
+          <div v-if="selectedAddressInfo" class="mb-4 p-3 bg-blue-50 rounded-md">
+            <p class="text-sm text-blue-800">
+              <strong>Dirección seleccionada:</strong> {{ selectedAddressInfo.formattedAddress }}
+            </p>
           </div>
   
           <button
@@ -103,11 +107,13 @@
   import { rules } from "@/rules/checkout/paymentOnDeliveryValidator.js";
   import * as utilities from "@/rules/utilities.js";
   import * as utilitiesLeads from "@/components/Cart/js/leads.js";
+  import AddressAutocomplete from "@/components/Cart/AddressAutocomplete.vue";
   
   export default {
     data() {
       return {
         ...fields,
+        selectedAddressInfo: null,
       };
     },
     setup: () => ({ v$: useVuelidate() }),
@@ -187,6 +193,16 @@
           this.errors = error.response.data;
         }
       },
+
+      // Manejar dirección seleccionada del componente AddressAutocomplete
+      handleAddressSelected(addressData) {
+        this.selectedAddressInfo = addressData;
+        this.v$?.form.street.$touch();
+      },
+    },
+
+    components: {
+      AddressAutocomplete
     },
   };
   </script>

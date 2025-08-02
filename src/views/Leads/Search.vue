@@ -1,5 +1,8 @@
 <template>
   <div class="container mx-auto px-4 flex flex-col items-center min-h-screen mb-10">
+    <!-- Dashboard de Métricas -->
+    <LeadMetricsDashboard @error="handleError" />
+    
     <div class="mb-5">
       <SearchForm ref="searchForm" @list_leads="handlerLeads" />
     </div>
@@ -19,6 +22,7 @@
 import SearchForm from "@/components/Leads/SearchForm.vue";
 import DetailLead from  "@/components/Leads/DetailLead.vue";
 import ItemListLead from "@/components/Leads/ItemListLead.vue";
+import LeadMetricsDashboard from "@/components/Leads/LeadMetricsDashboard.vue";
 import {timePassed}  from "@/helpers/time.js";
 
 
@@ -26,7 +30,8 @@ export default {
   components: {
     SearchForm,
     DetailLead,
-    ItemListLead
+    ItemListLead,
+    LeadMetricsDashboard
   },
   data() {
     return {
@@ -49,6 +54,11 @@ export default {
     callSubmitForm() {
       
       this.$refs.searchForm.submitForm();
+    },
+    handleError(message) {
+      // Manejar errores del dashboard
+      console.error('Error en dashboard:', message);
+      // Aquí podrías mostrar una notificación al usuario
     },
   },
   mounted() {

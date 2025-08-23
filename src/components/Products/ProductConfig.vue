@@ -94,6 +94,16 @@
                         </button>
                       </div>
 
+                      <!-- Categoría -->
+                      <div class="flex items-center mt-2">
+                        <p class="text-sm text-gray-900 font-bold">Categoría: {{ product.category?.name || 'Sin categoría' }}</p>
+                        <button type="button" class="ml-2 text-gray-500 hover:text-gray-700" @click="editCategoryMode = !editCategoryMode">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-4">
+                            <path d="m2.695 14.762-1.262 3.155a.5.5 0 0 0 .65.65l3.155-1.262a4 4 0 0 0 1.343-.886L17.5 5.501a2.121 2.121 0 0 0-3-3L3.58 13.419a4 4 0 0 0-.885 1.343Z" />
+                          </svg>
+                        </button>
+                      </div>
+
                       <!-- Primary Toggle -->
                       <div class="flex items-center mt-1">
                         <p class="text-sm text-gray-900 font-bold">Es producto primario:</p>
@@ -377,6 +387,49 @@
                         </div>
                       </div>
 
+                      <!-- Editar categoría -->
+                      <div v-if="editCategoryMode" class="mt-5">
+                        <label for="category" class="text-sm text-gray-900 border-b text-base">Cambiar categoría:</label>
+                        <div class="relative z-0 w-full mb-5 mt-2 group">
+                          <select
+                            v-model="form.category"
+                            name="category"
+                            id="category"
+                            class="peer input-cart"
+                            required
+                            @focus="loadCategories"
+                          >
+                            <option value="">Selecciona una categoría...</option>
+                            <option 
+                              v-for="category in categories" 
+                              :key="category.id" 
+                              :value="category.id"
+                            >
+                              {{ category.name }}
+                            </option>
+                          </select>
+                          <span class="text-red-500 text-sm" v-if="errors && errors.category">{{ formatError(errors.category) }}</span>
+                        </div>
+
+                        <!-- Mostrar resumen del cambio de categoría -->
+                        <div v-if="form.category" class="mt-3">
+                          <p class="text-sm text-gray-700">
+                            Actual: <strong>{{ product.category?.name || 'Sin categoría' }}</strong>
+                          </p>
+                          <p class="text-sm text-gray-700">
+                            Nueva categoría: <strong>{{ getSelectedCategoryName() }}</strong>
+                          </p>
+
+                          <!-- Botón de confirmar categoría -->
+                          <button
+                            @click="confirmCategoryChange"
+                            class="mt-3 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                          >
+                            Confirmar
+                          </button>
+                        </div>
+                      </div>
+
                       <!-- Componentes del Producto -->
                       <ProductComponentsConfig 
                         :product="product"
@@ -447,9 +500,11 @@ export default {
       editSpecificNameMode: false,
       editShortNameMode: false,
       editExpressPaymentLinkMode: false,
+      editCategoryMode: false,
       editStockMode: false,
       editMinStockMode: false,
       editMaxStockMode: false,
+      categories: [],
       form: {
         price: "",
         cost: "",
@@ -457,6 +512,7 @@ export default {
         specific_name: "",
         short_name: "",
         express_payment_link: "",
+        category: "",
         stock: "",
         min_stock: "",
         max_stock: "",
@@ -469,6 +525,7 @@ export default {
         specific_name: "",
         short_name: "",
         express_payment_link: "",
+        category: "",
       },
     };
   },
@@ -635,6 +692,60 @@ export default {
         
       } catch (error) {
         console.error("Error actualizando link de pago:", error);
+      }
+    },
+    
+    // Métodos para categoría
+    async loadCategories() {
+      if (this.categories.length === 0) {
+        try {
+          const response = await this.$axios.get('enid/categorias/');
+          this.categories = response.data;
+        } catch (error) {
+          console.error("Error cargando categorías:", error);
+        }
+      }
+      // Inicializar el valor actual
+      if (!this.form.category && this.product.category) {
+        this.form.category = this.product.category.id;
+      }
+    },
+    getSelectedCategoryName() {
+      const selectedCategory = this.categories.find(cat => cat.id == this.form.category);
+      return selectedCategory ? selectedCategory.name : '';
+    },
+    async confirmCategoryChange() {
+      try {
+        const params = { 
+          id: this.product.id, 
+          category: this.form.category 
+        };
+        const response = await this.$axios.patch(`enid/productos/${this.product.id}/`, params);
+        
+        // Actualizar el producto con la nueva categoría
+        const selectedCategory = this.categories.find(cat => cat.id == this.form.category);
+        this.product.category = selectedCategory;
+        
+        this.form.category = '';
+        this.editCategoryMode = false;
+        this.$emit('category-updated', selectedCategory);
+        
+        // Redirigir al usuario a la nueva URL del producto con la nueva categoría
+        if (selectedCategory && selectedCategory.slug && this.product.slug) {
+          // Construir la nueva URL del producto: /{categoria-slug}/{producto-slug}
+          const newProductUrl = `/${selectedCategory.slug}/${this.product.slug}`;
+          
+          // Usar router para navegar a la nueva URL del producto
+          if (this.$router) {
+            this.$router.push(newProductUrl);
+          } else {
+            // Fallback: redirección con window.location si no hay router
+            window.location.href = newProductUrl;
+          }
+        }
+        
+      } catch (error) {
+        console.error("Error actualizando categoría:", error);
       }
     },
     

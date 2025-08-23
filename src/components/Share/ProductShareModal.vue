@@ -118,6 +118,17 @@
             </svg>
             <span class="text-sm font-medium">Insertar</span>
           </button>
+
+          <!-- Landing Page -->
+          <button
+            @click="goToLandingPage"
+            class="flex items-center p-3 border border-orange-200 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors col-span-2"
+          >
+            <svg class="w-5 h-5 mr-3 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+            </svg>
+            <span class="text-sm font-medium text-orange-700">¿Cual es el proceso - pago contra entrega?</span>
+          </button>
         </div>
       </div>
     </div>
@@ -218,6 +229,20 @@ export default {
       navigator.clipboard.writeText(embedCode);
       this.showNotification('Código de inserción copiado', 'success');
       this.trackShareEvent('embed');
+    },
+    
+    goToLandingPage() {
+      // Usar slugs para SEO y profesionalismo
+      const landingUrl = `/kits-para-pasar-al-siguiente-nivel?product=${this.product.slug}&category=${this.product.category?.slug || 'default'}`;
+      
+      // Cerrar el modal
+      this.closeModal();
+      
+      // Navegar a la landing page
+      this.$router.push(landingUrl);
+      
+      // Trackear el evento
+      this.trackShareEvent('landing_page');
     },
     
     showNotification(message, type = 'info') {

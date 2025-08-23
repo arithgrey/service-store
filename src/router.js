@@ -19,8 +19,15 @@ import Searchorders from '@/views/Order/Search.vue';
 import Impact from '@/views/Impact/Impact.vue';
 import Advanced from '@/views/Faq/Advanced.vue';
 import StockView from '@/views/StockView.vue';
+import KitsLandingPage from '@/views/LandingPage/KitsLandingPage.vue';
 
 const routes = [
+  // Landing page independiente (sin MainLayout)
+  {
+    path: '/kits-para-pasar-al-siguiente-nivel',
+    name: 'kits-landing-page',
+    component: KitsLandingPage,
+  },
   {   
     path: '/',
     component: MainLayout,    

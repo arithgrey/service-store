@@ -86,6 +86,25 @@
                         </button>
                       </div>
 
+                      <!-- Es Público Toggle -->
+                      <div class="flex items-center mt-1">
+                        <p class="text-sm text-gray-900 font-bold">Es producto público:</p>
+                        <button 
+                          type="button" 
+                          class="ml-2 relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:ring-offset-2"
+                          :class="product.es_publico ? 'bg-indigo-600' : 'bg-gray-200'"
+                          @click="toggleEsPublico"
+                        >
+                          <span 
+                            class="pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out"
+                            :class="product.es_publico ? 'translate-x-5' : 'translate-x-0'"
+                          />
+                        </button>
+                        <span class="ml-2 text-xs text-gray-500">
+                          {{ product.es_publico ? 'Visible públicamente' : 'Oculto del público' }}
+                        </span>
+                      </div>
+
                       <!-- Stock Configuration -->
                       <ProductInventoryConfig 
                         :product="product"
@@ -353,6 +372,20 @@ export default {
         
       } catch (error) {
         console.error("Error actualizando estado top_seller:", error);
+      }
+    },
+    async toggleEsPublico() {
+      try {
+        const params = { 
+          id: this.product.id, 
+          es_publico: !this.product.es_publico 
+        };
+        const response = await this.$axios.patch(`enid/productos/${this.product.id}/`, params);
+        this.product.es_publico = !this.product.es_publico;
+        this.$emit('es-publico-updated', this.product.es_publico);
+        
+      } catch (error) {
+        console.error("Error actualizando estado es_publico:", error);
       }
     },
     handleMinStockUpdate(newMinStock) {

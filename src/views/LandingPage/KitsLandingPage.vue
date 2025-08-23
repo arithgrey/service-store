@@ -444,6 +444,7 @@ export default {
       productImage: null,
       productFeatures: [],
       form: {
+        source: "landing-page-black-lifestyle",
         name: "",
         phone_number: "",
         street: "",
@@ -608,8 +609,9 @@ export default {
         street: "",
         product_slug: this.productSlug || "",
         product_name: this.productName || "",
-        product_category: this.productCategory || ""
-      };
+        product_category: this.productCategory || "",
+        source: "landing-page-black-lifestyle"
+    };
       this.v$?.$reset();
     },
 
@@ -692,12 +694,8 @@ export default {
       this.errors = {};
     },
     
-
-    
     getMainImage(product) {
-      if (!product.images || !Array.isArray(product.images)) {
-        return "https://enidservice.com/public/images/04.jpg";
-      }
+      
       const mainImage = product.images.find((img) => img.is_main);
       return mainImage ? mainImage.get_image_url : "https://enidservice.com/public/images/04.jpg";
     },

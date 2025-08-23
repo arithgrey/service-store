@@ -280,7 +280,7 @@
         <!-- Header del modal -->
         <div class="flex justify-between items-center mb-6">
           <h3 class="text-2xl font-bold text-white">
-            Registra tus datos para recibir información exclusiva
+            Compártenos la dirección para llevarte tu equipo hasta tu puerta.
           </h3>
           <button 
             @click="closeForm"
@@ -293,7 +293,7 @@
         </div>
         
         <p class="text-gray-300 mb-6">
-          Solo usaremos estos datos para enviarte información sobre nuestros kits premium
+          Solo usaremos estos datos para enviarte tu kit
         </p>
         
         
@@ -411,21 +411,25 @@
         </div>
       </div>
     </div>
-
+    <References api-endpoint="references/business/enid-service/imagenes-referencia/" />
 
   </div>
 </template>
+
 
 <script>
 import { useVuelidate } from "@vuelidate/core";
 import { rules } from "@/rules/checkout/paymentOnDeliveryValidator.js";
 import * as utilities from "@/rules/utilities.js";
 import AddressAutocomplete from "@/components/Cart/AddressAutocomplete.vue";
+import References from '@/components/Trusth/References.vue';
 
 export default {
   name: 'KitsLandingPage',
   components: {
-    AddressAutocomplete
+    AddressAutocomplete,
+    References
+    
   },
   setup: () => ({ v$: useVuelidate() }),
   data() {

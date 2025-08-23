@@ -9,9 +9,9 @@
           <!-- Left Side - Product Title -->
           <div class="text-center lg:text-left">
             <h1 class="text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-              Blvck
+              Paga
               <br>
-              Tumbler
+              al rebicir
             </h1>
           </div>
           
@@ -28,9 +28,9 @@
                 <div class="w-64 h-64 bg-gray-900 rounded-full flex items-center justify-center">
                   <div class="w-48 h-48 bg-black rounded-full flex items-center justify-center border-2 border-gray-600">
                     <div class="text-center text-white">
-                      <div class="text-sm font-bold mb-2">ALL BLACK</div>
-                      <div class="text-xs">EVERYTHING</div>
-                      <div class="text-xs text-gray-400 mt-1">EST. 2024</div>
+                      <div class="text-sm font-bold mb-2">PASA AL</div>
+                      <div class="text-xs">SIGUIENTE</div>
+                      <div class="text-xs text-gray-400 mt-1">NIVEL YA!</div>
                     </div>
                   </div>
                 </div>
@@ -59,18 +59,10 @@
         <div class="grid md:grid-cols-2 gap-16">
           <!-- Left Section -->
           <div class="text-white">
-            <h2 class="text-3xl font-bold mb-6">Black Lifestyle Lovers.</h2>
             
-            <!-- Personalized Welcome Message -->
-            <div v-if="productName" class="mb-6 p-4 bg-orange-500/20 border border-orange-500/30 rounded-lg">
-              <p class="text-orange-200 text-sm mb-2">¡Bienvenido desde {{ productName }}!</p>
-              <p class="text-orange-100 text-sm">Te hemos preparado información exclusiva sobre productos premium similares.</p>
-            </div>
+
             
-            <p class="text-lg text-gray-300 leading-relaxed mb-8">
-              Experience what it feels like drinking your favourite beverage out of our premium, all-black mug that was designed with you in mind.
-            </p>
-            
+           
             <!-- Product Reference Info -->
             <div v-if="productName && productImage" class="mb-8 p-6 bg-gray-800 rounded-xl border border-gray-700">
               <h3 class="text-lg font-bold text-white mb-4">Producto que te interesa:</h3>
@@ -146,14 +138,132 @@
             </button>
           </div>
           
-          <!-- Right Section -->
+          <!-- Right Section - Timeline del Proceso -->
           <div class="text-white">
-            <h2 class="text-3xl font-bold mb-6">The design.</h2>
+            <h2 class="text-3xl font-bold mb-6">¿Cual es el proceso?</h2>
             <p class="text-lg text-gray-300 leading-relaxed mb-8">
-              Learn more what makes our Blvck Tumbler unique and different. Let's watch the video!
+              Tú eliges, nosotros entregamos, tú pagas cuando recibes. 
             </p>
-            <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors">
-              <div class="w-0 h-0 border-l-[12px] border-l-orange-500 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent ml-1"></div>
+            
+            <!-- Timeline en Forma de Árbol -->
+            <div class="relative">
+              <!-- Línea de conexión horizontal central -->
+              <div class="absolute left-1/2 transform -translate-x-px h-full w-0.5 bg-gradient-to-b from-orange-500 via-orange-400 to-orange-300"></div>
+              
+              <!-- Paso 1 -->
+              <div class="relative flex items-center mb-8">
+                <div class="flex-1 pr-8 text-right">
+                  <div class="bg-gray-700 p-4 rounded-xl border border-gray-600 hover:border-orange-500 transition-all duration-300 hover:shadow-lg hover:shadow-orange-500/20">
+                    <div class="flex items-center justify-end mb-2">
+                      <span class="bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full">PASO 1</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-1">Elige tu producto</h3>
+                    
+                  </div>
+                </div>
+                
+                <!-- Círculo del paso -->
+                <div class="relative z-10 flex-shrink-0 w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center shadow-lg border-2 border-gray-800">
+                  <span class="text-white text-sm font-bold">1</span>
+                </div>
+                
+                <div class="flex-1 pl-8">
+                  <!-- Espacio para balance visual -->
+                </div>
+              </div>
+
+              <!-- Paso 2 -->
+              <div class="relative flex items-center mb-8">
+                <div class="flex-1 pr-8">
+                  <!-- Espacio para balance visual -->
+                </div>
+                
+                <!-- Círculo del paso -->
+                <div class="relative z-10 flex-shrink-0 w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center shadow-lg border-2 border-gray-800">
+                  <span class="text-white text-sm font-bold">2</span>
+                </div>
+                
+                <div class="flex-1 pl-8">
+                  <div class="bg-gray-700 p-4 rounded-xl border border-gray-600 hover:border-orange-500 transition-all duration-300 hover:shadow-lg hover:shadow-orange-500/20">
+                    <div class="flex items-center mb-2">
+                      <span class="bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full">PASO 2</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-1">Registra tus datos</h3>
+                    <p class="text-gray-300 text-sm">
+                      Completa el formulario con tu información de contacto y dirección.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Paso 3 -->
+              <div class="relative flex items-center mb-8">
+                <div class="flex-1 pr-8 text-right">
+                  <div class="bg-gray-700 p-4 rounded-xl border border-gray-600 hover:border-orange-500 transition-all duration-300 hover:shadow-lg hover:shadow-orange-500/20">
+                    <div class="flex items-center justify-end mb-2">
+                      <span class="bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full">PASO 3</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-1">Preparamos tu pedido</h3>
+                    <p class="text-gray-300 text-sm">
+                        Te avisamos con una llamada en cuanto vayamos de camino a tu entrega                    </p>
+                  </div>
+                </div>
+                
+                <!-- Círculo del paso -->
+                <div class="relative z-10 flex-shrink-0 w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center shadow-lg border-2 border-gray-800">
+                  <span class="text-white text-sm font-bold">3</span>
+                </div>
+                
+                <div class="flex-1 pl-8">
+                  <!-- Espacio para balance visual -->
+                </div>
+              </div>
+
+              <!-- Paso 4 -->
+              <div class="relative flex items-center mb-8">
+                <div class="flex-1 pr-8">
+                  <!-- Espacio para balance visual -->
+                </div>
+                
+                <!-- Círculo del paso -->
+                <div class="relative z-10 flex-shrink-0 w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center shadow-lg border-2 border-gray-800">
+                  <span class="text-white text-sm font-bold">4</span>
+                </div>
+                
+                <div class="flex-1 pl-8">
+                  <div class="bg-gray-700 p-4 rounded-xl border border-gray-600 hover:border-orange-500 transition-all duration-300 hover:shadow-lg hover:shadow-orange-500/20">
+                    <div class="flex items-center mb-2">
+                      <span class="bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full">PASO 4</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-1">Recibes y pagas</h3>
+                    <p class="text-gray-300 text-sm">
+                      Te entregamos en tu puerta y pagas en ese momento.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Paso 5 -->
+              <div class="relative flex items-center">
+                <div class="flex-1 pr-8 text-right">
+                  <div class="bg-gray-700 p-4 rounded-xl border border-gray-600 hover:border-orange-500 transition-all duration-300 hover:shadow-lg hover:shadow-orange-500/20">
+                    <div class="flex items-center justify-end mb-2">
+                      <span class="bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full">PASO 5</span>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white mb-1">¡Disfruta tu kit!</h3>
+                    
+                  </div>
+                </div>
+                
+                <!-- Círculo del paso -->
+                <div class="relative z-10 flex-shrink-0 w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center shadow-lg border-2 border-gray-800">
+                  <span class="text-white text-sm font-bold">5</span>
+                </div>
+                
+                <div class="flex-1 pl-8">
+                  <!-- Espacio para balance visual -->
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -186,13 +296,6 @@
           Solo usaremos estos datos para enviarte información sobre nuestros kits premium
         </p>
         
-        <!-- Product Context Message -->
-        <div v-if="productSlug" class="mb-6 p-4 bg-blue-900/20 border border-blue-700 rounded-lg">
-          <p class="text-blue-200 text-sm">
-            <strong>Contexto:</strong> Te has interesado en <strong>{{ productName }}</strong> 
-            ({{ productCategory }}). Te enviaremos información relacionada y productos premium similares.
-          </p>
-        </div>
         
         <form @submit.prevent="submitForm" class="space-y-6">
           <!-- Nombre -->

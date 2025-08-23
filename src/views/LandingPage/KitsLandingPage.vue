@@ -235,13 +235,23 @@
 
           <!-- Dirección -->
           <div>
-            <input
+            <AddressAutocomplete
+              v-if="addressComponentLoaded"
               v-model="form.street"
-              type="text"
               name="street"
-              class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-white placeholder-gray-400"
-              placeholder="Dirección (opcional)"
+              placeholder="Escribe tu dirección completa*"
+              :input-class="'w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition-colors text-white placeholder-gray-400'"
+              @address-selected="handleAddressSelected"
             />
+            
+            <!-- Placeholder mientras carga -->
+            <div v-else class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-gray-400">
+              <div class="flex items-center">
+                <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-orange-500 mr-3"></div>
+                Cargando autocompletado de direcciones...
+              </div>
+            </div>
+            
             <span class="text-red-400 text-sm" v-if="errors.street">
               {{ formatError(errors.street) }}
             </span>
@@ -307,9 +317,13 @@
 import { useVuelidate } from "@vuelidate/core";
 import { rules } from "@/rules/checkout/paymentOnDeliveryValidator.js";
 import * as utilities from "@/rules/utilities.js";
+import AddressAutocomplete from "@/components/Cart/AddressAutocomplete.vue";
 
 export default {
   name: 'KitsLandingPage',
+  components: {
+    AddressAutocomplete
+  },
   setup: () => ({ v$: useVuelidate() }),
   data() {
     return {
@@ -341,6 +355,7 @@ export default {
       productId: null, // ID numérico del producto
       successMessage: "",
       showRedirectButton: false,
+      addressComponentLoaded: false, // Control de carga del componente de direcciones
     };
   },
   validations() {
@@ -378,6 +393,19 @@ export default {
         }
       },
       immediate: true
+    },
+    
+    // Watcher para optimizar la carga del modal
+    showForm: {
+      handler(newVal) {
+        if (newVal) {
+          // Cuando se abre el modal, optimizar la carga
+          this.$nextTick(() => {
+            this.optimizeAddressComponent();
+          });
+        }
+      },
+      immediate: false
     }
   },
   
@@ -516,6 +544,11 @@ export default {
           // Actualizar formulario
           this.form.product_name = this.productName;
           this.form.product_category = this.productCategory;
+          
+          // Pre-cargar el componente de direcciones para mejor UX
+          this.$nextTick(() => {
+            this.optimizeAddressComponent();
+          });
         } else {
           throw new Error('No se recibieron datos del producto');
         }
@@ -602,6 +635,24 @@ export default {
         window.location.href = `/orden-compra/${this.productId}`;
       } else {
         window.location.href = '/orden-compra/1';
+      }
+    },
+    
+    // Manejar dirección seleccionada del componente AddressAutocomplete
+    handleAddressSelected(addressData) {
+      console.log('Dirección seleccionada:', addressData);
+      // Aquí puedes agregar lógica adicional si es necesario
+    },
+    
+    // Optimizar la carga del componente de direcciones
+    optimizeAddressComponent() {
+      // Lazy load del componente de direcciones
+      if (!this.addressComponentLoaded) {
+        this.addressComponentLoaded = true;
+        // Forzar re-render del componente
+        this.$nextTick(() => {
+          this.$forceUpdate();
+        });
       }
     },
     

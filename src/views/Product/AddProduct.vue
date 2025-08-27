@@ -21,6 +21,7 @@
         @success="handleSuccess"
         @error="handleError"
         @cancel="handleClose"
+        @product-created="handleProductCreated"
       />
     </SidePanel>
 
@@ -28,7 +29,7 @@
     <div v-if="message" class="fixed bottom-4 right-4 z-50">
       <div
         :class="[
-          'p-4 rounded-md shadow-lg',
+          'p-4 rounded-md shadow-lg transition-all duration-300',
           message.type === 'success' ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'
         ]"
       >
@@ -51,8 +52,15 @@ export default {
   data() {
     return {
       showPanel: false,
-      message: null
+      message: null,
+      redirectTimeout: null
     };
+  },
+  beforeDestroy() {
+    // Limpiar timeout si existe
+    if (this.redirectTimeout) {
+      clearTimeout(this.redirectTimeout);
+    }
   },
   methods: {
     handleClose() {
@@ -62,6 +70,8 @@ export default {
     handleSuccess(message) {
       this.message = { text: message, type: 'success' };
       this.showPanel = false;
+      
+      // Limpiar mensaje después de 5 segundos
       setTimeout(() => {
         this.message = null;
       }, 5000);
@@ -72,11 +82,39 @@ export default {
       setTimeout(() => {
         this.message = null;
       }, 5000);
+    },
+
+    handleProductCreated({ url, product }) {
+      // Cerrar el panel inmediatamente
+      this.showPanel = false;
+
+      // Mostrar mensaje de éxito
+      this.message = { 
+        text: '¡Producto creado exitosamente! Redirigiendo...', 
+        type: 'success' 
+      };
+
+      // Limpiar cualquier timeout existente
+      if (this.redirectTimeout) {
+        clearTimeout(this.redirectTimeout);
+      }
+
+      // Configurar nuevo timeout para redirección
+      this.redirectTimeout = setTimeout(() => {
+        // Limpiar mensaje antes de redirigir
+        this.message = null;
+        // Redirigir a la página del producto
+        this.$router.replace(url);
+      }, 1000);
     }
   }
 };
 </script>
 
 <style scoped>
-/* Estilos adicionales si son necesarios */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
 </style> 

@@ -171,6 +171,17 @@
             </div>
           </Dialog>
         </TransitionRoot>
+
+        <!-- Imágenes del producto -->
+        <div class="mt-6">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            Imágenes del producto
+          </label>
+          <ImageUploader
+            ref="imageUploader"
+            @images-changed="handleImagesChanged"
+          />
+        </div>
       </div>
 
       <!-- Botones de acción -->
@@ -198,6 +209,7 @@
 <script>
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { XMarkIcon } from '@heroicons/vue/24/outline'
+import ImageUploader from './ImageUploader.vue'
 
 export default {
   name: 'ProductForm',
@@ -207,7 +219,8 @@ export default {
     DialogTitle,
     TransitionChild,
     TransitionRoot,
-    XMarkIcon
+    XMarkIcon,
+    ImageUploader
   },
   props: {
     initialData: {
@@ -230,7 +243,8 @@ export default {
         name: '',
         errors: null
       },
-      isCreatingCategory: false
+      isCreatingCategory: false,
+      productImages: null
     };
   },
   async mounted() {
@@ -296,6 +310,28 @@ export default {
       }, 3000);
     },
 
+    handleImagesChanged(formData) {
+      // Convertir el FormData a un array de archivos
+      const images = [];
+      let mainImageIndex = 0;
+      
+      for (let pair of formData.entries()) {
+        const [key, value] = pair;
+        if (key.startsWith('image_')) {
+          images.push(value);
+        } else if (key.startsWith('is_main_')) {
+          if (value === 'true') {
+            mainImageIndex = parseInt(key.split('_')[2]);
+          }
+        }
+      }
+      
+      this.productImages = {
+        images,
+        mainImageIndex
+      };
+    },
+
     async handleSubmit() {
       this.isSubmitting = true;
 
@@ -311,16 +347,49 @@ export default {
           throw new Error('El precio debe ser un número válido mayor a 0');
         }
 
-        // Datos para enviar
-        const productData = {
-          ...this.formData,
-          price: price
-        };
+        // Crear FormData para enviar producto e imágenes juntos
+        const formData = new FormData();
+        formData.append('name', this.formData.name);
+        formData.append('specific_name', this.formData.specific_name);
+        formData.append('price', price);
+        formData.append('category', this.formData.category);
+        
+        // Valores por defecto
+        formData.append('weight', 0.5);
+        formData.append('cost', 0);
+        formData.append('min_stock', 1);
+        formData.append('max_stock', 100);
+        formData.append('es_publico', true);
+
+        // Agregar imágenes si existen
+        if (this.productImages?.images) {
+          this.productImages.images.forEach((file, index) => {
+            formData.append(`uploaded_images[${index}]`, file);
+          });
+          formData.append('main_image_index', this.productImages.mainImageIndex);
+        }
 
         // Enviar al backend
-        await this.$axios.post('enid/productos/', productData);
+        const response = await this.$axios.post('enid/productos/', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+
+        // Obtener los datos del producto desde la respuesta
+        const productData = response.data;
         
-        this.$emit('success', 'Producto creado exitosamente!');
+        // Redirigir usando el nombre de la ruta y sus parámetros
+        this.$router.push({
+          name: 'product-detail',
+          params: {
+            categorySlug: productData.category.slug,
+            productSlug: productData.slug
+          }
+        });
+
+        // Mostrar mensaje y limpiar formulario
+        this.showMessage('¡Producto creado exitosamente!', 'success');
         this.resetForm();
 
       } catch (error) {
@@ -333,7 +402,7 @@ export default {
           errorMessage = error.message;
         }
         
-        this.$emit('error', errorMessage);
+        this.showMessage(errorMessage, 'error');
       } finally {
         this.isSubmitting = false;
       }
@@ -346,6 +415,8 @@ export default {
         price: '',
         category: ''
       };
+      this.$refs.imageUploader?.reset();
+      this.productImages = null;
     }
   }
 };

@@ -442,6 +442,12 @@
                         @component-removed="handleComponentRemoved"
                       />
 
+                      <!-- Agregar después del ProductComponentsConfig -->
+                      <ProductImageConfig 
+                        :product="product"
+                        @images-updated="handleImagesUpdated"
+                      />
+
                       <!-- Modal para crear nueva categoría -->
                       <TransitionRoot as="template" :show="showCreateCategoryModal">
                         <Dialog as="div" class="relative z-50" @close="showCreateCategoryModal = false">
@@ -535,6 +541,7 @@ import ValidationStockRules from "@/rules/stock/commons.js";
 import { formattedPrice } from '@/components/Products/js/priceHelper';
 import ProductInventoryConfig from '@/components/Products/ProductInventoryConfig.vue';
 import ProductComponentsConfig from '@/components/Products/ProductComponentsConfig.vue';
+import ProductImageConfig from '@/components/Products/ProductImageConfig.vue';
 
 import {
   Bars3Icon,
@@ -561,7 +568,8 @@ export default {
     MagnifyingGlassIcon,
     XMarkIcon,
     ProductInventoryConfig,
-    ProductComponentsConfig
+    ProductComponentsConfig,
+    ProductImageConfig
   },
   props: {
     product: {
@@ -626,6 +634,9 @@ export default {
       const addedQuantity = parseInt(this.form.quantity, 10) || 0;
       return currentQuantity + addedQuantity;
     }
+  },
+  mounted() {
+    console.log('Product in ProductConfig:', this.product);
   },
   methods: {
     ...utilities,
@@ -893,6 +904,10 @@ export default {
       this.product.primary_components = this.product.primary_components.filter(
         comp => comp.id !== componentId
       );
+    },
+    handleImagesUpdated(images) {
+      this.product.images = images;
+      this.$emit('images-updated', images);
     },
     
     // Método para crear nueva categoría

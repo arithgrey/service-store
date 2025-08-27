@@ -209,7 +209,7 @@
 <script>
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { XMarkIcon } from '@heroicons/vue/24/outline'
-import ImageUploader from './ImageUploader.vue'
+import ImageUploader from '@/components/Products/ImageUploader.vue';
 
 export default {
   name: 'ProductForm',

@@ -54,18 +54,123 @@
           <label for="category" class="block text-sm font-medium text-gray-700 mb-2">
             Categoría *
           </label>
-          <select
-            id="category"
-            v-model="formData.category"
-            required
-            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          >
-            <option value="">Selecciona una categoría</option>
-            <option v-for="cat in categories" :key="cat.id" :value="cat.id">
-              {{ cat.name }}
-            </option>
-          </select>
+          <div class="flex space-x-2">
+            <select
+              id="category"
+              v-model="formData.category"
+              required
+              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">Selecciona una categoría</option>
+              <option v-for="cat in categories" :key="cat.id" :value="cat.id">
+                {{ cat.name }}
+              </option>
+            </select>
+            <button
+              type="button"
+              @click="showCreateCategoryModal = true"
+              class="px-3 py-2 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <span class="sr-only">Agregar categoría</span>
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+              </svg>
+            </button>
+          </div>
         </div>
+
+        <!-- Modal para crear nueva categoría -->
+        <TransitionRoot as="template" :show="showCreateCategoryModal">
+          <Dialog as="div" class="relative z-50" @close="showCreateCategoryModal = false">
+            <TransitionChild as="template" 
+              enter="ease-in-out duration-300" 
+              enter-from="opacity-0" 
+              enter-to="opacity-100"
+              leave="ease-in-out duration-300" 
+              leave-from="opacity-100" 
+              leave-to="opacity-0"
+            >
+              <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            </TransitionChild>
+
+            <div class="fixed inset-0 overflow-hidden">
+              <div class="absolute inset-0 overflow-hidden">
+                <div class="pointer-events-none fixed inset-y-0 right-0 flex max-w-full pl-10">
+                  <TransitionChild as="template" 
+                    enter="transform transition ease-in-out duration-300 sm:duration-500"
+                    enter-from="translate-x-full" 
+                    enter-to="translate-x-0"
+                    leave="transform transition ease-in-out duration-300 sm:duration-500" 
+                    leave-from="translate-x-0"
+                    leave-to="translate-x-full"
+                  >
+                    <DialogPanel class="pointer-events-auto w-screen max-w-md">
+                      <div class="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
+                        <div class="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
+                          <div class="flex items-start justify-between">
+                            <DialogTitle class="text-lg font-medium text-gray-900">Crear Nueva Categoría</DialogTitle>
+                            <div class="ml-3 flex h-7 items-center">
+                              <button 
+                                type="button" 
+                                class="relative -m-2 p-2 text-gray-400 hover:text-gray-500"
+                                @click="showCreateCategoryModal = false"
+                              >
+                                <span class="absolute -inset-0.5" />
+                                <span class="sr-only">Cerrar modal</span>
+                                <XMarkIcon class="h-6 w-6" aria-hidden="true" />
+                              </button>
+                            </div>
+                          </div>
+
+                          <!-- Formulario para crear categoría -->
+                          <div class="mt-6">
+                            <label for="newCategoryName" class="block text-sm font-medium text-gray-700">
+                              Nombre de la categoría:
+                            </label>
+                            <input
+                              v-model="newCategoryForm.name"
+                              type="text"
+                              id="newCategoryName"
+                              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                              placeholder="Ej: Ropa deportiva"
+                              required
+                            />
+                            <span 
+                              v-if="newCategoryForm.errors && newCategoryForm.errors.name" 
+                              class="text-red-500 text-sm"
+                            >
+                              {{ newCategoryForm.errors.name }}
+                            </span>
+                          </div>
+
+                          <!-- Botones de acción -->
+                          <div class="mt-6 flex justify-end space-x-3">
+                            <button
+                              type="button"
+                              class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                              @click="showCreateCategoryModal = false"
+                            >
+                              Cancelar
+                            </button>
+                            <button
+                              type="button"
+                              class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                              @click="createNewCategory"
+                              :disabled="!newCategoryForm.name || isCreatingCategory"
+                            >
+                              <span v-if="isCreatingCategory">Creando...</span>
+                              <span v-else>Crear Categoría</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </DialogPanel>
+                  </TransitionChild>
+                </div>
+              </div>
+            </div>
+          </Dialog>
+        </TransitionRoot>
       </div>
 
       <!-- Botones de acción -->
@@ -91,8 +196,19 @@
 </template>
 
 <script>
+import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
+import { XMarkIcon } from '@heroicons/vue/24/outline'
+
 export default {
   name: 'ProductForm',
+  components: {
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+    TransitionChild,
+    TransitionRoot,
+    XMarkIcon
+  },
   props: {
     initialData: {
       type: Object,
@@ -108,7 +224,13 @@ export default {
     return {
       formData: { ...this.initialData },
       categories: [],
-      isSubmitting: false
+      isSubmitting: false,
+      showCreateCategoryModal: false,
+      newCategoryForm: {
+        name: '',
+        errors: null
+      },
+      isCreatingCategory: false
     };
   },
   async mounted() {
@@ -123,6 +245,55 @@ export default {
         console.error('Error cargando categorías:', error);
         this.$emit('error', 'Error al cargar las categorías');
       }
+    },
+
+    async createNewCategory() {
+      if (!this.newCategoryForm.name) return;
+      
+      this.isCreatingCategory = true;
+      this.newCategoryForm.errors = null;
+
+      try {
+        const response = await this.$axios.post('enid/categorias/', {
+          name: this.newCategoryForm.name
+        });
+
+        // Agregar la nueva categoría a la lista
+        this.categories.push(response.data);
+        
+        // Seleccionar automáticamente la nueva categoría
+        this.formData.category = response.data.id;
+        
+        // Solo cerramos el modal de categoría
+        this.showCreateCategoryModal = false;
+        this.newCategoryForm.name = '';
+        
+        // Mostramos un mensaje temporal
+        this.showTemporaryMessage('Categoría creada exitosamente', 'success');
+
+      } catch (error) {
+        console.error('Error creando categoría:', error);
+        this.newCategoryForm.errors = {
+          name: error.response?.data?.error || 'Error al crear la categoría'
+        };
+      } finally {
+        this.isCreatingCategory = false;
+      }
+    },
+
+    showTemporaryMessage(text, type) {
+      // Crear un mensaje temporal que no afecte al formulario principal
+      const tempMessage = document.createElement('div');
+      tempMessage.className = `fixed bottom-4 right-4 z-50 p-4 rounded-md shadow-lg ${
+        type === 'success' ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'
+      }`;
+      tempMessage.textContent = text;
+      document.body.appendChild(tempMessage);
+
+      // Eliminar el mensaje después de 3 segundos
+      setTimeout(() => {
+        document.body.removeChild(tempMessage);
+      }, 3000);
     },
 
     async handleSubmit() {

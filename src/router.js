@@ -20,6 +20,7 @@ import Impact from '@/views/Impact/Impact.vue';
 import Advanced from '@/views/Faq/Advanced.vue';
 import StockView from '@/views/StockView.vue';
 import KitsLandingPage from '@/views/LandingPage/KitsLandingPage.vue';
+import AddProduct from '@/views/Product/AddProduct.vue';
 
 const routes = [
   // Landing page independiente (sin MainLayout)
@@ -132,6 +133,12 @@ const routes = [
         path: 'stock',
         name: 'stock',
         component: StockView,        
+      },
+      {
+        path: 'agregar-producto',
+        name: 'add-product',
+        component: AddProduct,
+        meta: { requiresAuth: true }
       },
     ],
    

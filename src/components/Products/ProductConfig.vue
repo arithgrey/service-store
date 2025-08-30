@@ -448,6 +448,16 @@
                         @images-updated="handleImagesUpdated"
                       />
 
+                      <!-- Configuración de Plantillas de Landing -->
+                      <ProductLandingConfig 
+                        :product="product"
+                        @landing-added="handleLandingAdded"
+                        @landing-removed="handleLandingRemoved"
+                        @primary-landing-updated="handlePrimaryLandingUpdated"
+                        @template-created="handleTemplateCreated"
+                        @landing-created="handleLandingCreated"
+                      />
+
                       <!-- Modal para crear nueva categoría -->
                       <TransitionRoot as="template" :show="showCreateCategoryModal">
                         <Dialog as="div" class="relative z-50" @close="showCreateCategoryModal = false">
@@ -542,6 +552,7 @@ import { formattedPrice } from '@/components/Products/js/priceHelper';
 import ProductInventoryConfig from '@/components/Products/ProductInventoryConfig.vue';
 import ProductComponentsConfig from '@/components/Products/ProductComponentsConfig.vue';
 import ProductImageConfig from '@/components/Products/ProductImageConfig.vue';
+import ProductLandingConfig from '@/components/Products/ProductLandingConfig.vue';
 
 import {
   Bars3Icon,
@@ -569,7 +580,8 @@ export default {
     XMarkIcon,
     ProductInventoryConfig,
     ProductComponentsConfig,
-    ProductImageConfig
+    ProductImageConfig,
+    ProductLandingConfig
   },
   props: {
     product: {
@@ -908,6 +920,27 @@ export default {
     handleImagesUpdated(images) {
       this.product.images = images;
       this.$emit('images-updated', images);
+    },
+    
+    // Métodos para manejar eventos de ProductLandingConfig
+    handleLandingAdded(landing) {
+      this.$emit('landing-added', landing);
+    },
+    
+    handleLandingRemoved(landing) {
+      this.$emit('landing-removed', landing);
+    },
+    
+    handlePrimaryLandingUpdated(landing) {
+      this.$emit('primary-landing-updated', landing);
+    },
+    
+    handleTemplateCreated(template) {
+      this.$emit('template-created', template);
+    },
+    
+    handleLandingCreated(landing) {
+      this.$emit('landing-created', landing);
     },
     
     // Método para crear nueva categoría

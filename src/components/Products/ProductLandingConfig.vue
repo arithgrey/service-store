@@ -23,18 +23,9 @@
               {{ productLanding.template.name }}
             </h4>
             <p class="text-sm text-gray-500">
-              Tipo: {{ getLandingTypeLabel(productLanding.landing_type) }}
-            </p>
-            <p class="text-sm text-gray-500">
               URL: {{ productLanding.template.base_url }}
             </p>
             <div class="mt-2 flex items-center space-x-4">
-              <span
-                :class="getLandingTypeClass(productLanding.landing_type)"
-                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
-              >
-                {{ getLandingTypeLabel(productLanding.landing_type) }}
-              </span>
               <span
                 v-if="productLanding.is_primary"
                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"
@@ -77,7 +68,7 @@
 
     <!-- Modal para agregar plantilla -->
     <TransitionRoot as="template" :show="showAddLandingModal">
-      <Dialog as="div" class="relative z-10" @close="showAddLandingModal = false">
+      <Dialog as="div" class="relative z-50" @close="showAddLandingModal = false">
         <TransitionChild
           as="template"
           enter="ease-out duration-300"
@@ -87,10 +78,10 @@
           leave-from="opacity-100"
           leave-to="opacity-0"
         >
-          <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+          <div class="fixed inset-0 bg-black bg-opacity-20 transition-opacity backdrop-blur-sm" />
         </TransitionChild>
 
-        <div class="fixed inset-0 z-10 overflow-y-auto">
+        <div class="fixed inset-0 z-50 overflow-y-auto">
           <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
             <TransitionChild
               as="template"
@@ -156,27 +147,6 @@
                         <span class="text-red-500 text-sm" v-if="newLandingForm.errors && newLandingForm.errors.template_id">{{ formatError(newLandingForm.errors.template_id) }}</span>
                       </div>
 
-                      <!-- Tipo de landing -->
-                      <div>
-                        <label for="landing_type" class="block text-sm font-medium text-gray-700">Tipo de landing:</label>
-                        <select
-                          v-model="newLandingForm.landing_type"
-                          id="landing_type"
-                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                          required
-                        >
-                          <option value="">Selecciona un tipo...</option>
-                          <option 
-                            v-for="type in landingTypes" 
-                            :key="type.value" 
-                            :value="type.value"
-                          >
-                            {{ type.label }}
-                          </option>
-                        </select>
-                        <span class="text-red-500 text-sm" v-if="newLandingForm.errors && newLandingForm.errors.landing_type">{{ formatError(newLandingForm.errors.landing_type) }}</span>
-                      </div>
-
                       <!-- Es landing principal -->
                       <div class="flex items-center">
                         <input
@@ -214,7 +184,7 @@
                           type="text"
                           id="new_template_base_url"
                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                          placeholder="ej: kits-para-pasar-al-siguiente-nivel"
+                          placeholder="https://enidservice.com/kits-para-pasar-al-siguiente-nivel?"
                           required
                         />
                         <p class="mt-1 text-xs text-gray-500">Se generará: https://enidservice.com/[url-base]?</p>
@@ -311,13 +281,11 @@ export default {
       productLandings: [],
       availableTemplates: [],
       templateTypes: [],
-      landingTypes: [],
       showAddLandingModal: false,
       isAddingLanding: false,
       actionType: 'existing', // 'existing' o 'new'
       newLandingForm: {
         template_id: '',
-        landing_type: '',
         is_primary: false,
         errors: {}
       },
@@ -333,12 +301,11 @@ export default {
     this.loadProductLandings();
     this.loadTemplates();
     this.loadTemplateTypes();
-    this.loadLandingTypes();
   },
   computed: {
     canSubmitForm() {
       if (this.actionType === 'existing') {
-        return this.newLandingForm.template_id && this.newLandingForm.landing_type;
+        return this.newLandingForm.template_id;
       } else {
         return this.newTemplateForm.name && 
                this.newTemplateForm.base_url && 
@@ -351,7 +318,7 @@ export default {
     
     async loadProductLandings() {
       try {
-        const response = await this.$axios.get(`http://localhost:8084/api/landings/product-landings/by_product/?product_id=${this.product.id}`);
+        const response = await this.$axios.get(`/landings/product-landings/by_product/?product_id=${this.product.id}`);
         this.productLandings = response.data;
       } catch (error) {
         console.error("Error cargando plantillas del producto:", error);
@@ -361,7 +328,7 @@ export default {
     async loadTemplates() {
       if (this.availableTemplates.length === 0) {
         try {
-          const response = await this.$axios.get('http://localhost:8084/api/landings/templates/');
+          const response = await this.$axios.get('/landings/templates/');
           this.availableTemplates = response.data.results;
         } catch (error) {
           console.error("Error cargando plantillas disponibles:", error);
@@ -372,45 +339,12 @@ export default {
     async loadTemplateTypes() {
       if (this.templateTypes.length === 0) {
         try {
-          const response = await this.$axios.get('http://localhost:8084/api/landings/templates/template_types/');
+          const response = await this.$axios.get('/landings/templates/template_types/');
           this.templateTypes = response.data.template_types;
         } catch (error) {
           console.error("Error cargando tipos de plantilla:", error);
         }
       }
-    },
-    
-    async loadLandingTypes() {
-      if (this.landingTypes.length === 0) {
-        try {
-          const response = await this.$axios.get('http://localhost:8084/api/landings/product-landings/landing_types/');
-          this.landingTypes = response.data.landing_types;
-        } catch (error) {
-          console.error("Error cargando tipos de landing:", error);
-        }
-      }
-    },
-    
-    getLandingTypeLabel(type) {
-      const labels = {
-        'default': 'Por Defecto',
-        'promotional': 'Promocional',
-        'seasonal': 'Estacional',
-        'category': 'Por Categoría',
-        'custom': 'Personalizada'
-      };
-      return labels[type] || type;
-    },
-    
-    getLandingTypeClass(type) {
-      const classes = {
-        'default': 'bg-blue-100 text-blue-800',
-        'promotional': 'bg-yellow-100 text-yellow-800',
-        'seasonal': 'bg-green-100 text-green-800',
-        'category': 'bg-purple-100 text-purple-800',
-        'custom': 'bg-gray-100 text-gray-800'
-      };
-      return classes[type] || 'bg-gray-100 text-gray-800';
     },
     
     async addLanding() {
@@ -450,18 +384,17 @@ export default {
         }
       };
       
-      const templateResponse = await this.$axios.post('http://localhost:8084/api/landings/templates/', templateData);
+      const templateResponse = await this.$axios.post('/landings/templates/', templateData);
       const template = templateResponse.data;
       
       // 2. Crear la relación producto-plantilla
       const productLandingData = {
         product_id: this.product.id,
         template_id: template.id,
-        landing_type: 'custom', // Tipo por defecto
         is_primary: this.newLandingForm.is_primary
       };
       
-      const productLandingResponse = await this.$axios.post('http://localhost:8084/api/landings/product-landings/', productLandingData);
+      const productLandingResponse = await this.$axios.post('/landings/product-landings/', productLandingData);
       
       // Agregar la nueva relación a la lista
       this.productLandings.push(productLandingResponse.data);
@@ -480,11 +413,10 @@ export default {
       const params = {
         product_id: this.product.id,
         template_id: this.newLandingForm.template_id,
-        landing_type: this.newLandingForm.landing_type,
         is_primary: this.newLandingForm.is_primary
       };
       
-      const response = await this.$axios.post('http://localhost:8084/api/landings/product-landings/', params);
+      const response = await this.$axios.post('/landings/product-landings/', params);
       
       // Agregar la nueva relación a la lista
       this.productLandings.push(response.data);
@@ -501,7 +433,6 @@ export default {
       this.actionType = 'existing';
       this.newLandingForm = {
         template_id: '',
-        landing_type: '',
         is_primary: false,
         errors: {}
       };
@@ -516,7 +447,7 @@ export default {
     async removeLanding(productLanding) {
       if (confirm('¿Estás seguro de que quieres eliminar esta plantilla de landing?')) {
         try {
-          await this.$axios.delete(`http://localhost:8084/api/landings/product-landings/${productLanding.id}/`);
+          await this.$axios.delete(`/landings/product-landings/${productLanding.id}/`);
           
           // Remover de la lista
           this.productLandings = this.productLandings.filter(pl => pl.id !== productLanding.id);
@@ -536,7 +467,7 @@ export default {
           is_primary: !productLanding.is_primary
         };
         
-        const response = await this.$axios.patch(`http://localhost:8084/api/landings/product-landings/${productLanding.id}/`, params);
+        const response = await this.$axios.patch(`/landings/product-landings/${productLanding.id}/`, params);
         
         // Actualizar en la lista
         const index = this.productLandings.findIndex(pl => pl.id === productLanding.id);
@@ -562,4 +493,4 @@ export default {
     }
   }
 };
-</script> 
+</script>

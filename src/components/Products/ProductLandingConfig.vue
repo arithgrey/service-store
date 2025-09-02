@@ -318,7 +318,8 @@ export default {
     
     async loadProductLandings() {
       try {
-        const response = await this.$axios.get(`/landings/product-landings/by_product/?product_id=${this.product.id}`);
+        
+        const response = await this.$axios.get(`landings/product-landings/by_product/?product_id=${this.product.id}`);
         this.productLandings = response.data;
       } catch (error) {
         console.error("Error cargando plantillas del producto:", error);
@@ -328,7 +329,7 @@ export default {
     async loadTemplates() {
       if (this.availableTemplates.length === 0) {
         try {
-          const response = await this.$axios.get('/landings/templates/');
+          const response = await this.$axios.get('landings/templates/');
           this.availableTemplates = response.data.results;
         } catch (error) {
           console.error("Error cargando plantillas disponibles:", error);
@@ -339,7 +340,7 @@ export default {
     async loadTemplateTypes() {
       if (this.templateTypes.length === 0) {
         try {
-          const response = await this.$axios.get('/landings/templates/template_types/');
+          const response = await this.$axios.get('landings/templates/template_types/');
           this.templateTypes = response.data.template_types;
         } catch (error) {
           console.error("Error cargando tipos de plantilla:", error);
@@ -384,7 +385,7 @@ export default {
         }
       };
       
-      const templateResponse = await this.$axios.post('/landings/templates/', templateData);
+      const templateResponse = await this.$axios.post('landings/templates/', templateData);
       const template = templateResponse.data;
       
       // 2. Crear la relación producto-plantilla
@@ -394,7 +395,7 @@ export default {
         is_primary: this.newLandingForm.is_primary
       };
       
-      const productLandingResponse = await this.$axios.post('/landings/product-landings/', productLandingData);
+      const productLandingResponse = await this.$axios.post('landings/product-landings/', productLandingData);
       
       // Agregar la nueva relación a la lista
       this.productLandings.push(productLandingResponse.data);
@@ -416,7 +417,7 @@ export default {
         is_primary: this.newLandingForm.is_primary
       };
       
-      const response = await this.$axios.post('/landings/product-landings/', params);
+      const response = await this.$axios.post('landings/product-landings/', params);
       
       // Agregar la nueva relación a la lista
       this.productLandings.push(response.data);
@@ -447,7 +448,7 @@ export default {
     async removeLanding(productLanding) {
       if (confirm('¿Estás seguro de que quieres eliminar esta plantilla de landing?')) {
         try {
-          await this.$axios.delete(`/landings/product-landings/${productLanding.id}/`);
+          await this.$axios.delete(`landings/product-landings/${productLanding.id}/`);
           
           // Remover de la lista
           this.productLandings = this.productLandings.filter(pl => pl.id !== productLanding.id);
@@ -467,7 +468,7 @@ export default {
           is_primary: !productLanding.is_primary
         };
         
-        const response = await this.$axios.patch(`/landings/product-landings/${productLanding.id}/`, params);
+        const response = await this.$axios.patch(`landings/product-landings/${productLanding.id}/`, params);
         
         // Actualizar en la lista
         const index = this.productLandings.findIndex(pl => pl.id === productLanding.id);

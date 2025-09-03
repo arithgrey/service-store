@@ -118,8 +118,26 @@
             </svg>
             <span class="text-sm font-medium">Insertar</span>
           </button>
-
+            
           <!-- Landing Page -->
+          <div v-if="productLandings.length > 0" class="w-full col-span-2">
+            <div
+              v-for="productLanding in productLandings"
+              :key="productLanding.id"
+              class="border border-gray-200 rounded-lg p-4 mb-4"
+            >
+              <div class="flex items-center justify-between">
+                <div class="flex-1">
+                  <h4 class="text-sm font-medium text-gray-900">
+                    {{ productLanding.template.name }}
+                  </h4>
+                  <p class="text-sm text-gray-500">
+                    URL: {{ productLanding.template.base_url }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
           <button
             @click="goToLandingPage"
             class="flex items-center p-3 border border-orange-200 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors col-span-2"
@@ -148,6 +166,24 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      productLandings: []
+    };
+  },
+  mounted() {
+    this.loadProductLandings();
+  },
+  watch: {
+    'product.id': {
+      handler(newId) {
+        if (newId) {
+          this.loadProductLandings();
+        }
+      },
+      immediate: true
+    }
+  },
   methods: {
     closeModal() {
       this.$emit('close');
@@ -160,7 +196,14 @@ export default {
       const mainImage = product.images.find((img) => img.is_main);
       return mainImage ? mainImage.get_image_url : "https://enidservice.com/public/images/04.jpg";
     },
-    
+    async loadProductLandings() {
+      try {
+        const response = await this.$axios.get(`landings/product-landings/by_product/?product_id=${this.product.id}`);
+        this.productLandings = response.data;
+      } catch (error) {
+        console.error("Error cargando plantillas del producto:", error);
+      }
+    },
     formattedPrice(price) {
       if (!price || isNaN(price)) return "$0.00";
       return price.toLocaleString("es-MX", {
@@ -232,10 +275,9 @@ export default {
     },
     
     goToLandingPage() {
-      // Usar slugs para SEO y profesionalismo
-      const landingUrl = `/kits-para-pasar-al-siguiente-nivel?product=${this.product.slug}&category=${this.product.category?.slug || 'default'}`;
       
-      // Cerrar el modal
+      const landingUrl = `/kits-para-pasar-al-siguiente-nivel?product=${this.product.slug}&category=${this.product.category?.slug || 'default'}`;
+
       this.closeModal();
       
       // Navegar a la landing page

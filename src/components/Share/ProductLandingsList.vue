@@ -3,8 +3,11 @@
     <div
       v-for="productLanding in productLandings"
       :key="productLanding.id"
-      class="border border-gray-200 rounded-lg p-4 mb-4"
+      class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 font-bold transition-colors"
     >
+    <a
+            :href="getLandingUrl(productLanding)"
+            >
       <div class="flex items-center justify-between">
         <div class="flex-1">
           <h4 class="text-sm font-medium text-gray-900">
@@ -12,16 +15,8 @@
           </h4>
           
         </div>
-        <div class="flex items-center space-x-2">
-          <a
-            :href="getLandingUrl(productLanding)"
-            target="_blank"
-            class="inline-flex items-center px-3 py-1 border border-transparent text-xs font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            Ver Landing
-          </a>
-        </div>
       </div>
+    </a>
     </div>
   </div>
 </template>
@@ -63,9 +58,7 @@ export default {
       const baseUrl = productLanding.template.base_url;
       const productSlug = this.product.slug || this.product.id;
       const categorySlug = this.product.category?.slug || 'default';
-      
-      // Construir la URL completa con los parámetros del producto
-      return `${baseUrl}?product=${productSlug}&category=${categorySlug}`;
+      return `/${baseUrl}?product=${productSlug}&category=${categorySlug}`;
     }
   }
 }

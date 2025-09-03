@@ -118,8 +118,9 @@
             </svg>
             <span class="text-sm font-medium">Insertar</span>
           </button>
-
+            
           <!-- Landing Page -->
+          <ProductLandingsList :product="product" />
           <button
             @click="goToLandingPage"
             class="flex items-center p-3 border border-orange-200 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors col-span-2"
@@ -136,8 +137,13 @@
 </template>
 
 <script>
+import ProductLandingsList from "@/components/Share/ProductLandingsList.vue";
+
 export default {
   name: 'ProductShareModal',
+  components: {
+    ProductLandingsList
+  },
   props: {
     show: {
       type: Boolean,
@@ -147,6 +153,14 @@ export default {
       type: Object,
       required: true
     }
+  },
+  data() {
+    return {
+      showShareModal: false,
+    };
+  },
+  mounted() {
+    // El componente ProductLandingsList maneja su propia carga de datos
   },
   methods: {
     closeModal() {
@@ -160,7 +174,6 @@ export default {
       const mainImage = product.images.find((img) => img.is_main);
       return mainImage ? mainImage.get_image_url : "https://enidservice.com/public/images/04.jpg";
     },
-    
     formattedPrice(price) {
       if (!price || isNaN(price)) return "$0.00";
       return price.toLocaleString("es-MX", {
@@ -232,10 +245,9 @@ export default {
     },
     
     goToLandingPage() {
-      // Usar slugs para SEO y profesionalismo
-      const landingUrl = `/kits-para-pasar-al-siguiente-nivel?product=${this.product.slug}&category=${this.product.category?.slug || 'default'}`;
       
-      // Cerrar el modal
+      const landingUrl = `/kits-para-pasar-al-siguiente-nivel?product=${this.product.slug}&category=${this.product.category?.slug || 'default'}`;
+
       this.closeModal();
       
       // Navegar a la landing page

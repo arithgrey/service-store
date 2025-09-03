@@ -97,7 +97,6 @@ export default {
         const response = await this.$axios.get(
           `enid/productos/${categorySlug}/${productSlug}/`
         );
-
         this.product = response.data;
         this.mainImagePreview()
         this.facebook_event(this.product)

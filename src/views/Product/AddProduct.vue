@@ -1,26 +1,48 @@
 <template>
-  <div>
-    <!-- Botón para abrir el panel -->
-    <button
-      @click="showPanel = true"
-      class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-    >
-      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-      </svg>
-      Agregar Producto
-    </button>
+  <div class="min-h-screen bg-gray-50">
+    <!-- Header -->
+    <div class="bg-white shadow-sm border-b">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center py-6">
+          <div>
+            <h1 class="text-3xl font-bold text-gray-900">Gestión de Productos</h1>
+            <p class="mt-2 text-gray-600">Administra y crea productos para tu tienda</p>
+          </div>
+          
+          <!-- Botón para agregar producto -->
+          <button
+            @click="showAddPanel = true"
+            class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors"
+          >
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            Agregar Producto
+          </button>
+        </div>
+      </div>
+    </div>
 
-    <!-- Panel lateral con el formulario -->
-    <SidePanel
-      :is-open="showPanel"
-      title="Agregar Nuevo Producto"
-      @close="handleClose"
-    >
-      <ProductForm
+    <!-- Contenido principal -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- Lista de productos -->
+      <ProductListAdmin
+        ref="productListAdmin"
         @success="handleSuccess"
         @error="handleError"
-        @cancel="handleClose"
+      />
+    </div>
+
+    <!-- Panel lateral para agregar producto -->
+    <SidePanel
+      :is-open="showAddPanel"
+      title="Agregar Nuevo Producto"
+      @close="handleCloseAddPanel"
+    >
+      <ProductForm
+        @success="handleProductCreated"
+        @error="handleError"
+        @cancel="handleCloseAddPanel"
         @product-created="handleProductCreated"
       />
     </SidePanel>
@@ -29,11 +51,31 @@
     <div v-if="message" class="fixed bottom-4 right-4 z-50">
       <div
         :class="[
-          'p-4 rounded-md shadow-lg transition-all duration-300',
-          message.type === 'success' ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'
+          'p-4 rounded-md shadow-lg transition-all duration-300 max-w-sm',
+          message.type === 'success' ? 'bg-green-50 text-green-800 border border-green-200' : 'bg-red-50 text-red-800 border border-red-200'
         ]"
       >
-        {{ message.text }}
+        <div class="flex items-center">
+          <svg
+            v-if="message.type === 'success'"
+            class="w-5 h-5 mr-2 text-green-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+          </svg>
+          <svg
+            v-else
+            class="w-5 h-5 mr-2 text-red-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+          <span class="font-medium">{{ message.text }}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -42,79 +84,50 @@
 <script>
 import SidePanel from '@/components/Common/SidePanel.vue';
 import ProductForm from '@/components/Product/ProductForm.vue';
+import ProductListAdmin from '@/components/Product/ProductListAdmin.vue';
 
 export default {
   name: 'AddProduct',
   components: {
     SidePanel,
-    ProductForm
+    ProductForm,
+    ProductListAdmin,
   },
   data() {
     return {
-      showPanel: false,
+      showAddPanel: false,
       message: null,
-      redirectTimeout: null
     };
   },
-  beforeDestroy() {
-    // Limpiar timeout si existe
-    if (this.redirectTimeout) {
-      clearTimeout(this.redirectTimeout);
-    }
-  },
   methods: {
-    handleClose() {
-      this.showPanel = false;
+    handleCloseAddPanel() {
+      this.showAddPanel = false;
     },
-
-    handleSuccess(message) {
-      this.message = { text: message, type: 'success' };
-      this.showPanel = false;
+    
+    handleProductCreated(product) {
+      this.showAddPanel = false;
+      this.showMessage('¡Producto creado exitosamente!', 'success');
       
-      // Limpiar mensaje después de 5 segundos
-      setTimeout(() => {
-        this.message = null;
-      }, 5000);
+      // Recargar la lista de productos
+      this.$nextTick(() => {
+        this.$refs.productListAdmin?.fetchAllProducts();
+      });
     },
-
+    
+    handleSuccess(message) {
+      this.showMessage(message, 'success');
+    },
+    
     handleError(message) {
-      this.message = { text: message, type: 'error' };
+      this.showMessage(message, 'error');
+    },
+    
+    showMessage(text, type) {
+      this.message = { text, type };
       setTimeout(() => {
         this.message = null;
       }, 5000);
     },
-
-    handleProductCreated({ url, product }) {
-      // Cerrar el panel inmediatamente
-      this.showPanel = false;
-
-      // Mostrar mensaje de éxito
-      this.message = { 
-        text: '¡Producto creado exitosamente! Redirigiendo...', 
-        type: 'success' 
-      };
-
-      // Limpiar cualquier timeout existente
-      if (this.redirectTimeout) {
-        clearTimeout(this.redirectTimeout);
-      }
-
-      // Configurar nuevo timeout para redirección
-      this.redirectTimeout = setTimeout(() => {
-        // Limpiar mensaje antes de redirigir
-        this.message = null;
-        // Redirigir a la página del producto
-        this.$router.replace(url);
-      }, 1000);
-    }
-  }
+  },
 };
 </script>
-
-<style scoped>
-.transition-all {
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: 300ms;
-}
-</style> 

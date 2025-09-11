@@ -76,12 +76,22 @@
             
           <!-- Imagen del producto -->
           <div class="flex-shrink-0">
+            <router-link
+              :to="{
+                  name: 'product-detail',
+                  params: {
+                      categorySlug: product.category.slug,
+                      productSlug: product.slug,
+                  },
+              }"
+          >
             <img
               :src="getMainImage(product)"
               :alt="product.name"
               class="w-16 h-16 object-cover rounded-md"
               @error="handleImageError"
             />
+            </router-link>
           </div>
 
           <!-- Información del producto -->

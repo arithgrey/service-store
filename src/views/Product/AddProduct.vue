@@ -30,6 +30,7 @@
         ref="productListAdmin"
         @success="handleSuccess"
         @error="handleError"
+        @open_config_product="handleOpenConfigProduct"
       />
     </div>
 
@@ -120,6 +121,10 @@ export default {
     
     handleError(message) {
       this.showMessage(message, 'error');
+    },
+    
+    handleOpenConfigProduct(product) {
+      this.$emit("open_open_config_product", product);
     },
     
     showMessage(text, type) {

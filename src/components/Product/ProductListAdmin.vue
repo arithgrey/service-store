@@ -72,6 +72,8 @@
         class="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
       >
         <div class="flex items-start space-x-4">
+          <ProductConfigIcon :product="product" @open_config_product="handler_open_config_product" />
+            
           <!-- Imagen del producto -->
           <div class="flex-shrink-0">
             <img
@@ -188,8 +190,13 @@
 </template>
 
 <script>
+import ProductConfigIcon from "@/components/Products/ProductConfigIcon.vue";
+
 export default {
   name: 'ProductListAdmin',
+  components: {
+    ProductConfigIcon
+  },
   data() {
     return {
       products: [],
@@ -226,6 +233,9 @@ export default {
     this.fetchAllProducts();
   },
   methods: {
+    handler_open_config_product(product) {
+          this.$emit("open_config_product", product);
+    },
     async fetchAllProducts() {
       try {
         this.loading = true;

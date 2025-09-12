@@ -121,19 +121,53 @@
                   Top Seller
                 </span>
 
-                <!-- Badge de conteo de plantillas con enlace -->
-                <a
-                  v-if="getTemplateCount(product.id) > 0"
-                  :href="getLandingUrl(product)"
-                  target="_blank"
-                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-500 hover:bg-orange-600 text-white transition-colors cursor-pointer"
-                  :title="`${getTemplateCount(product.id)} plantilla(s) de landing - Click para ver`"
-                >
-                  <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                  {{ getTemplateCount(product.id) }} Landing{{ getTemplateCount(product.id) !== 1 ? 's' : '' }}
-                </a>
+                <!-- Toggle de plantillas de landing -->
+                <div v-if="getTemplateCount(product.id) > 0" class="relative">
+                  <button
+                    @click="toggleProductLandings(product.id)"
+                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-500 hover:bg-orange-600 text-white transition-colors cursor-pointer"
+                    :title="`${getTemplateCount(product.id)} plantilla(s) de landing - Click para ver`"
+                  >
+                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    {{ getTemplateCount(product.id) }} Landing{{ getTemplateCount(product.id) !== 1 ? 's' : '' }}
+                    <svg 
+                      class="w-3 h-3 ml-1 transition-transform duration-200"
+                      :class="{ 'rotate-180': expandedLandings[product.id] }"
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+
+                  <!-- Lista desplegable de enlaces -->
+                  <div 
+                    v-if="expandedLandings[product.id]"
+                    class="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-10 min-w-48"
+                  >
+                    <div class="py-1">
+                      <a
+                        v-for="productLanding in getProductLandings(product.id)"
+                        :key="productLanding.id"
+                        :href="getLandingUrl(product, productLanding)"
+                        target="_blank"
+                        class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                        :title="`${productLanding.template.name} - Click para ver`"
+                      >
+                        <svg class="w-4 h-4 mr-2 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <span class="flex-1">{{ productLanding.template.name }}</span>
+                        <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -319,7 +353,9 @@ export default {
       // Estado para almacenar conteos de plantillas por producto
       templateCounts: {},
       // Estado para almacenar las plantillas de cada producto
-      productLandings: {}
+      productLandings: {},
+      // Estado para controlar qué toggles están expandidos
+      expandedLandings: {}
     };
   },
   computed: {
@@ -360,18 +396,29 @@ export default {
       this.selectedProduct = null;
     },
 
+    // Método para toggle de plantillas de landing - CORREGIDO PARA VUE 3
+    toggleProductLandings(productId) {
+      console.log('Toggle clicked for product:', productId);
+      console.log('Current state:', this.expandedLandings[productId]);
+      
+      // En Vue 3, simplemente asignamos directamente
+      this.expandedLandings[productId] = !this.expandedLandings[productId];
+      
+      console.log('New state:', this.expandedLandings[productId]);
+    },
+
     // Método para obtener el conteo de plantillas de un producto
     getTemplateCount(productId) {
       return this.templateCounts[productId] || 0;
     },
 
-    // Método para obtener la URL de landing de un producto (similar a ProductLandingsList)
-    getLandingUrl(product) {
-      const landings = this.productLandings[product.id] || [];
-      if (landings.length === 0) return '#';
-      
-      // Usar la primera landing disponible
-      const productLanding = landings[0];
+    // Método para obtener las plantillas de un producto
+    getProductLandings(productId) {
+      return this.productLandings[productId] || [];
+    },
+
+    // Método para obtener la URL de landing de una plantilla específica
+    getLandingUrl(product, productLanding) {
       const baseUrl = productLanding.template.base_url;
       const productSlug = product.slug || product.id;
       const categorySlug = product.category?.slug || 'default';

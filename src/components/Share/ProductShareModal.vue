@@ -1,6 +1,13 @@
 <template>
-  <div v-if="show" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+  <div 
+    v-if="show" 
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+    @click="closeModal"
+  >
+    <div 
+      class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4"
+      @click.stop
+    >
       <!-- Header -->
       <div class="flex justify-between items-start p-6 border-b">
         <button
@@ -161,10 +168,23 @@ export default {
   },
   mounted() {
     // El componente ProductLandingsList maneja su propia carga de datos
+    // Agregar listener para la tecla ESC
+    document.addEventListener('keydown', this.handleKeydown);
+  },
+  beforeUnmount() {
+    // Limpiar el listener cuando el componente se desmonte
+    document.removeEventListener('keydown', this.handleKeydown);
   },
   methods: {
     closeModal() {
       this.$emit('close');
+    },
+    
+    handleKeydown(event) {
+      // Cerrar modal cuando se presione ESC
+      if (event.key === 'Escape' && this.show) {
+        this.closeModal();
+      }
     },
     
     getMainImage(product) {
@@ -293,4 +313,4 @@ export default {
     }
   }
 };
-</script> 
+</script>

@@ -46,11 +46,11 @@
                                         @stock-updated="handleStockUpdate"
                                     />
                                 </div>
-                                <ProductConfigIcon 
+                               <!-- <ProductConfigIcon 
                                     :product="product" 
                                     @open_config_product="handler_open_config_product"
                                     class="ml-2" 
-                                />
+                                />-->
                             </div>
                         </div>
                         <div class="mt-2">
@@ -71,14 +71,14 @@
 import StockManager from '@/components/Stock/StockManager.vue';
 import StockTotalquantity from '@/components/Stock/StockTotalquantity.vue';
 import ListSelect from '@/components/Warehouses/ListSelect.vue';
-import ProductConfigIcon from "@/components/Products/ProductConfigIcon.vue";
+//import ProductConfigIcon from "@/components/Products/ProductConfigIcon.vue";
 
 export default {
     components: {
         StockManager,
         StockTotalquantity,
         ListSelect,
-        ProductConfigIcon
+        //ProductConfigIcon
     },
     data() {
         return {

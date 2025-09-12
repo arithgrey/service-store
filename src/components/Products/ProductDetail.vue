@@ -9,7 +9,7 @@
           </div>
 
           <div class="lg:col-span-2 lg:row-span-2 lg:row-end-2 relative">
-            <ProductConfigIcon :product="product" @open_config_product="handler_open_config_product" />
+            <!-- <ProductConfigIcon :product="product" @open_config_product="handler_open_config_product" /> -->
             <div class="mt-5">
               <ProductAddToCart 
                 :product="product" 
@@ -53,7 +53,7 @@ import ProductBreadcrumb from "@/components/Products/ProductBreadcrumb.vue";
 import ProductDetailGalery from "@/components/Products/ProductDetailGalery.vue";
 import ProductAddToCart from "@/components/Products/ProductAddToCart.vue";
 import ProductDescription from "@/components/Products/ProductDescription.vue";
-import ProductConfigIcon from "@/components/Products/ProductConfigIcon.vue";
+//import ProductConfigIcon from "@/components/Products/ProductConfigIcon.vue";
 import PromoSlider from "@/components/Terms/PromoSlider.vue";
 import ShareButton from "@/components/Share/ShareButton.vue";
 import ProductShareModal from "@/components/Share/ProductShareModal.vue";
@@ -64,7 +64,7 @@ export default {
     ProductDetailGalery,
     ProductAddToCart,
     ProductDescription,
-    ProductConfigIcon,
+    //ProductConfigIcon,
     PromoSlider,
     ShareButton,
     ProductShareModal,

@@ -120,6 +120,54 @@
                 >
                   Top Seller
                 </span>
+
+                <!-- Toggle de plantillas de landing -->
+                <div v-if="getTemplateCount(product.id) > 0" class="relative">
+                  <button
+                    @click="toggleProductLandings(product.id)"
+                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-500 hover:bg-orange-600 text-white transition-colors cursor-pointer"
+                    :title="`${getTemplateCount(product.id)} plantilla(s) de landing - Click para ver`"
+                  >
+                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    {{ getTemplateCount(product.id) }} Landing{{ getTemplateCount(product.id) !== 1 ? 's' : '' }}
+                    <svg 
+                      class="w-3 h-3 ml-1 transition-transform duration-200"
+                      :class="{ 'rotate-180': expandedLandings[product.id] }"
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+
+                  <!-- Lista desplegable de enlaces -->
+                  <div 
+                    v-if="expandedLandings[product.id]"
+                    class="absolute top-full right-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg z-10 min-w-48"
+                  >
+                    <div class="py-1">
+                      <a
+                        v-for="productLanding in getProductLandings(product.id)"
+                        :key="productLanding.id"
+                        :href="getLandingUrl(product, productLanding)"
+                        target="_blank"
+                        class="flex items-center px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                        :title="`${productLanding.template.name} - Click para ver`"
+                      >
+                        <svg class="w-4 h-4 mr-2 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <span class="flex-1">{{ productLanding.template.name }}</span>
+                        <svg class="w-3 h-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      </a>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -132,7 +180,7 @@
             </div>
 
             <!-- Acciones -->
-            <div class="mt-3 flex space-x-2">
+            <div class="mt-3 flex flex-wrap gap-2">
               <router-link
                 :to="{
                   name: 'product-detail',
@@ -156,6 +204,18 @@
                 ]"
               >
                 {{ product.es_publico ? 'Hacer Privado' : 'Hacer Público' }}
+              </button>
+
+              <!-- Botón para configurar landings -->
+              <button
+                @click="openLandingConfig(product)"
+                class="inline-flex items-center px-3 py-1 border border-purple-300 rounded-md text-sm font-medium text-purple-700 bg-purple-50 hover:bg-purple-100"
+              >
+                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+                Configurar Landings
               </button>
             </div>
           </div>
@@ -196,16 +256,85 @@
         {{ searchQuery ? 'Intenta con otros términos de búsqueda' : 'No hay productos disponibles' }}
       </p>
     </div>
+
+    <!-- Modal para configuración de landings -->
+    <TransitionRoot as="template" :show="showLandingConfigModal">
+      <Dialog as="div" class="relative z-50" @close="closeLandingConfig">
+        <TransitionChild
+          as="template"
+          enter="ease-out duration-300"
+          enter-from="opacity-0"
+          enter-to="opacity-100"
+          leave="ease-in duration-200"
+          leave-from="opacity-100"
+          leave-to="opacity-0"
+        >
+          <div class="fixed inset-0 bg-black bg-opacity-20 transition-opacity backdrop-blur-sm" />
+        </TransitionChild>
+
+        <div class="fixed inset-0 z-50 overflow-y-auto">
+          <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <TransitionChild
+              as="template"
+              enter="ease-out duration-300"
+              enter-from="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              enter-to="opacity-100 translate-y-0 sm:scale-100"
+              leave="ease-in duration-200"
+              leave-from="opacity-100 translate-y-0 sm:scale-100"
+              leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+            >
+              <DialogPanel class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-4xl">
+                <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                  <div class="flex items-center justify-between mb-4">
+                    <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900">
+                      Configuración de Landings - {{ selectedProduct?.name }}
+                    </DialogTitle>
+                    <button
+                      type="button"
+                      class="rounded-md bg-white text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                      @click="closeLandingConfig"
+                    >
+                      <span class="sr-only">Cerrar</span>
+                      <XMarkIcon class="h-6 w-6" aria-hidden="true" />
+                    </button>
+                  </div>
+                  
+                  <!-- Componente ProductLandingConfig reutilizado -->
+                  <ProductLandingConfig
+                    v-if="selectedProduct"
+                    :product="selectedProduct"
+                    @landing-added="handleLandingAdded"
+                    @landing-removed="handleLandingRemoved"
+                    @primary-landing-updated="handlePrimaryLandingUpdated"
+                    @template-created="handleTemplateCreated"
+                  />
+                </div>
+              </DialogPanel>
+            </TransitionChild>
+          </div>
+        </div>
+      </Dialog>
+    </TransitionRoot>
   </div>
 </template>
 
 <script>
 import ProductConfigIcon from "@/components/Products/ProductConfigIcon.vue";
+import ProductLandingConfig from "@/components/Products/ProductLandingConfig.vue";
+import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from "@headlessui/vue";
+import { XMarkIcon } from "@heroicons/vue/24/outline";
 
 export default {
   name: 'ProductListAdmin',
   components: {
-    ProductConfigIcon
+    ProductConfigIcon,
+    ProductLandingConfig,
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+    TransitionChild,
+    TransitionRoot,
+    XMarkIcon
   },
   data() {
     return {
@@ -217,7 +346,16 @@ export default {
       currentPage: 1,
       itemsPerPage: 10,
       searchTimeout: null,
-      isSearching: false
+      isSearching: false,
+      // Estados para el modal de configuración de landings
+      showLandingConfigModal: false,
+      selectedProduct: null,
+      // Estado para almacenar conteos de plantillas por producto
+      templateCounts: {},
+      // Estado para almacenar las plantillas de cada producto
+      productLandings: {},
+      // Estado para controlar qué toggles están expandidos
+      expandedLandings: {}
     };
   },
   computed: {
@@ -244,8 +382,101 @@ export default {
   },
   methods: {
     handler_open_config_product(product) {
-          this.$emit("open_config_product", product);
+      this.$emit("open_config_product", product);
     },
+
+    // Métodos para el modal de configuración de landings
+    openLandingConfig(product) {
+      this.selectedProduct = product;
+      this.showLandingConfigModal = true;
+    },
+
+    closeLandingConfig() {
+      this.showLandingConfigModal = false;
+      this.selectedProduct = null;
+    },
+
+    // Método para toggle de plantillas de landing - CORREGIDO PARA VUE 3
+    toggleProductLandings(productId) {
+      console.log('Toggle clicked for product:', productId);
+      console.log('Current state:', this.expandedLandings[productId]);
+      
+      // En Vue 3, simplemente asignamos directamente
+      this.expandedLandings[productId] = !this.expandedLandings[productId];
+      
+      console.log('New state:', this.expandedLandings[productId]);
+    },
+
+    // Método para obtener el conteo de plantillas de un producto
+    getTemplateCount(productId) {
+      return this.templateCounts[productId] || 0;
+    },
+
+    // Método para obtener las plantillas de un producto
+    getProductLandings(productId) {
+      return this.productLandings[productId] || [];
+    },
+
+    // Método para obtener la URL de landing de una plantilla específica
+    getLandingUrl(product, productLanding) {
+      const baseUrl = productLanding.template.base_url;
+      const productSlug = product.slug || product.id;
+      const categorySlug = product.category?.slug || 'default';
+      return `/${baseUrl}?product=${productSlug}&category=${categorySlug}`;
+    },
+
+    // Método para cargar las plantillas de un producto específico
+    async loadProductLandings(productId) {
+      try {
+        const response = await this.$axios.get(`landings/product-landings/by_product/?product_id=${productId}`);
+        this.productLandings[productId] = response.data;
+        this.templateCounts[productId] = response.data.length;
+      } catch (error) {
+        console.error(`Error cargando plantillas para producto ${productId}:`, error);
+        this.productLandings[productId] = [];
+        this.templateCounts[productId] = 0;
+      }
+    },
+
+    // Método para cargar plantillas para todos los productos
+    async loadAllProductLandings() {
+      const promises = this.products.map(product => this.loadProductLandings(product.id));
+      await Promise.all(promises);
+    },
+
+    // Manejadores de eventos del componente ProductLandingConfig
+    handleLandingAdded(productLanding) {
+      // Actualizar el conteo local
+      const productId = productLanding.product_id;
+      this.templateCounts[productId] = (this.templateCounts[productId] || 0) + 1;
+      
+      // Recargar las plantillas del producto
+      this.loadProductLandings(productId);
+      
+      this.$emit('success', 'Plantilla de landing agregada exitosamente');
+    },
+
+    handleLandingRemoved(productLanding) {
+      // Actualizar el conteo local
+      const productId = productLanding.product_id;
+      this.templateCounts[productId] = Math.max(0, (this.templateCounts[productId] || 0) - 1);
+      
+      // Recargar las plantillas del producto
+      this.loadProductLandings(productId);
+      
+      this.$emit('success', 'Plantilla de landing eliminada exitosamente');
+    },
+
+    handlePrimaryLandingUpdated(productLanding) {
+      // Recargar las plantillas del producto para actualizar el orden
+      this.loadProductLandings(productLanding.product_id);
+      this.$emit('success', 'Landing principal actualizada exitosamente');
+    },
+
+    handleTemplateCreated(template) {
+      this.$emit('success', 'Nueva plantilla creada exitosamente');
+    },
+
     async fetchAllProducts() {
       try {
         this.loading = true;
@@ -267,6 +498,9 @@ export default {
         
         this.products = allProducts;
         this.applyFilters();
+        
+        // Cargar plantillas después de cargar productos
+        await this.loadAllProductLandings();
       } catch (error) {
         console.error('Error fetching products:', error);
         this.$emit('error', 'Error al cargar los productos');
@@ -297,6 +531,9 @@ export default {
         
         this.products = searchResults;
         this.applyFilters();
+        
+        // Cargar plantillas para los resultados de búsqueda
+        await this.loadAllProductLandings();
       } catch (error) {
         console.error('Error searching products:', error);
         // Si falla la búsqueda, hacer búsqueda local

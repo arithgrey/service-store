@@ -634,7 +634,7 @@ export default {
         this.productLoading = true;
         
         // Usar la misma API que ProductDetail.vue
-        const response = await this.$axios.get(`enid/productos/${categorySlug}/${productSlug}/`);
+        const response = await this.$axios.get(`enid/productos/${categorySlug}/${productSlug}/?es_landing=true`);
         
         if (response.data) {
           const product = response.data;

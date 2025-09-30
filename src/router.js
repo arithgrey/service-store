@@ -21,6 +21,7 @@ import Advanced from '@/views/Faq/Advanced.vue';
 import StockView from '@/views/StockView.vue';
 import KitsLandingPage from '@/views/LandingPage/KitsLandingPage.vue';
 import AddProduct from '@/views/Product/AddProduct.vue';
+import MultiCalendar from '@/views/MultiCalendar.vue';
 
 const routes = [
   // Landing page independiente (sin MainLayout)
@@ -139,6 +140,11 @@ const routes = [
         name: 'add-product',
         component: AddProduct,
         meta: { requiresAuth: true }
+      },
+      {
+        path: 'multicalendar',
+        name: 'multicalendar',
+        component: MultiCalendar,
       },
     ],
    

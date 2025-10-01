@@ -3,8 +3,8 @@
     <div class="max-w-7xl mx-auto">
       <!-- Header -->
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900">Calendario de Disponibilidad</h1>
-        <p class="mt-2 text-sm text-gray-600">Selecciona las fechas de tu preferencia</p>
+        <h1 class="text-3xl font-bold text-gray-900">Calendario de Entregas</h1>
+        <p class="mt-2 text-sm text-gray-600">Visualiza las entregas programadas por día</p>
       </div>
 
       <!-- Controls -->
@@ -39,8 +39,14 @@
         </button>
       </div>
 
+      <!-- Loading State -->
+      <div v-if="loading" class="text-center py-12">
+        <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500"></div>
+        <p class="mt-4 text-gray-600">Cargando estadísticas...</p>
+      </div>
+
       <!-- Calendar Grid -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div v-else class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- First Month -->
         <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
           <div class="text-center mb-6">
@@ -68,11 +74,11 @@
               @click="selectDate(day)"
               :disabled="!day.isCurrentMonth"
               :class="getDayClasses(day)"
-              class="relative h-12 flex items-center justify-center text-sm rounded-lg transition-all"
+              class="relative h-16 flex flex-col items-center justify-center text-sm rounded-lg transition-all"
             >
-              <span>{{ day.day }}</span>
-              <span v-if="day.price" class="absolute bottom-1 text-xs text-gray-500">
-                ${{ day.price }}
+              <span class="font-medium">{{ day.day }}</span>
+              <span v-if="day.deliveryCount > 0" class="text-xs font-semibold text-pink-600 mt-1">
+                {{ day.deliveryCount }} entregas
               </span>
             </button>
           </div>
@@ -105,165 +111,173 @@
               @click="selectDate(day)"
               :disabled="!day.isCurrentMonth"
               :class="getDayClasses(day)"
-              class="relative h-12 flex items-center justify-center text-sm rounded-lg transition-all"
+              class="relative h-16 flex flex-col items-center justify-center text-sm rounded-lg transition-all"
             >
-              <span>{{ day.day }}</span>
-              <span v-if="day.price" class="absolute bottom-1 text-xs text-gray-500">
-                ${{ day.price }}
+              <span class="font-medium">{{ day.day }}</span>
+              <span v-if="day.deliveryCount > 0" class="text-xs font-semibold text-pink-600 mt-1">
+                {{ day.deliveryCount }} entregas
               </span>
             </button>
           </div>
         </div>
       </div>
 
-      <!-- Selected Dates Info -->
-      <div v-if="selectedDates.length > 0" class="mt-8 bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-        <h3 class="text-lg font-semibold text-gray-900 mb-4">Fechas Seleccionadas</h3>
-        <div class="flex flex-wrap gap-2">
-          <div
-            v-for="(date, index) in selectedDates"
-            :key="index"
-            class="inline-flex items-center px-3 py-1 rounded-full text-sm bg-pink-100 text-pink-800"
-          >
-            {{ formatDate(date) }}
-            <button
-              @click="removeDate(date)"
-              class="ml-2 hover:text-pink-600"
-            >
-              <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
-              </svg>
-            </button>
-          </div>
+      <!-- Selected Date Info -->
+      <div v-if="selectedDate" class="mt-8 bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">
+          Entregas para {{ formatDate(selectedDate.date) }}
+        </h3>
+        <div class="bg-pink-50 rounded-lg p-4">
+          <p class="text-2xl font-bold text-pink-600">
+            {{ selectedDate.deliveryCount }} entregas programadas
+          </p>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-<script setup>
-import { ref, computed, onMounted } from 'vue';
+<script>
 import moment from 'moment';
+import { 
+  fetchDeliveryStats, 
+  getDeliveriesForDate, 
+  getDateRangeForMonth,
+  mergeStats 
+} from '@/helpers/DeliveryStatsHelper';
 
-// Configurar moment.js en español
-moment.locale('es');
+export default {
+  name: 'MultiCalendar',
+  
+  data() {
+    return {
+      currentMonth: moment(),
+      selectedDate: null,
+      deliveryStats: {},
+      loading: false,
+      daysOfWeek: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']
+    };
+  },
 
-// Estado
-const currentMonth = ref(moment());
-const selectedDates = ref([]);
+  computed: {
+    nextMonthDate() {
+      return moment(this.currentMonth).add(1, 'month');
+    }
+  },
 
-// Días de la semana
-const daysOfWeek = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+  watch: {
+    currentMonth() {
+      this.loadDeliveryStats();
+    }
+  },
 
-// Computed
-const nextMonthDate = computed(() => {
-  return moment(currentMonth.value).add(1, 'month');
-});
+  mounted() {
+    moment.locale('es');
+    this.loadDeliveryStats();
+  },
 
-// Métodos
-const formatMonthYear = (date) => {
-  return moment(date).format('MMMM YYYY');
-};
+  methods: {
+    async loadDeliveryStats() {
+      this.loading = true;
+      try {
+        // Obtener estadísticas para ambos meses visibles
+        const currentMonthRange = getDateRangeForMonth(this.currentMonth, 0);
+        const nextMonthRange = getDateRangeForMonth(this.currentMonth, 1);
 
-const formatDate = (date) => {
-  return moment(date).format('DD MMM YYYY');
-};
+        const [currentStats, nextStats] = await Promise.all([
+          fetchDeliveryStats(this.$axios, currentMonthRange),
+          fetchDeliveryStats(this.$axios, nextMonthRange)
+        ]);
 
-const getMonthDays = (monthDate) => {
-  const days = [];
-  const startOfMonth = moment(monthDate).startOf('month');
-  const endOfMonth = moment(monthDate).endOf('month');
-  const startDate = moment(startOfMonth).startOf('week');
-  const endDate = moment(endOfMonth).endOf('week');
+        this.deliveryStats = mergeStats(currentStats, nextStats);
+      } catch (error) {
+        console.error('Error cargando estadísticas de entregas:', error);
+        this.deliveryStats = {};
+      } finally {
+        this.loading = false;
+      }
+    },
 
-  let day = moment(startDate);
+    formatMonthYear(date) {
+      return moment(date).format('MMMM YYYY');
+    },
 
-  while (day.isBefore(endDate) || day.isSame(endDate, 'day')) {
-    const isCurrentMonth = day.isSame(monthDate, 'month');
-    const isPast = day.isBefore(moment(), 'day');
-    const isToday = day.isSame(moment(), 'day');
-    
-    // Simular precios aleatorios para algunas fechas
-    const price = isCurrentMonth && !isPast && Math.random() > 0.7 
-      ? Math.floor(Math.random() * 2000) + 1000 
-      : null;
+    formatDate(date) {
+      return moment(date).format('DD [de] MMMM YYYY');
+    },
 
-    days.push({
-      date: moment(day),
-      day: day.date(),
-      isCurrentMonth,
-      isPast,
-      isToday,
-      price,
-    });
+    getMonthDays(monthDate) {
+      const days = [];
+      const startOfMonth = moment(monthDate).startOf('month');
+      const endOfMonth = moment(monthDate).endOf('month');
+      const startDate = moment(startOfMonth).startOf('week');
+      const endDate = moment(endOfMonth).endOf('week');
 
-    day.add(1, 'day');
+      let day = moment(startDate);
+
+      while (day.isBefore(endDate) || day.isSame(endDate, 'day')) {
+        const isCurrentMonth = day.isSame(monthDate, 'month');
+        const isPast = day.isBefore(moment(), 'day');
+        const isToday = day.isSame(moment(), 'day');
+        const dateKey = day.format('YYYY-MM-DD');
+        const deliveryCount = getDeliveriesForDate(this.deliveryStats, dateKey);
+
+        days.push({
+          date: moment(day),
+          day: day.date(),
+          isCurrentMonth,
+          isPast,
+          isToday,
+          deliveryCount
+        });
+
+        day.add(1, 'day');
+      }
+
+      return days;
+    },
+
+    getDayClasses(day) {
+      const classes = [];
+
+      if (!day.isCurrentMonth) {
+        classes.push('text-gray-300 cursor-not-allowed');
+      } else {
+        classes.push('text-gray-900 hover:bg-gray-100 cursor-pointer');
+      }
+
+      if (day.isToday) {
+        classes.push('ring-2 ring-pink-500');
+      }
+
+      if (day.deliveryCount > 0) {
+        classes.push('bg-pink-50 hover:bg-pink-100');
+      }
+
+      if (this.selectedDate && this.selectedDate.date.isSame(day.date, 'day')) {
+        classes.push('bg-pink-500 text-white hover:bg-pink-600');
+      }
+
+      return classes.join(' ');
+    },
+
+    selectDate(day) {
+      if (!day.isCurrentMonth) return;
+      this.selectedDate = day;
+    },
+
+    previousMonth() {
+      this.currentMonth = moment(this.currentMonth).subtract(1, 'month');
+    },
+
+    nextMonth() {
+      this.currentMonth = moment(this.currentMonth).add(1, 'month');
+    },
+
+    goToToday() {
+      this.currentMonth = moment();
+    }
   }
-
-  return days;
-};
-
-const getDayClasses = (day) => {
-  const classes = [];
-
-  if (!day.isCurrentMonth) {
-    classes.push('text-gray-300 cursor-not-allowed');
-  } else if (day.isPast) {
-    classes.push('text-gray-400 line-through cursor-not-allowed');
-  } else {
-    classes.push('text-gray-900 hover:bg-gray-100 cursor-pointer');
-  }
-
-  if (day.isToday) {
-    classes.push('ring-2 ring-pink-500');
-  }
-
-  if (isDateSelected(day.date)) {
-    classes.push('bg-pink-500 text-white hover:bg-pink-600');
-  }
-
-  return classes.join(' ');
-};
-
-const isDateSelected = (date) => {
-  return selectedDates.value.some(d => 
-    moment(d).isSame(date, 'day')
-  );
-};
-
-const selectDate = (day) => {
-  if (!day.isCurrentMonth || day.isPast) return;
-
-  const dateIndex = selectedDates.value.findIndex(d => 
-    moment(d).isSame(day.date, 'day')
-  );
-
-  if (dateIndex > -1) {
-    selectedDates.value.splice(dateIndex, 1);
-  } else {
-    selectedDates.value.push(moment(day.date).toDate());
-  }
-};
-
-const removeDate = (date) => {
-  const index = selectedDates.value.findIndex(d => 
-    moment(d).isSame(date, 'day')
-  );
-  if (index > -1) {
-    selectedDates.value.splice(index, 1);
-  }
-};
-
-const previousMonth = () => {
-  currentMonth.value = moment(currentMonth.value).subtract(1, 'month');
-};
-
-const nextMonth = () => {
-  currentMonth.value = moment(currentMonth.value).add(1, 'month');
-};
-
-const goToToday = () => {
-  currentMonth.value = moment();
 };
 </script>
 

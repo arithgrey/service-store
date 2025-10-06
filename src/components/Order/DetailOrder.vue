@@ -34,9 +34,21 @@
         </ul>
 
         <div class="flex-1 border-l ml-4 p-5">
-          <div class="lg:row-span-3 lg:mt-0">
-            <h1 class="font-semibold text-gray-900">Dirección de envío</h1>
-            <AddressDetail :order="order" />
+          <div class="lg:row-span-3 lg:mt-0 space-y-6">
+            <!-- Fecha de Entrega -->
+            <div>
+              <h1 class="font-semibold text-gray-900 mb-3">Fecha de Entrega</h1>
+              <DeliveryDateEditor 
+                :order="order"
+                @delivery-date-updated="handleDeliveryDateUpdated"
+              />
+            </div>
+            
+            <!-- Dirección de envío -->
+            <div>
+              <h1 class="font-semibold text-gray-900">Dirección de envío</h1>
+              <AddressDetail :order="order" />
+            </div>
           </div>
         </div>
       </div>
@@ -52,6 +64,7 @@ import OrderHelper from "@/components/Products/js/OrderHelper.js";
 import TypeOfPayment from "@/components/Order/TypeOfPayment.vue";
 import Steps from "@/components/Delivery/Steps.vue";
 import OrderStatusButton from "@/components/Order/OrderStatusButton.vue";
+import DeliveryDateEditor from "@/components/Order/DeliveryDateEditor.vue";
 
 export default {
   components: {
@@ -60,6 +73,7 @@ export default {
     TypeOfPayment,
     Steps,
     OrderStatusButton,
+    DeliveryDateEditor,
   },
   props: {
     order: {
@@ -93,6 +107,13 @@ export default {
     handleStatusUpdated(newStatus) {
       this.order.status = newStatus;
       this.updateVisibleStatusesAndStage();
+    },
+    
+    handleDeliveryDateUpdated(newDeliveryDate) {
+      console.log('📅 Fecha de entrega actualizada:', newDeliveryDate);
+      this.order.delivery_date = newDeliveryDate;
+      // Emitir evento para que el componente padre sepa que la orden fue actualizada
+      this.$emit('order-updated', this.order);
     },
   },
   computed: {

@@ -28,7 +28,9 @@
         v-for="order in orders"
         :key="order.id"
         :orders="[order]"
+        :show-detail-button="true"
         @selected_order="handleOrderClick"
+        @navigate-to-detail="handleNavigateToDetail"
       />
     </div>
 
@@ -119,6 +121,11 @@ export default {
     handleOrderClick(order) {
       // Emitir evento para que el componente padre maneje la navegación
       this.$emit('order-clicked', order);
+    },
+
+    handleNavigateToDetail(order) {
+      // Emitir evento para navegar al detalle específico
+      this.$emit('navigate-to-detail', order);
     }
   }
 };

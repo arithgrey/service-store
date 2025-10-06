@@ -42,6 +42,7 @@
         v-if="selectedDate"
         :selected-date="selectedDate"
         @order-clicked="handleOrderClick"
+        @navigate-to-detail="handleNavigateToDetail"
       />
     </div>
   </div>
@@ -138,10 +139,18 @@ export default {
     },
 
     handleOrderClick(order) {
-      // Navegar al detalle de la orden
+      // Navegar al search-orders con ID específico
       this.$router.push({
-        name: 'order-detail',
-        params: { orderId: order.id }
+        name: 'search-orders-with-id',
+        params: { id: order.id }
+      });
+    },
+
+    handleNavigateToDetail(order) {
+      // Navegar al detalle completo de la orden
+      this.$router.push({
+        name: 'search-orders-with-id',
+        params: { id: order.id }
       });
     }
   }

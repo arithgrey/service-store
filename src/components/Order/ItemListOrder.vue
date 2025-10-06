@@ -34,8 +34,9 @@
               {{ timePassed(item.created_at) }}
             </p>
           </div>
-          <div>
+          <div class="flex justify-between items-center mt-3">
             <TypeOfPayment :paymentOnDelivery="item.payment_on_delivery" />
+            
           </div>
         </div>
       </div>
@@ -59,6 +60,11 @@ export default {
       type: Array,
       required: true,
     },
+    showDetailButton: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
   },
   computed: {
     reactiveOrders() {
@@ -77,6 +83,12 @@ export default {
     selectOrder(order) {
       this.selectedOrder = order;
       this.$emit("selected_order", order);
+    },
+
+    navigateToDetail(order) {
+      console.log('🔗 Navegando al detalle de la orden:', order.id);
+      // Emitir evento para que el componente padre maneje la navegación
+      this.$emit("navigate-to-detail", order);
     },
  
   },

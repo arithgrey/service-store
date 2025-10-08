@@ -1,9 +1,10 @@
 <template>
   <div class="relative ml-3" @click="toggleMenu">
     <img
-      src="/images/user.png"
-      class="w-8 h-8 rounded-full cursor-pointer"
+      :src="userAvatar"
+      class="w-8 h-8 rounded-full cursor-pointer object-cover"
       alt="Imagen de usuario"
+      @error="handleImageError"
     />
     <transition name="fade">
       <div
@@ -17,9 +18,10 @@
                 class="group flex items-center cursor-pointer"
               >
                 <img
-                  src="/images/user.png"
-                  class="w-8 h-8 rounded-full cursor-pointer"
+                  :src="userAvatar"
+                  class="w-8 h-8 rounded-full cursor-pointer object-cover"
                   alt="Imagen de usuario"
+                  @error="handleImageError"
                 />
                 <p class="ml-3 text-md">
                   {{currentUser.name}}
@@ -85,7 +87,8 @@
 export default {
   data() {
     return {
-      showMenu: false
+      showMenu: false,
+      imageError: false
     };
   },
   computed: {
@@ -95,8 +98,27 @@ export default {
     isAuthenticated() {
       return this.$store.getters.isAuthenticated;
     },
+    userAvatar() {
+      console.log('🔍 MenuImageUser - currentUser:', this.currentUser);
+      console.log('🔍 MenuImageUser - currentUser.picture:', this.currentUser?.picture);
+      console.log('🔍 MenuImageUser - imageError:', this.imageError);
+      
+      // Si hay error cargando la imagen o no hay imagen de Google, usar la por defecto
+      if (this.imageError || !this.currentUser?.picture) {
+        console.log('🔍 MenuImageUser - Usando imagen por defecto');
+        return '/images/user.png';
+      }
+      // Usar la imagen de perfil de Google
+      console.log('🔍 MenuImageUser - Usando imagen de Google:', this.currentUser.picture);
+      return this.currentUser.picture;
+    }
   },
   methods: {
+    handleImageError() {
+      // Si falla la carga de la imagen de Google, usar la por defecto
+      this.imageError = true;
+    },
+    
     logout() {
       const refresh_token = localStorage.getItem("refresh_token");
       this.$axios
@@ -116,6 +138,16 @@ export default {
       this.showMenu = !this.showMenu;
     },
   },
+  watch: {
+    currentUser: {
+      handler(newUser, oldUser) {
+        console.log('🔍 MenuImageUser - Usuario cambió:', { newUser, oldUser });
+        // Reset error state when user changes
+        this.imageError = false;
+      },
+      immediate: true
+    }
+  }
 };
 </script>
 

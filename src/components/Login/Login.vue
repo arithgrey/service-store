@@ -44,6 +44,9 @@
         >
           <span class="pl-2 mx-1">Continuar</span>
         </button>
+
+        <!-- Componente de autenticación con Google -->
+        <GoogleAuth @google-auth-success="handleGoogleAuthSuccess" />
       </div>
     </form>
     <LoginAccess v-if="user_exists && !searching" :email="form.email" />
@@ -56,6 +59,7 @@
 import { useVuelidate } from "@vuelidate/core";
 import LoginAccess from "@/components/Login/LoginAccess.vue";
 import LoginRegister from "@/components/Login/LoginRegister.vue";
+import GoogleAuth from "@/components/Login/GoogleAuth.vue";
 import { emailCommonRule } from "@/rules/commonRules.js";
 
 
@@ -64,6 +68,7 @@ export default {
   components: {
     LoginAccess,
     LoginRegister,
+    GoogleAuth,
   },
   data() {
     return {
@@ -88,6 +93,15 @@ export default {
       this.form.email  = email;
       this.user_exists = true;
       this.searching = false;
+    },
+    handleGoogleAuthSuccess(user) {
+      // Usuario autenticado exitosamente con Google
+      // El usuario permanece en la página de login
+      // Los datos ya están guardados en el store de Vuex
+      console.log('Usuario autenticado con Google:', user);
+      
+      // Aquí puedes agregar lógica adicional si es necesaria
+      // Por ejemplo: mostrar mensaje de éxito, actualizar UI, etc.
     },
     async submitForm() {
       const result = await this.v$.$validate();

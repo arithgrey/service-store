@@ -121,6 +121,13 @@ const routes = [
         
       },
       {
+        path: '/search-orders/:id',
+        name: 'search-orders-with-id',
+        component: Searchorders,
+        meta:{requiresAuth: true}
+        
+      },
+      {
         path: 'impact',
         name: 'impact',
         component: Impact,        

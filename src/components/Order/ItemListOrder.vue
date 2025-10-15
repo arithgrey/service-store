@@ -23,6 +23,10 @@
           >
             Orden: #{{ item.id }}
           </h5>
+          
+          <!-- Información del Cliente -->
+          <CustomerInfo :userInfo="item.user_info" class="mb-2" />
+          
           <CartTotal :productsFromCart="item" />
 
           <div class="flex mt-2 items-end justify-end">
@@ -48,12 +52,14 @@
 import { timePassed } from "@/helpers/time.js";
 import CartTotal from "@/components/Order/CartTotal.vue";
 import TypeOfPayment from "@/components/Order/TypeOfPayment.vue";
+import CustomerInfo from "@/components/Order/CustomerInfo.vue";
 import { get_status_label, get_order_bg_class } from "@/helpers/OrderHelper.js";
 
 export default {
   components: {
     CartTotal,
-    TypeOfPayment
+    TypeOfPayment,
+    CustomerInfo
   },
   props: {
     orders: {

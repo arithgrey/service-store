@@ -4,6 +4,12 @@
       <h5 class="block mb-2 text-xl font-bold text-blue-gray-900">
         Orden: #{{ order.id }}
       </h5>
+      
+      <!-- Información del Cliente -->
+      <div class="mb-3">
+        <CustomerInfo :userInfo="order.user_info" />
+      </div>
+      
       <div class="flex items-center justify-between">
         <!-- Componente Steps -->
         <Steps v-if="visibleStatuses.length" :stages="visibleStatuses" :currentStage="currentStage" />
@@ -65,6 +71,7 @@ import TypeOfPayment from "@/components/Order/TypeOfPayment.vue";
 import Steps from "@/components/Delivery/Steps.vue";
 import OrderStatusButton from "@/components/Order/OrderStatusButton.vue";
 import DeliveryDateEditor from "@/components/Order/DeliveryDateEditor.vue";
+import CustomerInfo from "@/components/Order/CustomerInfo.vue";
 
 export default {
   components: {
@@ -74,6 +81,7 @@ export default {
     Steps,
     OrderStatusButton,
     DeliveryDateEditor,
+    CustomerInfo,
   },
   props: {
     order: {

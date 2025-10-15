@@ -5,9 +5,23 @@
           <h5 class="text-2xl font-bold tracking-tight text-gray-900 sm:tc mb-5 ">
             ¿Dónde enviamos tu pedido?
           </h5>
-          <p class="mt-4 text-sm text-gray-950 bg-gray-50">
+          
+          <!-- Indicador de datos autocompletados -->
+          <div v-if="userDataLoaded" class="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+            <div class="flex items-center">
+              <svg class="w-5 h-5 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <p class="text-sm text-green-800">
+                Tus datos se han completado automáticamente. Puedes editarlos si lo necesitas.
+              </p>
+            </div>
+          </div>
+
+          <p class="mt-4 text-sm text-gray-950 bg-gray-50 p-3 rounded">
             Solo usaremos estos datos para ayudarnos a entregar tu pedido
           </p>
+          
           <div>
             <div class="relative z-0 w-full mb-5 mt-5 group">
               <input
@@ -16,7 +30,10 @@
                 type="text"
                 name="name"
                 id="floating_name"
-                class="peer input-cart"
+                :class="[
+                  'peer input-cart',
+                  userDataLoaded && !isFieldEdited.name ? 'bg-green-50 border-green-200' : ''
+                ]"
                 placeholder="Nombre"
                 required
               />
@@ -36,7 +53,10 @@
                 @input="formatPhoneNumber"
                 type="tel"
                 id="floating_name_phone_number"
-                class="peer input-cart"
+                :class="[
+                  'peer input-cart',
+                  userDataLoaded && !isFieldEdited.phone_number ? 'bg-green-50 border-green-200' : ''
+                ]"
                 placeholder="Teléfono*"
                 required
               />
@@ -114,6 +134,15 @@
       return {
         ...fields,
         selectedAddressInfo: null,
+        userDataLoaded: false,
+        isFieldEdited: {
+          name: false,
+          phone_number: false,
+        },
+        originalValues: {
+          name: '',
+          phone_number: '',
+        }
       };
     },
     setup: () => ({ v$: useVuelidate() }),
@@ -135,10 +164,63 @@
         return status;
   
       },
+      currentUser() {
+        return this.$store.getters.user;
+      }
+    },
+    mounted() {
+      this.loadUserData();
     },
     methods: {
       ...utilities,
       ...utilitiesLeads,
+
+      // Cargar datos del usuario en sesión
+      loadUserData() {
+        const user = this.currentUser;
+        
+        if (user) {
+          // Autocompletar nombre
+          if (user.name) {
+            this.form.name = user.name;
+            this.originalValues.name = user.name;
+          } else if (user.email) {
+            // Si no tiene nombre, usar el email como respaldo
+            this.form.name = user.email.split('@')[0];
+            this.originalValues.name = this.form.name;
+          }
+
+          // Si hay un número de teléfono guardado (puede venir de pedidos anteriores)
+          // Por ahora lo dejamos vacío ya que no está en el objeto user base
+          // pero el campo estará listo para ser llenado
+          
+          this.userDataLoaded = true;
+        }
+      },
+
+      // Override del método formatName para detectar edición
+      formatName(event) {
+        const newValue = event.target.value;
+        if (this.originalValues.name && newValue !== this.originalValues.name) {
+          this.isFieldEdited.name = true;
+        }
+        // Llamar al método original de utilities si existe
+        if (utilities.formatName) {
+          utilities.formatName.call(this, event);
+        }
+      },
+
+      // Override del método formatPhoneNumber para detectar edición
+      formatPhoneNumber(event) {
+        const newValue = event.target.value;
+        if (this.originalValues.phone_number && newValue !== this.originalValues.phone_number) {
+          this.isFieldEdited.phone_number = true;
+        }
+        // Llamar al método original de utilities si existe
+        if (utilities.formatPhoneNumber) {
+          utilities.formatPhoneNumber.call(this, event);
+        }
+      },
   
       async submitForm() {
         try {

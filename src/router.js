@@ -15,6 +15,7 @@ import SeachProducts from '@/views/Search/SeachProducts.vue';
 import ProductsSearchByCategory from '@/views/Search/ProductsSearchByCategory.vue';
 import AccountEcommerce from '@/views/Account/Ecommerce.vue';
 import SearchLead from '@/views/Leads/Search.vue';
+import SearchUsers from '@/views/Users/Search.vue';
 import Searchorders from '@/views/Order/Search.vue';
 import Impact from '@/views/Impact/Impact.vue';
 import Advanced from '@/views/Faq/Advanced.vue';
@@ -110,6 +111,13 @@ const routes = [
         path: '/search-leads/',
         name: 'search-lead',
         component: SearchLead,
+        meta:{requiresAuth: true}
+        
+      },
+      {
+        path: '/search-users/',
+        name: 'search-users',
+        component: SearchUsers,
         meta:{requiresAuth: true}
         
       },

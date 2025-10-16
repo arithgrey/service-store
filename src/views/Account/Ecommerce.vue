@@ -36,6 +36,7 @@ export default {
   },
   methods: {
     timePassed,
+    
     handlerOrders(orders) {      
             
       this.orders = orders;

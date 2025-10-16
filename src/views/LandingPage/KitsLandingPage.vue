@@ -556,6 +556,15 @@ export default {
         // Agregar productos del carrito al formulario como hace el checkout
         this.form.products = this.$store.getters.getProductsFromCart;
         
+        // ✅ Verificar si hay usuario autenticado y agregar email
+        const currentUser = this.$store.getters.user;
+        if (currentUser && currentUser.email) {
+          this.form.email = currentUser.email;
+          console.log('🔗 Landing page - Usuario autenticado, ligando orden:', currentUser.email);
+        } else {
+          console.log('📝 Landing page - Orden sin usuario autenticado');
+        }
+        
         // Enviar datos al mismo endpoint que el checkout de pago contra entrega
         const response = await this.$axios.post("enid/order-payment-on-delivery/pod/", this.form);
         

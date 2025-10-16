@@ -255,7 +255,23 @@
       async processPaymentOnDelivery() {
         
           this.cleanErrors();
-          this.form.products = this.$store.getters.getProductsFromCart;      
+          this.form.products = this.$store.getters.getProductsFromCart;
+          
+          // ✅ NUEVO: Agregar el email del usuario autenticado si existe
+          if (this.currentUser && this.currentUser.email) {
+            this.form.email = this.currentUser.email;
+            console.log('🔗 Ligando orden al usuario:', this.currentUser.email);
+          } else {
+            console.warn('⚠️ No se pudo obtener el email del usuario autenticado');
+          }
+          
+          console.log('📤 Datos del formulario enviados:', {
+            name: this.form.name,
+            phone_number: this.form.phone_number,
+            email: this.form.email,
+            products_count: this.form.products.length
+          });
+          
           return await this.$axios.post("enid/order-payment-on-delivery/pod/", this.form);
       },
   

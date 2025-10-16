@@ -173,7 +173,17 @@
       async processPaymentOnDelivery() {
         
           this.cleanErrors();
-          this.form.products = this.$store.getters.getProductsFromCart;      
+          this.form.products = this.$store.getters.getProductsFromCart;
+          
+          // ✅ Verificar si hay usuario autenticado y agregar email
+          const currentUser = this.$store.getters.user;
+          if (currentUser && currentUser.email) {
+            this.form.email = currentUser.email;
+            console.log('🔗 Usuario autenticado detectado, ligando orden:', currentUser.email);
+          } else {
+            console.log('📝 Orden sin usuario autenticado (guest checkout)');
+          }
+          
           return await this.$axios.post("enid/order-payment-on-delivery/pod/", this.form);
       },
   

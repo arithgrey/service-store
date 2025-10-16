@@ -52,6 +52,7 @@ import { minLength } from "@vuelidate/validators";
 import { helpers } from "@vuelidate/validators";
 import { required } from "@vuelidate/validators";
 
+
 export const rules = {
   q: {
     minLength: helpers.withMessage("Encuentra tu orden", minLength(1)),
@@ -86,6 +87,15 @@ export default {
       ],
     };
   },
+  computed: {
+    currentUser() {
+      return this.$store.getters.user;
+    },
+    userEmail() {
+      // Obtener el email del usuario autenticado desde el store
+      return this.currentUser?.email || null;
+    }
+  },
   setup: () => ({ v$: useVuelidate() }),
   validations() {
     return {
@@ -99,9 +109,20 @@ export default {
         payment_on_delivery: this.form.payment_on_delivery,
       };
       
+      // Agregar el status si no es "all"
       if (this.form.status && this.form.status !== 'all') {
         params.status = this.form.status;
       }
+      
+      // ✅ NUEVO: Agregar el email del usuario autenticado si existe
+      if (this.userEmail) {
+        params.email = this.userEmail;
+        console.log('🔍 Buscando órdenes para el usuario:', this.userEmail);
+      } else {
+        console.warn('⚠️ No hay usuario autenticado, buscando sin filtro de email');
+      }
+      
+      console.log('📤 Parámetros de búsqueda:', params);
       
       try {
         const response = await this.$axios.get(this.api, { params });
